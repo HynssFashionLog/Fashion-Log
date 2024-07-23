@@ -1,4 +1,4 @@
-package com.example.fashionlog.Domain;
+package com.example.fashionlog.domain;
 
 public class Domain {
 	/* dfdfdfdf */

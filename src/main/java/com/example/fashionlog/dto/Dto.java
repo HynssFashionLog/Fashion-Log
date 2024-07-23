@@ -1,4 +1,4 @@
-package com.example.fashionlog.DTO;
+package com.example.fashionlog.dto;
 
 public class Dto {
 	/* pr testing */
