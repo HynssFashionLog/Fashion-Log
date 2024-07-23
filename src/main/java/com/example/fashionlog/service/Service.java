@@ -1,4 +1,4 @@
-package com.example.fashionlog.Service;
+package com.example.fashionlog.service;
 
 public class Service {
 	/* dfdfdfdf */

@@ -1,4 +1,4 @@
-package com.example.fashionlog.Controller;
+package com.example.fashionlog.controller;
 
 public class Controller {
 	/* dfdfdfdf */

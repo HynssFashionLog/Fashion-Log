@@ -1,4 +1,4 @@
-package com.example.fashionlog.Repository;
+package com.example.fashionlog.repository;
 
 public class Repository {
 	/* dfdfdfdf */
