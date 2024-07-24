@@ -81,7 +81,7 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 # Ignore application.yml file
-application-dev.yml
+**.yml
 
 ### Intellij Patch ###
 # Comment Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-215987721
