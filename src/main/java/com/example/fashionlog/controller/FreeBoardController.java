@@ -1,10 +1,13 @@
 package com.example.fashionlog.controller;
 
+import com.example.fashionlog.dto.FreeBoardDto;
 import com.example.fashionlog.service.FreeBoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -19,8 +22,19 @@ public class FreeBoardController {
 	}
 
 	@GetMapping
-	public String freeBoard(Model model) {
-		model.addAttribute("freeBoards", freeBoardService.getAllFreeBoards());
+	public String getAllFreeBoards(Model model) {
+		model.addAttribute("freeboards", freeBoardService.getAllFreeBoards());
 		return "freeboard/list";
+	}
+
+	@GetMapping("/new")
+	public String newFreeBoardForm() {
+		return "freeboard/form";
+	}
+
+	@PostMapping
+	public String savePost(@ModelAttribute FreeBoardDto freeBoardDto) {
+		freeBoardService.createFreeBoardPost(freeBoardDto);
+		return "redirect:/fashionlog/freeboard";
 	}
 }

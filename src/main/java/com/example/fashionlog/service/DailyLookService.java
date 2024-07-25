@@ -1,15 +1,11 @@
 package com.example.fashionlog.service;
 
 import com.example.fashionlog.domain.DailyLook;
-import com.example.fashionlog.domain.DailyLookComment;
-import com.example.fashionlog.dto.DailyLookCommentDto;
 import com.example.fashionlog.dto.DailyLookDto;
 import com.example.fashionlog.repository.DailyLookCommentRepository;
 import com.example.fashionlog.repository.DailyLookRepository;
-
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Service;
 
 @Service
