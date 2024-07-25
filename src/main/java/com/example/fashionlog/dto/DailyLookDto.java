@@ -18,13 +18,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DailyLookDto {
 
-    Long id;
-    String title;
-    String content;
-    Boolean postStatus;
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
-    LocalDateTime deletedAt;
+    private Long id;
+    private String title;
+    private String content;
+    private Boolean postStatus;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private LocalDateTime deletedAt;
 
     public static DailyLookDto convertToDto(DailyLook dailyLook) {
         return DailyLookDto.builder()
