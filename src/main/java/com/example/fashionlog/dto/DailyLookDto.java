@@ -5,21 +5,20 @@ import com.example.fashionlog.domain.DailyLook;
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
  * DTO for {@link DailyLook}
  */
 @Getter
-@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class DailyLookDto {
 
-    Long Id;
-    Long memberId;
+    Long id;
     String title;
     String content;
     Boolean postStatus;
@@ -27,27 +26,27 @@ public class DailyLookDto {
     LocalDateTime updatedAt;
     LocalDateTime deletedAt;
 
-    public DailyLookDto convertToDto(DailyLook dailyLook) {
-        DailyLookDto dailyLookDto = new DailyLookDto();
-        dailyLookDto.setId(dailyLook.getId());
-        dailyLookDto.setTitle(dailyLook.getTitle());
-        dailyLookDto.setContent(dailyLook.getContent());
-        dailyLookDto.setPostStatus(dailyLook.getPostStatus());
-        dailyLookDto.setCreatedAt(dailyLook.getCreatedAt());
-        dailyLookDto.setUpdatedAt(dailyLook.getUpdatedAt());
-        dailyLookDto.setDeletedAt(dailyLook.getDeletedAt());
-        return dailyLookDto;
+    public static DailyLookDto convertToDto(DailyLook dailyLook) {
+        return DailyLookDto.builder()
+            .id(dailyLook.getId())
+            .title(dailyLook.getTitle())
+            .content(dailyLook.getContent())
+            .postStatus(dailyLook.getPostStatus())
+            .createdAt(dailyLook.getCreatedAt())
+            .updatedAt(dailyLook.getUpdatedAt())
+            .deletedAt(dailyLook.getDeletedAt())
+            .build();
     }
 
-    public DailyLook convertToEntity(DailyLookDto dailyLookDto) {
-        DailyLook dailyLook = new DailyLook();
-        dailyLook.setId(dailyLookDto.getId());
-        dailyLook.setTitle(dailyLookDto.getTitle());
-        dailyLook.setContent(dailyLookDto.getContent());
-        dailyLook.setPostStatus(dailyLookDto.getPostStatus());
-        dailyLook.setCreatedAt(dailyLookDto.getCreatedAt());
-        dailyLook.setUpdatedAt(dailyLookDto.getUpdatedAt());
-        dailyLook.setDeletedAt(dailyLookDto.getDeletedAt());
-        return dailyLook;
+    public static DailyLook convertToEntity(DailyLookDto dailyLookDto) {
+        return DailyLook.builder()
+            .id(dailyLookDto.getId())
+            .title(dailyLookDto.getTitle())
+            .content(dailyLookDto.getContent())
+            .postStatus(dailyLookDto.getPostStatus())
+            .createdAt(dailyLookDto.getCreatedAt())
+            .updatedAt(dailyLookDto.getUpdatedAt())
+            .deletedAt(dailyLookDto.getDeletedAt())
+            .build();
     }
 }
