@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Daily Look List</title>
+</head>
+<body>
+<h1>Daily Look</h1>
+<table>
+  <thead>
+  <tr>
+    <th>제목</th>
+    <th>작성자</th>
+    <th>작성일</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="post:${dailylooks}">
+    <td th:text="${post.title}">제목</td>
+    <td>작성자</td>
+    <td th:text="${post.createdAt}">작성일</td>
+  </tr>
+  </tbody>
+</table>
+<a href="@{/fashionlog/dailylook/new}">새 글 작성</a>
+</body>
+</html>
