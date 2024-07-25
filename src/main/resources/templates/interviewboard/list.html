@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>인터뷰 게시판</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<h1>인터뷰 게시판</h1>
+<table>
+  <thead>
+  <tr>
+    <th>제목</th>
+    <th>작성자</th>
+    <th>작성일</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="interview : ${interviewBoards}">
+    <td>
+      <a th:href="@{/interviewboard/{id}(id=${interview.id})}" th:text="${interview.title}"></a>
+    </td>
+    <td></td>
+    <td th:text="${interview.createdAt}"></td>
+  </tr>
+  </tbody>
+</table>
+<a th:href="@{/interview/new}">새 글 작성</a>
+</body>
+</html>
