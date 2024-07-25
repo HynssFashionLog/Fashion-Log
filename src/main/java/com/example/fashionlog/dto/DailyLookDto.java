@@ -8,11 +8,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * DTO for {@link DailyLook}
  */
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,7 +23,7 @@ public class DailyLookDto {
     private Long id;
     private String title;
     private String content;
-    private Boolean postStatus;
+    private Boolean postStatus = false;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
@@ -44,9 +46,22 @@ public class DailyLookDto {
             .title(dailyLookDto.getTitle())
             .content(dailyLookDto.getContent())
             .postStatus(dailyLookDto.getPostStatus())
-            .createdAt(dailyLookDto.getCreatedAt())
-            .updatedAt(dailyLookDto.getUpdatedAt())
+            .createdAt(LocalDateTime.now())
+            .updatedAt(LocalDateTime.now())
             .deletedAt(dailyLookDto.getDeletedAt())
             .build();
+    }
+
+    @Override
+    public String toString() {
+        return "DailyLookDto{" +
+            "id=" + id +
+            ", title='" + title + '\'' +
+            ", content='" + content + '\'' +
+            ", postStatus=" + postStatus +
+            ", createdAt=" + createdAt +
+            ", updatedAt=" + updatedAt +
+            ", deletedAt=" + deletedAt +
+            '}';
     }
 }
