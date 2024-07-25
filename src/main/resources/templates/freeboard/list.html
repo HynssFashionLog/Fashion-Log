@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>자유 게시판</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<h1>자유 게시판</h1>
+<table>
+  <thead>
+  <tr>
+    <th>제목</th>
+    <th>작성자</th>
+    <th>작성일</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="freeboard : ${freeboards}">
+    <td>
+      <a th:href="@{/freeboard/{id}(id=${freeboard.id})}" th:text="${freeboard.title}"></a>
+    </td>
+    <td></td>
+    <td th:text="${freeboard.createdAt}"></td>
+  </tr>
+  </tbody>
+</table>
+<a th:href="@{/freeboard/new}">새 글 작성</a>
+</body>
+</html>
