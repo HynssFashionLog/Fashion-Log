@@ -1,5 +1,6 @@
 package com.example.fashionlog.service;
 
+import com.example.fashionlog.domain.FreeBoard;
 import com.example.fashionlog.dto.FreeBoardDto;
 import com.example.fashionlog.repository.FreeBoardCommentRepository;
 import com.example.fashionlog.repository.FreeBoardRepository;
@@ -24,7 +25,13 @@ public class FreeBoardService {
 	}
 
 	public List<FreeBoardDto> getAllFreeBoards() {
-		return freeBoardRepository.findAll().stream().map(FreeBoardDto::convertToDto)
+		return freeBoardRepository.findAll().stream().filter(FreeBoard::getPostStatus)
+			.map(FreeBoardDto::convertToDto)
 			.collect(Collectors.toList());
+	}
+
+	@Transactional
+	public void createFreeBoardPost(FreeBoardDto freeBoardDto) {
+		freeBoardRepository.save(FreeBoardDto.convertToEntity(freeBoardDto));
 	}
 }
