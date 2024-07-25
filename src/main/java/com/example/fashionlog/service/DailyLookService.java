@@ -25,4 +25,10 @@ public class DailyLookService {
         List<DailyLook> dailyLookList = dailyLookRepository.findAll();
         return dailyLookList.stream().map(DailyLookDto::convertToDto).collect(Collectors.toList());
     }
+
+    public void createDailyLookPost(DailyLookDto dailyLookDto) {
+        System.out.println("Content in service: " + dailyLookDto.getContent());
+        DailyLook dailyLook = DailyLookDto.convertToEntity(dailyLookDto);
+        dailyLookRepository.save(dailyLook);
+    }
 }
