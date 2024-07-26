@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>게시글 상세보기</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<h1>게시글 상세보기</h1>
+<div class="post-detail" th:if="${post.isPresent()}">
+  <h2 th:text="${post.get().title}">Title</h2>
+  <p class="post-meta">
+    작성자: <span>Member</span>
+    작성일: <span th:text="${post.get().createdAt}">CreatedAt</span>
+  </p>
+  <div class="post-content" th:text="${post.get().content}">Content</div>
+  <div class="post-actions">
+    <a th:href="@{/fashionlog/freeboard}">목록으로</a>
+    <a th:href="@{/fashionlog/freeboard/{id}/edit(id=${post.get().id})}" class="edit-btn">수정</a>
+    <form th:action="@{/fashionlog/freeboard/{id}/delete(id=${post.get().id})}" method="post" class="delete-form">
+      <button type="submit">삭제</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>

@@ -5,6 +5,7 @@ import com.example.fashionlog.dto.FreeBoardDto;
 import com.example.fashionlog.repository.FreeBoardCommentRepository;
 import com.example.fashionlog.repository.FreeBoardRepository;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,5 +34,10 @@ public class FreeBoardService {
 	@Transactional
 	public void createFreeBoardPost(FreeBoardDto freeBoardDto) {
 		freeBoardRepository.save(FreeBoardDto.convertToEntity(freeBoardDto));
+	}
+
+	public Optional<FreeBoardDto> getFreeBoardDtoById(Long id) {
+		return freeBoardRepository.findById(id)
+			.map(FreeBoardDto::convertToDto);
 	}
 }
