@@ -1,10 +1,13 @@
 package com.example.fashionlog.service;
 
 import com.example.fashionlog.domain.DailyLook;
+import com.example.fashionlog.domain.DailyLookComment;
+import com.example.fashionlog.dto.DailyLookCommentDto;
 import com.example.fashionlog.dto.DailyLookDto;
 import com.example.fashionlog.repository.DailyLookCommentRepository;
 import com.example.fashionlog.repository.DailyLookRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,6 +46,12 @@ public class DailyLookService {
         return DailyLookDto.convertToDto(dailyLook);
     }
 
+    @Transactional(readOnly = true)
+    public List<DailyLookCommentDto> getAllDailyLookCommentByDailyLookId(Long id) {
+        List<DailyLookComment> DailyLookComments = dailyLookCommentRepository.findAllByDailyLookId(id);
+        return DailyLookComments.stream().map(DailyLookCommentDto::convertToDto).collect(Collectors.toList());
+    }
+
     @Transactional
     public void editDailyLookPost(Long id, DailyLookDto dailyLookDto) {
         DailyLook dailyLook = DailyLookFindById(id);
@@ -57,5 +66,15 @@ public class DailyLookService {
     @Transactional
     public void deleteDailyPost(Long id) {
         dailyLookRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void createDailyLookComment(Long id, DailyLookCommentDto dailyLookCommentDto) {
+        dailyLookCommentDto.setDailyLookId(id);
+        dailyLookCommentDto.setCommentStatus(true);
+        dailyLookCommentDto.setCreatedAt(LocalDateTime.now());
+        DailyLookComment dailyLookComment = DailyLookCommentDto.convertToEntity(
+            dailyLookCommentDto);
+        dailyLookCommentRepository.save(dailyLookComment);
     }
 }
