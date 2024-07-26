@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>LOOKBOOK 게시판</title>
+  <link rel="stylesheet" th:href="@{/css/lookbook.css}">
+</head>
+<body>
+<div class="container">
+  <h1>Lookbook 게시판</h1>
+  <a href="/fashionlog/lookbook/new" class="button">게시글 작성</a>
+  <div th:each="lookbook : ${lookbooks}" class="lookbook-item">
+    <h2>
+      <a th:href="@{/fashionlog/lookbook/{id}(id=${lookbook.id})}"
+         th:text="${lookbook.title}"></a>
+    </h2>
+    <p th:text="${lookbook.content}"></p>
+    <p>작성일: <span th:text="${lookbook.createdAt}"></span></p>
+    <p>작성자: <span th:text="${lookbook.memberId}"></span></p>
+  </div>
+</div>
+</body>
+</html>
