@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -23,7 +24,7 @@ public class FreeBoardController {
 
 	@GetMapping
 	public String getAllFreeBoards(Model model) {
-		model.addAttribute("freeboards", freeBoardService.getAllFreeBoards());
+		model.addAttribute("posts", freeBoardService.getAllFreeBoards());
 		return "freeboard/list";
 	}
 
@@ -36,5 +37,11 @@ public class FreeBoardController {
 	public String savePost(@ModelAttribute FreeBoardDto freeBoardDto) {
 		freeBoardService.createFreeBoardPost(freeBoardDto);
 		return "redirect:/fashionlog/freeboard";
+	}
+
+	@GetMapping("/{id}")
+	public String getFreeBoardById(@PathVariable("id") Long id, Model model) {
+		model.addAttribute("post", freeBoardService.getFreeBoardDtoById(id));
+		return "freeboard/detail";
 	}
 }
