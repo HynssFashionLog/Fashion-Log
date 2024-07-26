@@ -35,5 +35,10 @@ public class InterviewBoardService {
 	}
 
 
+	public InterviewBoardDto getInterviewPostDetail(Long id) {
+		InterviewBoard interviewBoard = interviewBoardRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("게시판 정보를 찾을 수 없습니다."));
+		return InterviewBoardDto.fromEntity(interviewBoard);
+	}
 }
 
