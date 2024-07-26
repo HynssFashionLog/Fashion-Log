@@ -3,7 +3,7 @@ name: Feature request
 about: Suggest an idea for this project
 title: ''
 labels: ''
-assignees: JEESW, cloudisme99, LLSNsssz, NamK666, rface3106
+assignees: cloudisme99, JEESW, LLSNsssz, NamK666
 
 ---
 
