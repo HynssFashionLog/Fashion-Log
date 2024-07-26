@@ -44,8 +44,15 @@ public class FreeBoardService {
 	@Transactional
 	public void updateFreeBoardPost(Long id, FreeBoardDto freeBoardDto) {
 		FreeBoard freeBoard = freeBoardRepository.findById(id)
-			.orElseThrow(()->new IllegalArgumentException("id: " + id + " not found"));
+			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
 		freeBoard.updateFreeBoard(freeBoardDto);
 		freeBoardRepository.save(freeBoard);
+	}
+
+	@Transactional
+	public void deleteFreeBoardPost(Long id) {
+		FreeBoard freeBoard = freeBoardRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
+		freeBoardRepository.delete(freeBoard);
 	}
 }

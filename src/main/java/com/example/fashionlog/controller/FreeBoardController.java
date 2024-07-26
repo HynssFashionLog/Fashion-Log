@@ -23,7 +23,7 @@ public class FreeBoardController {
 	}
 
 	@GetMapping
-	public String getAllFreeBoards(Model model) {
+	public String getAllFreeBoardList(Model model) {
 		model.addAttribute("posts", freeBoardService.getAllFreeBoards());
 		return "freeboard/list";
 	}
@@ -34,7 +34,7 @@ public class FreeBoardController {
 	}
 
 	@PostMapping
-	public String savePost(@ModelAttribute FreeBoardDto freeBoardDto) {
+	public String saveFreeBoardPost(@ModelAttribute FreeBoardDto freeBoardDto) {
 		freeBoardService.createFreeBoardPost(freeBoardDto);
 		return "redirect:/fashionlog/freeboard";
 	}
@@ -52,8 +52,15 @@ public class FreeBoardController {
 	}
 
 	@PostMapping("/{id}/edit")
-	public String editPost(@PathVariable("id") Long id, @ModelAttribute FreeBoardDto freeBoardDto) {
+	public String editFreeBoardPost(@PathVariable("id") Long id,
+		@ModelAttribute FreeBoardDto freeBoardDto) {
 		freeBoardService.updateFreeBoardPost(id, freeBoardDto);
 		return "redirect:/fashionlog/freeboard/{id}";
+	}
+
+	@PostMapping("/{id}/delete")
+	public String deleteFreeBoardPost(@PathVariable("id") Long id) {
+		freeBoardService.deleteFreeBoardPost(id);
+		return "redirect:/fashionlog/freeboard";
 	}
 }
