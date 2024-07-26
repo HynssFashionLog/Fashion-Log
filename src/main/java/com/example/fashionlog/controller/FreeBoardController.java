@@ -42,6 +42,7 @@ public class FreeBoardController {
 	@GetMapping("/{id}")
 	public String getFreeBoardById(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("post", freeBoardService.getFreeBoardDtoById(id));
+		model.addAttribute("comments", freeBoardService.getCommentsByFreeBoardId(id));
 		return "freeboard/detail";
 	}
 
