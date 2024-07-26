@@ -61,6 +61,8 @@ public class LookbookService {
 		dto.setTitle(lookbook.getTitle());
 		dto.setContent(lookbook.getContent());
 		dto.setPostStatus(lookbook.isPostStatus());
+		dto.setCreatedAt(lookbook.getCreatedAt());
+		dto.setUpdatedAt(lookbook.getUpdatedAt());
 		return dto;
 	}
 
