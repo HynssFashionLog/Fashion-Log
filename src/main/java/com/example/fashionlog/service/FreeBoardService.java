@@ -40,4 +40,12 @@ public class FreeBoardService {
 		return freeBoardRepository.findById(id)
 			.map(FreeBoardDto::convertToDto);
 	}
+
+	@Transactional
+	public void updateFreeBoardPost(Long id, FreeBoardDto freeBoardDto) {
+		FreeBoard freeBoard = freeBoardRepository.findById(id)
+			.orElseThrow(()->new IllegalArgumentException("id: " + id + " not found"));
+		freeBoard.updateFreeBoard(freeBoardDto);
+		freeBoardRepository.save(freeBoard);
+	}
 }
