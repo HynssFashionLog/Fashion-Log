@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -40,5 +41,12 @@ public class DailyLookController {
         System.out.println("Content in Service: " + dailyLookDto.getContent());
         dailyLookService.createDailyLookPost(dailyLookDto);
         return "redirect:/fashionlog/dailylook";
+    }
+
+    //추가 코드
+    @GetMapping("/{id}")
+    public String getDailyLookPostById(@PathVariable Long id, Model model) {
+        model.addAttribute("dailyLook", dailyLookService.getDailyLookPostById(id));
+        return "dailylook/detail";
     }
 }
