@@ -10,9 +10,15 @@
     <p class="post-meta">
         작성일: <span th:text="${interviewPost.createdAt}"></span>
     </p>
+    <p class="post-meta">
+        <span th:if="${interviewPost.updatedAt}">
+            수정일: <span th:text="${interviewPost.updatedAt}"></span>
+        </span>
+    </p>
     <div class="post-content" th:text="${interviewPost.content}"></div>
     <div class="post-actions">
         <a th:href="@{/fashionlog/interviewboard}">목록으로</a>
+        <a th:href="@{/fashionlog/interviewboard/{id}/edit(id=${interviewPost.id})}" class="edit-btn">수정</a>
     </div>
 </div>
 </body>
