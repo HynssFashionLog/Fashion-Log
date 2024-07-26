@@ -33,7 +33,7 @@ public class FreeBoardComment {
 	private String content;
 
 	@Column(nullable = false)
-	private Boolean comment_status;
+	private Boolean commentStatus;
 
 	@Column(nullable = false)
 	private LocalDateTime createdAt;

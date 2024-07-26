@@ -1,5 +1,6 @@
 package com.example.fashionlog.controller;
 
+import com.example.fashionlog.dto.FreeBoardCommentDto;
 import com.example.fashionlog.dto.FreeBoardDto;
 import com.example.fashionlog.service.FreeBoardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,5 +64,12 @@ public class FreeBoardController {
 	public String deleteFreeBoardPost(@PathVariable("id") Long id) {
 		freeBoardService.deleteFreeBoardPost(id);
 		return "redirect:/fashionlog/freeboard";
+	}
+
+	@PostMapping("/{id}/comment")
+	public String saveFreeBoardComment(@PathVariable("id") Long id,
+		@ModelAttribute FreeBoardCommentDto freeBoardCommentDto) {
+		freeBoardService.createFreeBoardComment(id, freeBoardCommentDto);
+		return "redirect:/fashionlog/freeboard/{id}";
 	}
 }
