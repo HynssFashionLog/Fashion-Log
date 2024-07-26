@@ -1,6 +1,7 @@
 package com.example.fashionlog.service;
 
 import com.example.fashionlog.domain.FreeBoard;
+import com.example.fashionlog.dto.FreeBoardCommentDto;
 import com.example.fashionlog.dto.FreeBoardDto;
 import com.example.fashionlog.repository.FreeBoardCommentRepository;
 import com.example.fashionlog.repository.FreeBoardRepository;
@@ -54,5 +55,11 @@ public class FreeBoardService {
 		FreeBoard freeBoard = freeBoardRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
 		freeBoardRepository.delete(freeBoard);
+	}
+
+	public List<FreeBoardCommentDto> getCommentsByFreeBoardId(Long freeBoardId) {
+		return freeBoardCommentRepository.findByFreeBoardId(freeBoardId).stream()
+			.map(FreeBoardCommentDto::convertToDto)
+			.collect(Collectors.toList());
 	}
 }
