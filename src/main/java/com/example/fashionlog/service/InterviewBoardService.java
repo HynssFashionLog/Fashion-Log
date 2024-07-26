@@ -47,5 +47,12 @@ public class InterviewBoardService {
 			.orElseThrow(() -> new IllegalArgumentException("게시판 정보를 찾을 수 없습니다."));
 		interviewBoard.updateInterviewBoard(interviewBoardDto);
 	}
+
+	@Transactional
+	public void deleteInterviewPost(Long id) {
+		InterviewBoard interviewBoard = interviewBoardRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("게시판 정보를 찾을 수 없습니다."));
+		interviewBoardRepository.delete(interviewBoard);
+	}
 }
 
