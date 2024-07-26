@@ -17,7 +17,6 @@
   <tbody>
   <tr th:each="post:${dailylooks}">
     <td>
-      <!-- 추가 코드 -->
       <a th:text="${post.title}" th:href="@{/fashionlog/dailylook/{id}(id=${post.id})}">제목</a>
     </td>
     <td>작성자</td>

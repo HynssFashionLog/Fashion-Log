@@ -50,4 +50,8 @@ public class DailyLookService {
         return dailyLookRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("게시글을 찾지 못했습니다."));
     }
+
+    public void deleteDailyPost(Long id) {
+        dailyLookRepository.deleteById(id);
+    }
 }

@@ -10,6 +10,8 @@
 <p>Content: <span th:text="${dailyLook.content}">Content</span></p>
 <a href="/fashionlog/dailylook">뒤로</a>
 <a th:href="@{/fashionlog/dailylook/{id}/edit(id=${dailyLook.getId()})}" class="edit-btn">수정</a>
-
+<form th:action="@{/fashionlog/dailylook/{id}/delete(id=${dailyLook.getId()})}" method="post">
+  <button type="submit" class="delete-btn">삭제</button>
+</form>
 </body>
 </html>
