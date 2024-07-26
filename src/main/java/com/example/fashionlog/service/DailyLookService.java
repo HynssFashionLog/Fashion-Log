@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class DailyLookService {
@@ -23,27 +24,29 @@ public class DailyLookService {
         this.dailyLookCommentRepository = dailyLookCommentRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<DailyLookDto> getAllDailyLookPost() {
         List<DailyLook> dailyLookList = dailyLookRepository.findAll();
         return dailyLookList.stream().map(DailyLookDto::convertToDto).collect(Collectors.toList());
     }
 
+    @Transactional
     public void createDailyLookPost(DailyLookDto dailyLookDto) {
         System.out.println("Content in service: " + dailyLookDto.getContent());
         DailyLook dailyLook = DailyLookDto.convertToEntity(dailyLookDto);
         dailyLookRepository.save(dailyLook);
     }
 
+    @Transactional(readOnly = true)
     public DailyLookDto getDailyLookPostById(Long id) {
         DailyLook dailyLook = DailyLookFindById(id);
         return DailyLookDto.convertToDto(dailyLook);
     }
 
-    //추가 코드
+    @Transactional
     public void editDailyLookPost(Long id, DailyLookDto dailyLookDto) {
         DailyLook dailyLook = DailyLookFindById(id);
         dailyLook.updateDailyLook(dailyLookDto);
-        dailyLookRepository.save(dailyLook);
     }
 
     private DailyLook DailyLookFindById(Long id) {
@@ -51,6 +54,7 @@ public class DailyLookService {
             .orElseThrow(() -> new IllegalArgumentException("게시글을 찾지 못했습니다."));
     }
 
+    @Transactional
     public void deleteDailyPost(Long id) {
         dailyLookRepository.deleteById(id);
     }
