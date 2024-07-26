@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>자유 게시글 수정</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<h1>글 수정</h1>
+<form th:action="@{/fashionlog/dailylook/{id}/edit(id=${dailyLook.getId()})}" method="post">
+  <div>
+    <label for="title">제목</label>
+    <input type="text" id="title" name="title" th:value="${dailyLook.getTitle()}">
+  </div>
+  <div>
+    <label for="content">내용</label>
+    <textarea id="content" name="content" th:text="${dailyLook.getContent()}"></textarea>
+  </div>
+  <button type="submit">수정하기</button>
+</form>
+</body>
+</html>

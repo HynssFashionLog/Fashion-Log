@@ -4,8 +4,10 @@ import com.example.fashionlog.domain.DailyLook;
 import com.example.fashionlog.dto.DailyLookDto;
 import com.example.fashionlog.repository.DailyLookCommentRepository;
 import com.example.fashionlog.repository.DailyLookRepository;
+
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,10 +34,20 @@ public class DailyLookService {
         dailyLookRepository.save(dailyLook);
     }
 
-    //추가 코드
     public DailyLookDto getDailyLookPostById(Long id) {
-        DailyLook dailyLook = dailyLookRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("게시글을 찾지 못했습니다."));
+        DailyLook dailyLook = DailyLookFindById(id);
         return DailyLookDto.convertToDto(dailyLook);
+    }
+
+    //추가 코드
+    public void editDailyLookPost(Long id, DailyLookDto dailyLookDto) {
+        DailyLook dailyLook = DailyLookFindById(id);
+        dailyLook.updateDailyLook(dailyLookDto);
+        dailyLookRepository.save(dailyLook);
+    }
+
+    private DailyLook DailyLookFindById(Long id) {
+        return dailyLookRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("게시글을 찾지 못했습니다."));
     }
 }
