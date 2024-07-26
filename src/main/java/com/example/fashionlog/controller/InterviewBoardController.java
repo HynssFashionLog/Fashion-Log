@@ -46,5 +46,17 @@ public class InterviewBoardController {
 		model.addAttribute("interviewPost", interviewBoardService.getInterviewPostDetail(id));
 		return "interviewboard/detail";
 	}
+
+	@GetMapping("/{id}/edit")
+	public String editInterviewPostForm(@PathVariable Long id, Model model) {
+		model.addAttribute("interviewPost", interviewBoardService.getInterviewPostDetail(id));
+		return "interviewboard/edit";
+	}
+
+	@PostMapping("/{id}/edit")
+	public String editInterviewPost(@PathVariable Long id, @ModelAttribute InterviewBoardDto interviewBoardDto) {
+		interviewBoardService.updateInterviewPost(id, interviewBoardDto);
+		return "redirect:/fashionlog/interviewboard/{id}";
+	}
 }
 

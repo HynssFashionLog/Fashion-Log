@@ -40,5 +40,12 @@ public class InterviewBoardService {
 			.orElseThrow(() -> new IllegalArgumentException("게시판 정보를 찾을 수 없습니다."));
 		return InterviewBoardDto.fromEntity(interviewBoard);
 	}
+
+	@Transactional
+	public void updateInterviewPost(Long id, InterviewBoardDto interviewBoardDto) {
+		InterviewBoard interviewBoard = interviewBoardRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("게시판 정보를 찾을 수 없습니다."));
+		interviewBoard.updateInterviewBoard(interviewBoardDto);
+	}
 }
 
