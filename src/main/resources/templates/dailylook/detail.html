@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Daily Look Post Detail</title>
+</head>
+<body>
+<h1>Daily Look Post</h1>
+<h1 th:text="${dailyLook.title}">Title</h1>
+<p>Content: <span th:text="${dailyLook.content}">Content</span></p>
+<a href="/fashionlog/dailylook">Back to Daily Look List</a>
+</body>
+</html>

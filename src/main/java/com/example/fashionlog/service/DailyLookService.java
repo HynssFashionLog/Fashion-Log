@@ -31,4 +31,11 @@ public class DailyLookService {
         DailyLook dailyLook = DailyLookDto.convertToEntity(dailyLookDto);
         dailyLookRepository.save(dailyLook);
     }
+
+    //추가 코드
+    public DailyLookDto getDailyLookPostById(Long id) {
+        DailyLook dailyLook = dailyLookRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("게시글을 찾지 못했습니다."));
+        return DailyLookDto.convertToDto(dailyLook);
+    }
 }

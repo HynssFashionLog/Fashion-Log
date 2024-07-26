@@ -16,7 +16,10 @@
   </thead>
   <tbody>
   <tr th:each="post:${dailylooks}">
-    <td th:text="${post.title}">제목</td>
+    <td>
+      <!-- 추가 코드 -->
+      <a th:text="${post.title}" th:href="@{/fashionlog/dailylook/{id}(id=${post.id})}">제목</a>
+    </td>
     <td>작성자</td>
     <td th:text="${post.createdAt}">작성일</td>
   </tr>
