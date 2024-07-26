@@ -49,7 +49,6 @@ public class DailyLookController {
         return "dailylook/detail";
     }
 
-    //추가 코드
     @GetMapping("/{id}/edit")
     public String getDailyLookEdit(@PathVariable Long id, Model model) {
         model.addAttribute("dailyLook", dailyLookService.getDailyLookPostById(id));
@@ -60,6 +59,12 @@ public class DailyLookController {
     public String editDailyLookPost(@PathVariable Long id,
         @ModelAttribute DailyLookDto dailyLookDto) {
         dailyLookService.editDailyLookPost(id, dailyLookDto);
+        return "redirect:/fashionlog/dailylook";
+    }
+
+    @PostMapping("{id}/delete")
+    public String deleteDailyPost(@PathVariable Long id) {
+        dailyLookService.deleteDailyPost(id);
         return "redirect:/fashionlog/dailylook";
     }
 }
