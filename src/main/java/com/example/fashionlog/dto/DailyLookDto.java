@@ -47,7 +47,7 @@ public class DailyLookDto {
             .content(dailyLookDto.getContent())
             .postStatus(dailyLookDto.getPostStatus())
             .createdAt(LocalDateTime.now())
-            .updatedAt(LocalDateTime.now())
+            .updatedAt(dailyLookDto.getUpdatedAt())
             .deletedAt(dailyLookDto.getDeletedAt())
             .build();
     }

@@ -43,10 +43,23 @@ public class DailyLookController {
         return "redirect:/fashionlog/dailylook";
     }
 
-    //추가 코드
     @GetMapping("/{id}")
     public String getDailyLookPostById(@PathVariable Long id, Model model) {
         model.addAttribute("dailyLook", dailyLookService.getDailyLookPostById(id));
         return "dailylook/detail";
+    }
+
+    //추가 코드
+    @GetMapping("/{id}/edit")
+    public String getDailyLookEdit(@PathVariable Long id, Model model) {
+        model.addAttribute("dailyLook", dailyLookService.getDailyLookPostById(id));
+        return "dailylook/edit";
+    }
+
+    @PostMapping("/{id}/edit")
+    public String editDailyLookPost(@PathVariable Long id,
+        @ModelAttribute DailyLookDto dailyLookDto) {
+        dailyLookService.editDailyLookPost(id, dailyLookDto);
+        return "redirect:/fashionlog/dailylook";
     }
 }

@@ -1,5 +1,7 @@
 package com.example.fashionlog.domain;
 
+import com.example.fashionlog.dto.DailyLookDto;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,5 +42,12 @@ public class DailyLook {
     private LocalDateTime updatedAt;
     @Column
     private LocalDateTime deletedAt;
+
+    // 추가 코드
+    public void updateDailyLook(DailyLookDto dailyLookDto) {
+        this.title = dailyLookDto.getTitle();
+        this.content = dailyLookDto.getContent();
+        this.updatedAt = LocalDateTime.now();
+    }
 
 }

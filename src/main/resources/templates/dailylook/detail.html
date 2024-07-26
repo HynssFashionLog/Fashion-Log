@@ -8,6 +8,8 @@
 <h1>Daily Look Post</h1>
 <h1 th:text="${dailyLook.title}">Title</h1>
 <p>Content: <span th:text="${dailyLook.content}">Content</span></p>
-<a href="/fashionlog/dailylook">Back to Daily Look List</a>
+<a href="/fashionlog/dailylook">뒤로</a>
+<a th:href="@{/fashionlog/dailylook/{id}/edit(id=${dailyLook.getId()})}" class="edit-btn">수정</a>
+
 </body>
 </html>
