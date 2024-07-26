@@ -44,4 +44,16 @@ public class FreeBoardController {
 		model.addAttribute("post", freeBoardService.getFreeBoardDtoById(id));
 		return "freeboard/detail";
 	}
+
+	@GetMapping("/{id}/edit")
+	public String editFreeBoardForm(@PathVariable("id") Long id, Model model) {
+		model.addAttribute("post", freeBoardService.getFreeBoardDtoById(id));
+		return "freeboard/edit";
+	}
+
+	@PostMapping("/{id}/edit")
+	public String editPost(@PathVariable("id") Long id, @ModelAttribute FreeBoardDto freeBoardDto) {
+		freeBoardService.updateFreeBoardPost(id, freeBoardDto);
+		return "redirect:/fashionlog/freeboard/{id}";
+	}
 }
