@@ -16,7 +16,7 @@
   <tbody>
   <tr th:each="interview : ${interviewBoards}">
     <td>
-      <a th:href="@{/interviewboard/{id}(id=${interview.id})}" th:text="${interview.title}"></a>
+      <a th:href="@{/fashionlog/interviewboard/{id}(id=${interview.id})}" th:text="${interview.title}"></a>
     </td>
     <td></td>
     <td th:text="${interview.createdAt}"></td>
