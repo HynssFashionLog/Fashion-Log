@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @Table(name = "interview_board")
@@ -19,6 +20,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLDelete(sql = "UPDATE interview_board SET status = false, deleted_at = CURRENT_TIMESTAMP(6) WHERE interview_board_id = ?")
 public class InterviewBoard {
 
 	@Id

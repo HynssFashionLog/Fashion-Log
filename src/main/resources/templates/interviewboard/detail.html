@@ -19,6 +19,9 @@
     <div class="post-actions">
         <a th:href="@{/fashionlog/interviewboard}">목록으로</a>
         <a th:href="@{/fashionlog/interviewboard/{id}/edit(id=${interviewPost.id})}" class="edit-btn">수정</a>
+        <form th:action="@{/fashionlog/interviewboard/{id}/delete(id=${interviewPost.id})}" method="post" class="delete-form">
+            <button type="submit">삭제</button>
+        </form>
     </div>
 </div>
 </body>

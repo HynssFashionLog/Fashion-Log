@@ -14,7 +14,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr th:each="interview : ${interviewBoards}">
+  <tr th:if="${interview.status}" th:each="interview : ${interviewBoards}">
     <td>
       <a th:href="@{/fashionlog/interviewboard/{id}(id=${interview.id})}" th:text="${interview.title}"></a>
     </td>

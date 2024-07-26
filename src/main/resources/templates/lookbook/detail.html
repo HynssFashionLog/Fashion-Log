@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>상세 페이지</title>
+  <link rel="stylesheet" th:href="@{/css/lookbook.css}">
+</head>
+<body>
+<div class="container">
+  <h1 th:text="${lookbook.title}"></h1>
+  <p th:text="${lookbook.content}"></p>
+  <p>회원 아이디: <span th:text="${lookbook.memberId}"></span></p>
+  <p>글 상태: <span th:text="${lookbook.postStatus ? 'Posted' : 'Not Posted'}"></span></p>
+  <p>작성일: <span th:text="${lookbook.createdAt}"></span></p>
+  <p>수정일: <span th:text="${lookbook.updatedAt}"></span></p>
+  <a th:href="@{/fashionlog/lookbook/{id}/edit(id=${lookbook.id})}" class="button">수정</a>
+  <form th:action="@{/fashionlog/lookbook/{id}/delete(id=${lookbook.id})}" method="post" style="display:inline;">
+    <input type="submit" value="삭제" class="button" onclick="return confirm('정말 삭제하시겠습니까?');">
+  </form>
+  <a href="/fashionlog/lookbook" class="button">Lookbook 게시판으로 돌아가기</a>
+</div>
+</body>
+</html>

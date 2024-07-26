@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>게시글 수정</title>
+  <link rel="stylesheet" th:href="@{/css/lookbook.css}">
+</head>
+<body>
+<div class="container">
+  <h1>Edit Lookbook</h1>
+  <form th:action="@{/fashionlog/lookbook/{id}/edit(id=${lookbookDto.id})}" th:object="${lookbookDto}" method="post">
+    <input type="text" th:field="*{memberId}" placeholder="Member ID">
+    <input type="text" th:field="*{title}" placeholder="Title">
+    <textarea th:field="*{content}" placeholder="Content"></textarea>
+    <label>
+      <input type="checkbox" th:field="*{postStatus}"> Post Status
+    </label>
+    <input type="submit" value="Update">
+  </form>
+</div>
+</body>
+</html>
