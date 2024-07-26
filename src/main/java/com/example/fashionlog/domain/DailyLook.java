@@ -43,7 +43,6 @@ public class DailyLook {
     @Column
     private LocalDateTime deletedAt;
 
-    // 추가 코드
     public void updateDailyLook(DailyLookDto dailyLookDto) {
         this.title = dailyLookDto.getTitle();
         this.content = dailyLookDto.getContent();

@@ -1,5 +1,6 @@
 package com.example.fashionlog.controller;
 
+import com.example.fashionlog.dto.DailyLookCommentDto;
 import com.example.fashionlog.dto.DailyLookDto;
 import com.example.fashionlog.service.DailyLookService;
 
@@ -36,7 +37,7 @@ public class DailyLookController {
     }
 
     @PostMapping("/new")
-    public String createDailyLookPostForm(@ModelAttribute("dailyLook") DailyLookDto dailyLookDto) {
+    public String createDailyLookPost(@ModelAttribute("dailyLook") DailyLookDto dailyLookDto) {
         System.out.println("Received DTO: " + dailyLookDto);
         System.out.println("Content in Service: " + dailyLookDto.getContent());
         dailyLookService.createDailyLookPost(dailyLookDto);
@@ -46,6 +47,9 @@ public class DailyLookController {
     @GetMapping("/{id}")
     public String getDailyLookPostById(@PathVariable Long id, Model model) {
         model.addAttribute("dailyLook", dailyLookService.getDailyLookPostById(id));
+        model.addAttribute("dailyLookComments",
+            dailyLookService.getAllDailyLookCommentByDailyLookId(id));
+        model.addAttribute("dailyLookComment", new DailyLookCommentDto());
         return "dailylook/detail";
     }
 
@@ -66,5 +70,12 @@ public class DailyLookController {
     public String deleteDailyPost(@PathVariable Long id) {
         dailyLookService.deleteDailyPost(id);
         return "redirect:/fashionlog/dailylook";
+    }
+
+    @PostMapping("/{id}/comment")
+    public String createDailyLookComment(@PathVariable Long id, @ModelAttribute("dailyLookComment")
+        DailyLookCommentDto dailyLookCommentDto) {
+        dailyLookService.createDailyLookComment(id, dailyLookCommentDto);
+        return "redirect:/fashionlog/dailylook/" + id;
     }
 }

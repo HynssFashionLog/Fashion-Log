@@ -1,6 +1,5 @@
 package com.example.fashionlog.dto;
 
-import com.example.fashionlog.domain.DailyLook;
 import com.example.fashionlog.domain.DailyLookComment;
 
 import java.time.LocalDateTime;
@@ -9,11 +8,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * DTO for {@link DailyLookComment}
  */
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -40,7 +41,7 @@ public class DailyLookCommentDto {
             .build();
     }
 
-    public DailyLookComment convertToEntity(DailyLookCommentDto dailyLookCommentDto) {
+    public static DailyLookComment convertToEntity(DailyLookCommentDto dailyLookCommentDto) {
 
         return DailyLookComment.builder()
             .id(dailyLookCommentDto.getId())
