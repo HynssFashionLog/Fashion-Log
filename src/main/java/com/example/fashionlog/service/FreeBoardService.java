@@ -1,6 +1,7 @@
 package com.example.fashionlog.service;
 
 import com.example.fashionlog.domain.FreeBoard;
+import com.example.fashionlog.domain.FreeBoardComment;
 import com.example.fashionlog.dto.FreeBoardCommentDto;
 import com.example.fashionlog.dto.FreeBoardDto;
 import com.example.fashionlog.repository.FreeBoardCommentRepository;
@@ -61,5 +62,13 @@ public class FreeBoardService {
 		return freeBoardCommentRepository.findByFreeBoardId(freeBoardId).stream()
 			.map(FreeBoardCommentDto::convertToDto)
 			.collect(Collectors.toList());
+	}
+
+	@Transactional
+	public void createFreeBoardComment(Long id, FreeBoardCommentDto freeBoardCommentDto) {
+		FreeBoard freeBoard = freeBoardRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
+		FreeBoardComment freeBoardComment = FreeBoardCommentDto.convertToEntity(freeBoard, freeBoardCommentDto);
+		freeBoardCommentRepository.save(freeBoardComment);
 	}
 }
