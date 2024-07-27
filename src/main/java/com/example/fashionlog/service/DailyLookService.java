@@ -73,8 +73,20 @@ public class DailyLookService {
         dailyLookCommentDto.setDailyLookId(id);
         dailyLookCommentDto.setCommentStatus(true);
         dailyLookCommentDto.setCreatedAt(LocalDateTime.now());
+
+        DailyLook dailyLook = DailyLookFindById(id);
         DailyLookComment dailyLookComment = DailyLookCommentDto.convertToEntity(
-            dailyLookCommentDto);
+            dailyLookCommentDto, dailyLook);
+        dailyLookCommentRepository.save(dailyLookComment);
+    }
+
+    @Transactional
+    public void editDailyLookComment(Long postId, Long commentId,
+        DailyLookCommentDto dailyLookCommentDto) {
+        DailyLook dailyLook = DailyLookFindById(postId);
+        DailyLookComment dailyLookComment = dailyLookCommentRepository.findById(commentId)
+            .orElseThrow(() -> new IllegalArgumentException("댓글을 찾기 못했습니다."));
+        dailyLookComment.updateDailyLookComment(dailyLookCommentDto, dailyLook);
         dailyLookCommentRepository.save(dailyLookComment);
     }
 }
