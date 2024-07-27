@@ -1,5 +1,6 @@
 package com.example.fashionlog.domain;
 
+import com.example.fashionlog.dto.FreeBoardCommentDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -43,4 +44,10 @@ public class FreeBoardComment {
 
 	@Column
 	private LocalDateTime deletedAt;
+
+	public void updateFreeBoardComment(FreeBoardCommentDto freeBoardCommentDto, FreeBoard updatedFreeBoard) {
+		this.freeBoard = updatedFreeBoard;
+		this.content = freeBoardCommentDto.getContent();
+		this.updatedAt = LocalDateTime.now();
+	}
 }

@@ -3,6 +3,9 @@ package com.example.fashionlog.controller;
 import com.example.fashionlog.dto.FreeBoardCommentDto;
 import com.example.fashionlog.dto.FreeBoardDto;
 import com.example.fashionlog.service.FreeBoardService;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +28,9 @@ public class FreeBoardController {
 
 	@GetMapping
 	public String getAllFreeBoardList(Model model) {
-		model.addAttribute("posts", freeBoardService.getAllFreeBoards());
+		Optional<List<FreeBoardDto>> freeBoardOpt = freeBoardService.getAllFreeBoards();
+		List<FreeBoardDto> freeBoardDto = freeBoardOpt.orElse(Collections.emptyList());
+		model.addAttribute("posts", freeBoardDto);
 		return "freeboard/list";
 	}
 
@@ -42,8 +47,16 @@ public class FreeBoardController {
 
 	@GetMapping("/{id}")
 	public String getFreeBoardById(@PathVariable("id") Long id, Model model) {
-		model.addAttribute("post", freeBoardService.getFreeBoardDtoById(id));
-		model.addAttribute("comments", freeBoardService.getCommentsByFreeBoardId(id));
+		Optional<FreeBoardDto> freeBoardOpt = freeBoardService.getFreeBoardDtoById(id);
+		Optional<List<FreeBoardCommentDto>> freeBoardCommentOpt = freeBoardService.getCommentsByFreeBoardId(id);
+
+		FreeBoardDto freeBoardDto = freeBoardOpt.orElse(new FreeBoardDto());
+		List<FreeBoardCommentDto> freeBoardCommentDto = freeBoardCommentOpt.orElse(Collections.emptyList());
+
+		model.addAttribute("post", freeBoardDto);
+		model.addAttribute("comments", freeBoardCommentDto);
+		model.addAttribute("postExists", freeBoardOpt.isPresent());
+
 		return "freeboard/detail";
 	}
 
@@ -66,10 +79,18 @@ public class FreeBoardController {
 		return "redirect:/fashionlog/freeboard";
 	}
 
-	@PostMapping("/{id}/comment")
-	public String saveFreeBoardComment(@PathVariable("id") Long id,
+	@PostMapping("/{postid}/comment")
+	public String saveFreeBoardComment(@PathVariable("postid") Long id,
 		@ModelAttribute FreeBoardCommentDto freeBoardCommentDto) {
 		freeBoardService.createFreeBoardComment(id, freeBoardCommentDto);
-		return "redirect:/fashionlog/freeboard/{id}";
+		return "redirect:/fashionlog/freeboard/{postid}";
+	}
+
+	@PostMapping("/{postid}/edit-comment/{commentid}")
+	public String editFreeBoardComment(@PathVariable("postid") Long postId,
+		@PathVariable("commentid") Long commentId,
+		@ModelAttribute FreeBoardCommentDto freeBoardCommentDto) {
+		freeBoardService.updateFreeBoardComment(postId, commentId, freeBoardCommentDto);
+		return "redirect:/fashionlog/freeboard/{postid}";
 	}
 }

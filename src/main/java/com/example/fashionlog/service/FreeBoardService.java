@@ -27,10 +27,12 @@ public class FreeBoardService {
 		this.freeBoardCommentRepository = freeBoardCommentRepository;
 	}
 
-	public List<FreeBoardDto> getAllFreeBoards() {
-		return freeBoardRepository.findAll().stream().filter(FreeBoard::getPostStatus)
+	public Optional<List<FreeBoardDto>> getAllFreeBoards() {
+		List<FreeBoardDto> freeBoards = freeBoardRepository.findAll().stream()
+			.filter(FreeBoard::getPostStatus)
 			.map(FreeBoardDto::convertToDto)
 			.collect(Collectors.toList());
+		return freeBoards.isEmpty() ? Optional.empty() : Optional.of(freeBoards);
 	}
 
 	@Transactional
@@ -58,17 +60,32 @@ public class FreeBoardService {
 		freeBoardRepository.delete(freeBoard);
 	}
 
-	public List<FreeBoardCommentDto> getCommentsByFreeBoardId(Long freeBoardId) {
-		return freeBoardCommentRepository.findByFreeBoardId(freeBoardId).stream()
+	public Optional<List<FreeBoardCommentDto>> getCommentsByFreeBoardId(Long freeBoardId) {
+		List<FreeBoardCommentDto> comments = freeBoardCommentRepository.findByFreeBoardId(
+				freeBoardId).stream()
 			.map(FreeBoardCommentDto::convertToDto)
 			.collect(Collectors.toList());
+		return comments.isEmpty() ? Optional.empty() : Optional.of(comments);
 	}
 
 	@Transactional
 	public void createFreeBoardComment(Long id, FreeBoardCommentDto freeBoardCommentDto) {
 		FreeBoard freeBoard = freeBoardRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
-		FreeBoardComment freeBoardComment = FreeBoardCommentDto.convertToEntity(freeBoard, freeBoardCommentDto);
+		FreeBoardComment freeBoardComment = FreeBoardCommentDto.convertToEntity(freeBoard,
+			freeBoardCommentDto);
+		freeBoardCommentRepository.save(freeBoardComment);
+	}
+
+	@Transactional
+	public void updateFreeBoardComment(Long postId, Long commentId,
+		FreeBoardCommentDto freeBoardCommentDto) {
+		FreeBoard freeBoard = freeBoardRepository.findById(postId)
+			.orElseThrow(() -> new IllegalArgumentException("id: " + postId + " not found"));
+		FreeBoardComment freeBoardComment = freeBoardCommentRepository.findById(commentId)
+			.orElseThrow(
+				() -> new IllegalArgumentException("comment id:" + commentId + " not found"));
+		freeBoardComment.updateFreeBoardComment(freeBoardCommentDto, freeBoard);
 		freeBoardCommentRepository.save(freeBoardComment);
 	}
 }
