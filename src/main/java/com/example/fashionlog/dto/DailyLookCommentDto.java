@@ -1,5 +1,6 @@
 package com.example.fashionlog.dto;
 
+import com.example.fashionlog.domain.DailyLook;
 import com.example.fashionlog.domain.DailyLookComment;
 
 import java.time.LocalDateTime;
@@ -32,7 +33,7 @@ public class DailyLookCommentDto {
 
         return DailyLookCommentDto.builder()
             .id(dailyLookComment.getId())
-            .dailyLookId(dailyLookComment.getDailyLookId())
+            .dailyLookId(dailyLookComment.getDailyLook().getId())
             .content(dailyLookComment.getContent())
             .commentStatus(dailyLookComment.getCommentStatus())
             .createdAt(dailyLookComment.getCreatedAt())
@@ -41,11 +42,11 @@ public class DailyLookCommentDto {
             .build();
     }
 
-    public static DailyLookComment convertToEntity(DailyLookCommentDto dailyLookCommentDto) {
+    public static DailyLookComment convertToEntity(DailyLookCommentDto dailyLookCommentDto, DailyLook dailyLook) {
 
         return DailyLookComment.builder()
             .id(dailyLookCommentDto.getId())
-            .dailyLookId(dailyLookCommentDto.getDailyLookId())
+            .dailyLook(dailyLook)
             .content(dailyLookCommentDto.getContent())
             .commentStatus(dailyLookCommentDto.getCommentStatus())
             .createdAt(dailyLookCommentDto.getCreatedAt())
