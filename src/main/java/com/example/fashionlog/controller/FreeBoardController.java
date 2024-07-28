@@ -48,10 +48,12 @@ public class FreeBoardController {
 	@GetMapping("/{id}")
 	public String getFreeBoardById(@PathVariable("id") Long id, Model model) {
 		Optional<FreeBoardDto> freeBoardOpt = freeBoardService.getFreeBoardDtoById(id);
-		Optional<List<FreeBoardCommentDto>> freeBoardCommentOpt = freeBoardService.getCommentsByFreeBoardId(id);
+		Optional<List<FreeBoardCommentDto>> freeBoardCommentOpt = freeBoardService.getCommentsByFreeBoardId(
+			id);
 
 		FreeBoardDto freeBoardDto = freeBoardOpt.orElse(new FreeBoardDto());
-		List<FreeBoardCommentDto> freeBoardCommentDto = freeBoardCommentOpt.orElse(Collections.emptyList());
+		List<FreeBoardCommentDto> freeBoardCommentDto = freeBoardCommentOpt.orElse(
+			Collections.emptyList());
 
 		model.addAttribute("post", freeBoardDto);
 		model.addAttribute("comments", freeBoardCommentDto);
@@ -74,8 +76,9 @@ public class FreeBoardController {
 	}
 
 	@PostMapping("/{id}/delete")
-	public String deleteFreeBoardPost(@PathVariable("id") Long id) {
-		freeBoardService.deleteFreeBoardPost(id);
+	public String deleteFreeBoardPost(@PathVariable("id") Long id,
+		@ModelAttribute FreeBoardDto freeBoardDto) {
+		freeBoardService.deleteFreeBoardPost(id, freeBoardDto);
 		return "redirect:/fashionlog/freeboard";
 	}
 
@@ -91,6 +94,14 @@ public class FreeBoardController {
 		@PathVariable("commentid") Long commentId,
 		@ModelAttribute FreeBoardCommentDto freeBoardCommentDto) {
 		freeBoardService.updateFreeBoardComment(postId, commentId, freeBoardCommentDto);
+		return "redirect:/fashionlog/freeboard/{postid}";
+	}
+
+	@PostMapping("/{postid}/delete-comment/{commentid}")
+	public String deleteFreeBoardComment(@PathVariable("postid") Long postId,
+		@PathVariable("commentid") Long commentId,
+		@ModelAttribute FreeBoardCommentDto freeBoardCommentDto) {
+		freeBoardService.deleteFreeBoardComment(postId, commentId, freeBoardCommentDto);
 		return "redirect:/fashionlog/freeboard/{postid}";
 	}
 }

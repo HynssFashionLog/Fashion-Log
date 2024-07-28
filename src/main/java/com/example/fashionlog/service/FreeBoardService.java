@@ -54,15 +54,17 @@ public class FreeBoardService {
 	}
 
 	@Transactional
-	public void deleteFreeBoardPost(Long id) {
+	public void deleteFreeBoardPost(Long id, FreeBoardDto freeBoardDto) {
 		FreeBoard freeBoard = freeBoardRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
-		freeBoardRepository.delete(freeBoard);
+		freeBoard.deleteFreeBoard(freeBoardDto);
+		freeBoardRepository.save(freeBoard);
 	}
 
 	public Optional<List<FreeBoardCommentDto>> getCommentsByFreeBoardId(Long freeBoardId) {
 		List<FreeBoardCommentDto> comments = freeBoardCommentRepository.findByFreeBoardId(
 				freeBoardId).stream()
+			.filter(FreeBoardComment::getCommentStatus)
 			.map(FreeBoardCommentDto::convertToDto)
 			.collect(Collectors.toList());
 		return comments.isEmpty() ? Optional.empty() : Optional.of(comments);
@@ -86,6 +88,17 @@ public class FreeBoardService {
 			.orElseThrow(
 				() -> new IllegalArgumentException("comment id:" + commentId + " not found"));
 		freeBoardComment.updateFreeBoardComment(freeBoardCommentDto, freeBoard);
+		freeBoardCommentRepository.save(freeBoardComment);
+	}
+
+	@Transactional
+	public void deleteFreeBoardComment(Long postId, Long commentId,
+		FreeBoardCommentDto freeBoardCommentDto) {
+		FreeBoard freeBoard = freeBoardRepository.findById(postId)
+			.orElseThrow(() -> new IllegalArgumentException("id: " + postId + " not found"));
+		FreeBoardComment freeBoardComment = freeBoardCommentRepository.findById(commentId)
+			.orElseThrow(() -> new IllegalArgumentException("id: " + commentId + " not found"));
+		freeBoardComment.deleteFreeBoardComment(freeBoardCommentDto, freeBoard);
 		freeBoardCommentRepository.save(freeBoardComment);
 	}
 }

@@ -50,4 +50,9 @@ public class FreeBoardComment {
 		this.content = freeBoardCommentDto.getContent();
 		this.updatedAt = LocalDateTime.now();
 	}
+
+	public void deleteFreeBoardComment(FreeBoardCommentDto freeBoardCommentDto, FreeBoard deletedFreeBoard) {
+		this.commentStatus = Boolean.FALSE;
+		this.deletedAt = LocalDateTime.now();
+	}
 }

@@ -47,4 +47,9 @@ public class FreeBoard {
 		this.content = freeBoardDto.getContent();
 		this.updatedAt = LocalDateTime.now();
 	}
+
+	public void deleteFreeBoard(FreeBoardDto freeBoardDto) {
+		this.postStatus = Boolean.FALSE;
+		this.deletedAt = LocalDateTime.now();
+	}
 }

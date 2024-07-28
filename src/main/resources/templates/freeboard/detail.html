@@ -42,6 +42,7 @@
       <th>내용</th>
       <th>작성일</th>
       <th>수정 버튼</th>
+      <th>삭제 버튼</th>
     </tr>
     </thead>
     <tbody>
@@ -50,12 +51,20 @@
       <td th:text="${comment.content}"></td>
       <td th:text="${comment.createdAt}"></td>
       <td>
-        <button type="button" th:onclick="'showEditForm(' + ${comment.id} + ')'" th:id="'edit-btn-' + ${comment.id}">Edit</button>
+        <button type="button" th:onclick="'showEditForm(' + ${comment.id} + ')'"
+                th:id="'edit-btn-' + ${comment.id}">Edit
+        </button>
+      </td>
+      <td>
+        <form th:action="@{/fashionlog/freeboard/{postId}/delete-comment/{commentId}(postId=${post.id}, commentId=${comment.id})}"
+              method="post">
+          <button type="submit">Delete</button>
+        </form>
       </td>
     </tr>
     <tr th:each="comment : ${comments}" th:attr="id=${'edit-form-' + comment.id}"
         style="display:none;">
-      <td colspan="4">
+      <td colspan="5">
         <form
             th:action="@{/fashionlog/freeboard/{postId}/edit-comment/{commentId}(postId=${post.id}, commentId=${comment.id})}"
             method="post">
