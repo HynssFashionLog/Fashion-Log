@@ -1,7 +1,7 @@
 package com.example.fashionlog.domain;
 
 import com.example.fashionlog.dto.DailyLookCommentDto;
-import com.example.fashionlog.dto.DailyLookDto;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -51,4 +51,10 @@ public class DailyLookComment {
         this.dailyLook = dailyLook;
         this.content = dailyLookCommentDto.getContent();
         this.updatedAt = LocalDateTime.now();
-    }}
+    }
+
+    public void deleteDailyLookComment() {
+        this.commentStatus = Boolean.FALSE;
+        this.deletedAt = LocalDateTime.now();
+    }
+}

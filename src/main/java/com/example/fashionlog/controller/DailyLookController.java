@@ -47,13 +47,13 @@ public class DailyLookController {
     @GetMapping("/{id}")
     public String getDailyLookPostById(
         @PathVariable("id") Long id,
-        @PathVariable(required = false) Long editCommentId,
+        Long editCommentId,
         Model model) {
         model.addAttribute("dailyLook", dailyLookService.getDailyLookPostById(id));
         model.addAttribute("dailyLookComments",
             dailyLookService.getAllDailyLookCommentByDailyLookId(id));
         model.addAttribute("dailyLookComment", new DailyLookCommentDto());
-        model.addAttribute("editCommentId", editCommentId);
+//        model.addAttribute("editCommentId", editCommentId);
         return "dailylook/detail";
     }
 
@@ -67,12 +67,12 @@ public class DailyLookController {
     public String editDailyLookPost(@PathVariable("id") Long id,
         @ModelAttribute DailyLookDto dailyLookDto) {
         dailyLookService.editDailyLookPost(id, dailyLookDto);
-        return "redirect:/fashionlog/dailylook";
+        return "redirect:/fashionlog/dailylook" + id;
     }
 
     @PostMapping("{id}/delete")
     public String deleteDailyPost(@PathVariable("id") Long id) {
-        dailyLookService.deleteDailyPost(id);
+        dailyLookService.deleteDailyLookPost(id);
         return "redirect:/fashionlog/dailylook";
     }
 
@@ -92,6 +92,16 @@ public class DailyLookController {
         @ModelAttribute("dailyLookComment") DailyLookCommentDto dailyLookCommentDto
     ) {
         dailyLookService.editDailyLookComment(postId, commentId, dailyLookCommentDto);
+
+        return "redirect:/fashionlog/dailylook/" + postId;
+    }
+
+    @PostMapping("/{postid}/delete-comment/{commentid}")
+    public String deleteDailyLookComment(
+        @PathVariable("postid") Long postId,
+        @PathVariable("commentid") Long commentId
+    ) {
+        dailyLookService.deleteDailyLookComment(commentId);
 
         return "redirect:/fashionlog/dailylook/" + postId;
     }

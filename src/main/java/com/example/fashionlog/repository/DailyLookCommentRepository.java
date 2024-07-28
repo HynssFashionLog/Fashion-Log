@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DailyLookCommentRepository extends JpaRepository<DailyLookComment, Long> {
 
-    List<DailyLookComment> findAllByDailyLookId(Long id);
+    List<DailyLookComment> findAllByDailyLookIdAndCommentStatusIsTrue(Long id);
 }
