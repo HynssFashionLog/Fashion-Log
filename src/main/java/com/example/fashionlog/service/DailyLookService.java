@@ -48,7 +48,7 @@ public class DailyLookService {
 
     @Transactional(readOnly = true)
     public List<DailyLookCommentDto> getAllDailyLookCommentByDailyLookId(Long id) {
-        List<DailyLookComment> DailyLookComments = dailyLookCommentRepository.findAllByDailyLookId(id);
+        List<DailyLookComment> DailyLookComments = dailyLookCommentRepository.findAllByDailyLookIdAndCommentStatusIsTrue(id);
         return DailyLookComments.stream().map(DailyLookCommentDto::convertToDto).collect(Collectors.toList());
     }
 
@@ -64,14 +64,15 @@ public class DailyLookService {
     }
 
     @Transactional
-    public void deleteDailyPost(Long id) {
+    public void deleteDailyLookPost(Long id) {
         dailyLookRepository.deleteById(id);
     }
 
     @Transactional
     public void createDailyLookComment(Long id, DailyLookCommentDto dailyLookCommentDto) {
+        dailyLookCommentDto.setId(null);
         dailyLookCommentDto.setDailyLookId(id);
-        dailyLookCommentDto.setCommentStatus(true);
+        dailyLookCommentDto.setCommentStatus(Boolean.TRUE);
         dailyLookCommentDto.setCreatedAt(LocalDateTime.now());
 
         DailyLook dailyLook = DailyLookFindById(id);
@@ -84,9 +85,20 @@ public class DailyLookService {
     public void editDailyLookComment(Long postId, Long commentId,
         DailyLookCommentDto dailyLookCommentDto) {
         DailyLook dailyLook = DailyLookFindById(postId);
-        DailyLookComment dailyLookComment = dailyLookCommentRepository.findById(commentId)
-            .orElseThrow(() -> new IllegalArgumentException("댓글을 찾기 못했습니다."));
+        DailyLookComment dailyLookComment = getDailyLookComment(commentId);
         dailyLookComment.updateDailyLookComment(dailyLookCommentDto, dailyLook);
         dailyLookCommentRepository.save(dailyLookComment);
+    }
+
+    @Transactional
+    public void deleteDailyLookComment(Long commentId) {
+        DailyLookComment dailyLookComment = getDailyLookComment(commentId);
+        dailyLookComment.deleteDailyLookComment();
+        dailyLookCommentRepository.save(dailyLookComment);
+    }
+
+    private DailyLookComment getDailyLookComment(Long commentId) {
+        return dailyLookCommentRepository.findById(commentId)
+            .orElseThrow(() -> new IllegalArgumentException("댓글을 찾기 못했습니다."));
     }
 }

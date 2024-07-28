@@ -55,13 +55,19 @@
       <!-- 수정 버튼 -->
       <button th:id="'edit-button-' + ${comment.id}" th:onclick="'toggleEditForm(' + ${comment.id} + ')'">수정</button>
     </td>
+    <td>
+      <!-- 삭제 버튼 -->
+      <form th:action="@{/fashionlog/dailylook/{postid}/delete-comment/{commentid}(postid=${dailyLook.id}, commentid=${comment.id})}" method="post">
+        <button type="submit">삭제</button>
+      </form>
+    </td>
   </tr>
   </tbody>
 </table>
 <!-- 댓글 작성 -->
 <form th:action="@{/fashionlog/dailylook/{id}/comment(id=${dailyLook.id})}" th:object="${dailyLookComment}" method="post">
-  <label for="comment"></label>
-  <textarea id="comment" name="comment" th:field="*{content}"></textarea>
+  <label for="content">댓글</label>
+  <textarea id="content" name="content" th:field="*{content}"></textarea>
   <button type="submit">등록</button>
 </form>
 </body>
