@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
   <meta charset="UTF-8">
   <title>자유 게시글 수정</title>
-  <link rel="stylesheet" th:href="@{/css/style.css}" />
+  <link rel="stylesheet" th:href="@{/freeboard/css/style.css}" />
 </head>
 <body>
 <h1>글 수정</h1>
-<form th:action="@{/fashionlog/freeboard/{id}/edit(id=${post.get().id})}" method="post">
+<form th:action="@{/fashionlog/freeboard/{id}/edit(id=${post.id})}" method="post">
   <div>
     <label for="title">제목</label>
-    <input type="text" id="title" name="title" th:value="${post.get().title}">
+    <input type="text" id="title" name="title" required th:value="${post.title}">
   </div>
   <div>
     <label for="content">내용</label>
-    <textarea id="content" name="content" th:text="${post.get().content}"></textarea>
+    <textarea id="content" name="content" required th:text="${post.content}"></textarea>
   </div>
   <button type="submit">수정하기</button>
 </form>

@@ -45,14 +45,21 @@ public class FreeBoardComment {
 	@Column
 	private LocalDateTime deletedAt;
 
-	public void updateFreeBoardComment(FreeBoardCommentDto freeBoardCommentDto, FreeBoard updatedFreeBoard) {
-		this.freeBoard = updatedFreeBoard;
+	public void updateFreeBoardComment(FreeBoardCommentDto freeBoardCommentDto) {
+		validateField(freeBoardCommentDto.getContent(), "Content");
+
 		this.content = freeBoardCommentDto.getContent();
 		this.updatedAt = LocalDateTime.now();
 	}
 
-	public void deleteFreeBoardComment(FreeBoardCommentDto freeBoardCommentDto, FreeBoard deletedFreeBoard) {
+	public void deleteFreeBoardComment() {
 		this.commentStatus = Boolean.FALSE;
 		this.deletedAt = LocalDateTime.now();
+	}
+
+	public static void validateField(String field, String fieldName) {
+		if (field == null || field.isEmpty()) {
+			throw new IllegalArgumentException(fieldName + " cannot be null or empty");
+		}
 	}
 }

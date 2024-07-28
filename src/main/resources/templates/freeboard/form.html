@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
+  <meta charset="UTF-8">
   <title>자유 게시판 작성</title>
-  <link rel="stylesheet" th:href="@{/css/style.css}" />
+  <link rel="stylesheet" th:href="@{/freeboard/css/style.css}" />
 </head>
 <body>
 <h1>글 작성</h1>
 <form th:action="@{/fashionlog/freeboard}" method="post">
   <div>
     <label for="title">제목</label>
-    <input type="text" id="title" name="title" />
+    <input type="text" id="title" name="title" required/>
   </div>
   <div>
     <label for="content">내용</label>
-    <textarea id="content" name="content"></textarea>
+    <textarea id="content" name="content" required></textarea>
   </div>
   <button type="submit">저장</button>
 </form>

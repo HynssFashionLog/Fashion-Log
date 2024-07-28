@@ -42,14 +42,23 @@ public class FreeBoard {
 	@Column
 	private LocalDateTime deletedAt;
 
-	public void updateFreeBoard (FreeBoardDto freeBoardDto) {
+	public void updateFreeBoard(FreeBoardDto freeBoardDto) {
+		validateField(freeBoardDto.getTitle(), "Title");
+		validateField(freeBoardDto.getContent(), "Content");
+
 		this.title = freeBoardDto.getTitle();
 		this.content = freeBoardDto.getContent();
 		this.updatedAt = LocalDateTime.now();
 	}
 
-	public void deleteFreeBoard(FreeBoardDto freeBoardDto) {
+	public void deleteFreeBoard() {
 		this.postStatus = Boolean.FALSE;
 		this.deletedAt = LocalDateTime.now();
+	}
+
+	public static void validateField(String field, String fieldName) {
+		if (field == null || field.isEmpty()) {
+			throw new IllegalArgumentException(fieldName + " cannot be null or empty");
+		}
 	}
 }
