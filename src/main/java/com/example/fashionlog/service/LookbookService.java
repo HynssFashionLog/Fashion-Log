@@ -1,7 +1,10 @@
 package com.example.fashionlog.service;
 
 import com.example.fashionlog.domain.Lookbook;
+import com.example.fashionlog.domain.LookbookComment;
+import com.example.fashionlog.dto.LookbookCommentDto;
 import com.example.fashionlog.dto.LookbookDto;
+import com.example.fashionlog.repository.LookbookCommentRepository;
 import com.example.fashionlog.repository.LookbookRepository;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,10 +18,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class LookbookService {
 
 	private final LookbookRepository lookbookRepository;
+	private final LookbookCommentRepository lookbookCommentRepository;
 
 	@Autowired
-	public LookbookService(LookbookRepository lookbookRepository) {
+	public LookbookService(LookbookRepository lookbookRepository, LookbookCommentRepository lookbookCommentRepository) {
 		this.lookbookRepository = lookbookRepository;
+		this.lookbookCommentRepository = lookbookCommentRepository;
 	}
 
 	public List<LookbookDto> getAllLookbooks() {
@@ -80,6 +85,58 @@ public class LookbookService {
 		lookbook.setTitle(dto.getTitle());
 		lookbook.setContent(dto.getContent());
 		lookbook.setPostStatus(dto.isPostStatus());
+	}
+
+	public List<LookbookCommentDto> getCommentsByLookbookId(Long lookbookId) {
+		return lookbookCommentRepository.findByLookbookId(lookbookId).stream()
+			.map(this::convertCommentToDto)
+			.collect(Collectors.toList());
+	}
+
+	public LookbookCommentDto createComment(LookbookCommentDto commentDto) {
+		Lookbook lookbook = lookbookRepository.findById(commentDto.getLookbookId())
+			.orElseThrow(() -> new RuntimeException("Lookbook not found"));
+		LookbookComment comment = convertCommentToEntity(commentDto);
+		comment.setLookbook(lookbook);
+		LookbookComment savedComment = lookbookCommentRepository.save(comment);
+		return convertCommentToDto(savedComment);
+	}
+
+	public LookbookCommentDto updateComment(Long id, LookbookCommentDto commentDto) {
+		LookbookComment comment = lookbookCommentRepository.findById(id)
+			.orElseThrow(() -> new RuntimeException("Comment not found"));
+		comment.setContent(commentDto.getContent());
+		LookbookComment updatedComment = lookbookCommentRepository.save(comment);
+		return convertCommentToDto(updatedComment);
+	}
+
+	public void deleteComment(Long id) {
+		lookbookCommentRepository.deleteById(id);
+	}
+
+	private LookbookCommentDto convertCommentToDto(LookbookComment comment) {
+		LookbookCommentDto dto = new LookbookCommentDto();
+		dto.setId(comment.getId());
+		dto.setLookbookId(comment.getLookbook().getId());
+		dto.setMemberId(comment.getMemberId());
+		dto.setContent(comment.getContent());
+		dto.setCreatedAt(comment.getCreatedAt());
+		dto.setUpdatedAt(comment.getUpdatedAt());
+		return dto;
+	}
+
+	private LookbookComment convertCommentToEntity(LookbookCommentDto dto) {
+		LookbookComment comment = new LookbookComment();
+		comment.setMemberId(dto.getMemberId());
+		comment.setContent(dto.getContent());
+		comment.setCommentStatus(dto.getCommentStatus() != null ? dto.getCommentStatus() : true); // 기본값으로 true 설정
+		return comment;
+	}
+
+	public LookbookCommentDto getCommentById(Long commentId) {
+		LookbookComment comment = lookbookCommentRepository.findById(commentId)
+			.orElseThrow(() -> new RuntimeException("Comment not found"));
+		return convertCommentToDto(comment);
 	}
 
 }
