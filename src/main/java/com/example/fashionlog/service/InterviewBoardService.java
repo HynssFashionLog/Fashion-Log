@@ -71,6 +71,8 @@ public class InterviewBoardService {
 	public void addComment(Long id, InterviewBoardCommentDto interviewBoardCommentDto) {
 		InterviewBoard interviewBoard = interviewBoardRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("게시판 정보를 찾을 수 없습니다."));
+		interviewBoardCommentDto.setId(null);
+		interviewBoardCommentDto.setBoardId(id);
 		interviewBoardCommentDto.setCreatedAt(LocalDateTime.now());
 		interviewBoardCommentDto.setStatus(true);
 		InterviewBoardComment interviewBoardComment = interviewBoardCommentDto.toEntity(
