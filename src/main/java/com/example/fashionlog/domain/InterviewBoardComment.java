@@ -1,5 +1,6 @@
 package com.example.fashionlog.domain;
 
+import com.example.fashionlog.dto.InterviewBoardCommentDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -48,4 +49,8 @@ public class InterviewBoardComment {
 	@Column
 	private LocalDateTime deletedAt;
 
+	public void updateInterviewComment(InterviewBoardCommentDto interviewBoardCommentDto) {
+		this.content = interviewBoardCommentDto.getContent();
+		this.updatedAt = LocalDateTime.now();
+	}
 }
