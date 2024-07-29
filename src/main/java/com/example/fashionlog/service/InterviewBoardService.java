@@ -79,5 +79,12 @@ public class InterviewBoardService {
 			interviewBoardCommentDto, interviewBoard);
 		interviewBoardCommentRepository.save(interviewBoardComment);
 	}
+
+	@Transactional
+	public void updateInterviewComment(Long postId, Long commentId, InterviewBoardCommentDto interviewBoardCommentDto) {
+		InterviewBoardComment interviewBoardComment = interviewBoardCommentRepository.findById(commentId)
+			.orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+		interviewBoardComment.updateInterviewComment(interviewBoardCommentDto);
+	}
 }
 

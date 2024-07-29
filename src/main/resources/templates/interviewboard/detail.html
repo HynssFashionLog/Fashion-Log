@@ -2,6 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
   <title>인터뷰 게시글 상세보기</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    .edit-form {
+      display: none;
+    }
+
+    .edit-buttons {
+      display: none;
+    }
+  </style>
 </head>
 <body>
 <h1>인터뷰 게시글</h1>
@@ -35,8 +45,24 @@
     </thead>
     <tbody>
     <tr th:each="comments : ${interviewComment}">
-      <td th:text="${comments.content}"></td>
-      <td th:text="${comments.createdAt}"></td>
+      <td>
+        <span class="comment-content" th:text="${comments.content}"
+              th:data-id="${comments.id}"></span>
+        <div class="edit-form">
+          <textarea class="edit-textarea"></textarea>
+        </div>
+      </td>
+      <td>
+        <span th:if="${comments.updatedAt}" th:text="${comments.updatedAt}"></span>
+        <span th:unless="${comments.updatedAt}" th:text="${comments.createdAt}"></span>
+      </td>
+      <td>
+        <button type="button" class="edit-comment">수정</button>
+        <div class="edit-buttons">
+          <button type="button" class="save-edit">저장</button>
+          <button type="button" class="cancel-edit">취소</button>
+        </div>
+      </td>
     </tr>
     </tbody>
   </table>
@@ -50,5 +76,60 @@
     <button type="submit">작성하기</button>
   </form>
 </div>
+<!--댓글 수정 javascript-->
+<script th:inline="javascript">
+  $(document).ready(function () {
+    $('.edit-comment').click(function () {
+      var row = $(this).closest('tr');
+      var content = row.find('.comment-content');
+      var editForm = row.find('.edit-form');
+      var textarea = editForm.find('.edit-textarea');
+      var editButtons = row.find('.edit-buttons');
+
+      textarea.val(content.text());
+      content.hide();
+      editForm.show();
+      $(this).hide();
+      editButtons.show();
+    });
+
+    $('.cancel-edit').click(function () {
+      var row = $(this).closest('tr');
+      row.find('.comment-content').show();
+      row.find('.edit-form').hide();
+      row.find('.edit-comment').show();
+      row.find('.edit-buttons').hide();
+    });
+
+    $('.save-edit').click(function () {
+      var row = $(this).closest('tr');
+      var content = row.find('.comment-content');
+      var editForm = row.find('.edit-form');
+      var textarea = editForm.find('.edit-textarea');
+      var commentId = content.data('id');
+      var newContent = textarea.val();
+      var postId = [[${interviewPost.id}]];
+
+      $.ajax({
+        url: '/fashionlog/interviewboard/' + postId + '/edit-comment/' + commentId,
+        type: 'POST',
+        data: {content: newContent},
+        success: function (response) {
+          content.text(newContent).show();
+          editForm.hide();
+          row.find('.edit-comment').show();
+          row.find('.edit-buttons').hide();
+        },
+        error: function (xhr, status, error) {
+          alert('댓글 수정에 실패했습니다.');
+          editForm.hide();
+          content.show();
+          row.find('.edit-comment').show();
+          row.find('.edit-buttons').hide();
+        }
+      });
+    });
+  });
+</script>
 </body>
 </html>

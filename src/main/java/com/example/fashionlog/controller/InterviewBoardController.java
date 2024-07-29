@@ -74,5 +74,12 @@ public class InterviewBoardController {
 		interviewBoardService.addComment(id, interviewBoardCommentDto);
 		return "redirect:/fashionlog/interviewboard/{id}";
 	}
+
+	@PostMapping("/{postId}/edit-comment/{commentId}")
+	public String editComment(@PathVariable("postId") Long postId, @PathVariable("commentId") Long commentId,
+		@ModelAttribute InterviewBoardCommentDto interviewBoardCommentDto) {
+		interviewBoardService.updateInterviewComment(postId, commentId, interviewBoardCommentDto);
+		return "redirect:/fashionlog/interviewboard/" + postId;
+	}
 }
 
