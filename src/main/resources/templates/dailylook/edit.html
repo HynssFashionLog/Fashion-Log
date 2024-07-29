@@ -2,20 +2,30 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>자유 게시글 수정</title>
+  <title>Edit Daily Look Post</title>
+  <link rel="stylesheet" th:href="@{/dailylook/css/styles.css}">
+  <link rel="stylesheet" th:href="@{/dailylook/css/edit-form.css}">
 </head>
 <body>
-<h1>글 수정</h1>
-<form th:action="@{/fashionlog/dailylook/{id}/edit(id=${dailyLook.id})}" method="post">
-  <div>
-    <label for="title">제목</label>
-    <input type="text" id="title" name="title" th:value="${dailyLook.title}">
-  </div>
-  <div>
-    <label for="content">내용</label>
-    <textarea id="content" name="content" th:text="${dailyLook.content}"></textarea>
-  </div>
-  <button type="submit">수정하기</button>
-</form>
+<header>
+  <!-- 헤더 내용 (detail.html과 동일) -->
+</header>
+<div class="container">
+  <h1>Edit Daily Look Post</h1>
+  <form th:action="@{/fashionlog/dailylook/{id}/edit(id=${dailyLook.id})}" th:object="${dailyLook}" method="post">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input type="text" id="title" name="title" th:field="*{title}" required>
+    </div>
+    <div class="form-group">
+      <label for="content">Content</label>
+      <textarea id="content" name="content" th:field="*{content}" required></textarea>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Save</button>
+      <a th:href="@{/fashionlog/dailylook/{id}(id=${dailyLook.id})}" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
 </body>
 </html>
