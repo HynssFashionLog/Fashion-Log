@@ -45,15 +45,11 @@ public class DailyLookController {
     }
 
     @GetMapping("/{id}")
-    public String getDailyLookPostById(
-        @PathVariable("id") Long id,
-        Long editCommentId,
-        Model model) {
+    public String getDailyLookPostById(@PathVariable("id") Long id, Model model) {
         model.addAttribute("dailyLook", dailyLookService.getDailyLookPostById(id));
         model.addAttribute("dailyLookComments",
             dailyLookService.getAllDailyLookCommentByDailyLookId(id));
         model.addAttribute("dailyLookComment", new DailyLookCommentDto());
-//        model.addAttribute("editCommentId", editCommentId);
         return "dailylook/detail";
     }
 
@@ -67,7 +63,7 @@ public class DailyLookController {
     public String editDailyLookPost(@PathVariable("id") Long id,
         @ModelAttribute DailyLookDto dailyLookDto) {
         dailyLookService.editDailyLookPost(id, dailyLookDto);
-        return "redirect:/fashionlog/dailylook" + id;
+        return "redirect:/fashionlog/dailylook/" + id;
     }
 
     @PostMapping("{id}/delete")
