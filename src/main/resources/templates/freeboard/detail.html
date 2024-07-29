@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <title>자유 게시글 상세보기</title>
-  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+  <link rel="stylesheet" th:href="@{/freeboard/css/style.css}"/>
+  <script th:src="@{/freeboard/js/commentEditForm.js}"></script>
 </head>
 <body>
 <!-- 글 상세 보기 -->
 <h1>제목</h1>
-<div class="post-detail" th:if="${postExists}">
+<div class="post-detail">
   <h2 th:text="${post.title}">Title</h2>
   <p class="post-meta">
     작성자: <span>Member</span>
@@ -26,10 +27,10 @@
 </div>
 <!-- 댓글 작성 -->
 <h3>댓글 작성</h3>
-<form th:action="@{/fashionlog/freeboard/{id}/comment(id=${post.id})}" method="post">
+<form th:action="@{/fashionlog/freeboard/{postId}/comment(postId=${post.id})}" method="post">
   <div>
     <label for="content">내용</label>
-    <textarea id="content" name="content"></textarea>
+    <textarea id="content" name="content" required></textarea>
   </div>
   <button type="submit">작성 완료</button>
 </form>
@@ -68,7 +69,9 @@
         <form
             th:action="@{/fashionlog/freeboard/{postId}/edit-comment/{commentId}(postId=${post.id}, commentId=${comment.id})}"
             method="post">
-          <textarea name="content" required th:text="${comment.content}"></textarea>
+          <label>
+            <textarea name="content" required th:text="${comment.content}"></textarea>
+          </label>
           <button type="submit">Save</button>
           <button type="button" th:onclick="'hideEditForm(' + ${comment.id} + ')'">Cancel</button>
         </form>
@@ -77,36 +80,5 @@
     </tbody>
   </table>
 </div>
-
-<!-- 수정 폼 띄우기 스크립트 임시 -->
-<script th:inline="javascript">
-  function showEditForm(commentId) {
-    // 모든 기존의 수정 폼을 숨김
-    hideEditForm();
-
-    // 댓글 행 찾기
-    const commentRow = document.querySelector(`#edit-btn-${commentId}`).closest('tr');
-    if (!commentRow) {
-      return;
-    }
-
-    // 수정 폼 행 찾기
-    const editFormRow = document.getElementById(`edit-form-${commentId}`);
-    if (!editFormRow) {
-      return;
-    }
-
-    // 수정 폼을 댓글 행 다음에 추가
-    commentRow.insertAdjacentElement('afterend', editFormRow);
-    editFormRow.style.display = 'table-row';
-  }
-
-  function hideEditForm() {
-    // 모든 수정 폼 행 숨기기
-    document.querySelectorAll('[id^="edit-form-"]').forEach(form => {
-      form.style.display = 'none';
-    });
-  }
-</script>
 </body>
 </html>
