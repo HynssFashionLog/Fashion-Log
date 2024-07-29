@@ -3,18 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>자유 게시글 수정</title>
-  <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
 <body>
 <h1>글 수정</h1>
-<form th:action="@{/fashionlog/dailylook/{id}/edit(id=${dailyLook.getId()})}" method="post">
+<form th:action="@{/fashionlog/dailylook/{id}/edit(id=${dailyLook.id})}" method="post">
   <div>
     <label for="title">제목</label>
-    <input type="text" id="title" name="title" th:value="${dailyLook.getTitle()}">
+    <input type="text" id="title" name="title" th:value="${dailyLook.title}">
   </div>
   <div>
     <label for="content">내용</label>
-    <textarea id="content" name="content" th:text="${dailyLook.getContent()}"></textarea>
+    <textarea id="content" name="content" th:text="${dailyLook.content}"></textarea>
   </div>
   <button type="submit">수정하기</button>
 </form>

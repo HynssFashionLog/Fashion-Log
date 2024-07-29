@@ -7,6 +7,7 @@ import com.example.fashionlog.dto.DailyLookDto;
 import com.example.fashionlog.repository.DailyLookCommentRepository;
 import com.example.fashionlog.repository.DailyLookRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,20 +30,21 @@ public class DailyLookService {
 
     @Transactional(readOnly = true)
     public List<DailyLookDto> getAllDailyLookPost() {
-        List<DailyLook> dailyLookList = dailyLookRepository.findAll();
+        List<DailyLook> dailyLookList = dailyLookRepository.findAllByPostStatusIsTrue();
         return dailyLookList.stream().map(DailyLookDto::convertToDto).collect(Collectors.toList());
     }
 
     @Transactional
     public void createDailyLookPost(DailyLookDto dailyLookDto) {
         System.out.println("Content in service: " + dailyLookDto.getContent());
+        dailyLookDto.setPostStatus(Boolean.TRUE);
         DailyLook dailyLook = DailyLookDto.convertToEntity(dailyLookDto);
         dailyLookRepository.save(dailyLook);
     }
 
     @Transactional(readOnly = true)
     public DailyLookDto getDailyLookPostById(Long id) {
-        DailyLook dailyLook = DailyLookFindById(id);
+        DailyLook dailyLook = findDailyLookById(id);
         return DailyLookDto.convertToDto(dailyLook);
     }
 
@@ -54,18 +56,19 @@ public class DailyLookService {
 
     @Transactional
     public void editDailyLookPost(Long id, DailyLookDto dailyLookDto) {
-        DailyLook dailyLook = DailyLookFindById(id);
+        DailyLook dailyLook = findDailyLookById(id);
         dailyLook.updateDailyLook(dailyLookDto);
-    }
-
-    private DailyLook DailyLookFindById(Long id) {
-        return dailyLookRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("게시글을 찾지 못했습니다."));
     }
 
     @Transactional
     public void deleteDailyLookPost(Long id) {
-        dailyLookRepository.deleteById(id);
+        DailyLook dailyLook = findDailyLookById(id);
+        dailyLook.deleteDailyLook();
+    }
+
+    private DailyLook findDailyLookById(Long id) {
+        return dailyLookRepository.findByIdAndPostStatusIsTrue(id)
+            .orElseThrow(() -> new EntityNotFoundException("post를 찾지 못했습니다."));
     }
 
     @Transactional
@@ -75,7 +78,7 @@ public class DailyLookService {
         dailyLookCommentDto.setCommentStatus(Boolean.TRUE);
         dailyLookCommentDto.setCreatedAt(LocalDateTime.now());
 
-        DailyLook dailyLook = DailyLookFindById(id);
+        DailyLook dailyLook = findDailyLookById(id);
         DailyLookComment dailyLookComment = DailyLookCommentDto.convertToEntity(
             dailyLookCommentDto, dailyLook);
         dailyLookCommentRepository.save(dailyLookComment);
@@ -84,17 +87,15 @@ public class DailyLookService {
     @Transactional
     public void editDailyLookComment(Long postId, Long commentId,
         DailyLookCommentDto dailyLookCommentDto) {
-        DailyLook dailyLook = DailyLookFindById(postId);
+        DailyLook dailyLook = findDailyLookById(postId);
         DailyLookComment dailyLookComment = getDailyLookComment(commentId);
         dailyLookComment.updateDailyLookComment(dailyLookCommentDto, dailyLook);
-        dailyLookCommentRepository.save(dailyLookComment);
     }
 
     @Transactional
     public void deleteDailyLookComment(Long commentId) {
         DailyLookComment dailyLookComment = getDailyLookComment(commentId);
         dailyLookComment.deleteDailyLookComment();
-        dailyLookCommentRepository.save(dailyLookComment);
     }
 
     private DailyLookComment getDailyLookComment(Long commentId) {

@@ -49,4 +49,9 @@ public class DailyLook {
         this.updatedAt = LocalDateTime.now();
     }
 
+    public void deleteDailyLook() {
+        this.postStatus = Boolean.FALSE;
+        this.deletedAt = LocalDateTime.now();
+    }
+
 }
