@@ -7,7 +7,7 @@
   <script th:src="@{/freeboard/js/commentEditForm.js}"></script>
 </head>
 <body>
-<!-- 글 상세 보기 -->
+<!-- 자유 게시판 글 상세 보기 -->
 <h1>제목</h1>
 <div class="post-detail">
   <h2 th:text="${post.title}">Title</h2>
@@ -25,7 +25,8 @@
     </form>
   </div>
 </div>
-<!-- 댓글 작성 -->
+
+<!-- 자유 게시판 댓글 작성 폼 -->
 <h3>댓글 작성</h3>
 <form th:action="@{/fashionlog/freeboard/{postId}/comment(postId=${post.id})}" method="post">
   <div>
@@ -34,7 +35,8 @@
   </div>
   <button type="submit">작성 완료</button>
 </form>
-<!-- 댓글 목록 -->
+
+<!-- 자유게시판 댓글 목록 및 수정 폼 -->
 <div class="post-comments">
   <table>
     <thead>
@@ -47,22 +49,26 @@
     </tr>
     </thead>
     <tbody>
+    <!-- 자유 게시판 댓글 목록 -->
     <tr th:each="comment : ${comments}">
       <td>작성자</td>
       <td th:text="${comment.content}"></td>
       <td th:text="${comment.createdAt}"></td>
       <td>
+        <!-- commentEditForm.js와 연동 -->
         <button type="button" th:onclick="'showEditForm(' + ${comment.id} + ')'"
                 th:id="'edit-btn-' + ${comment.id}">Edit
         </button>
       </td>
       <td>
-        <form th:action="@{/fashionlog/freeboard/{postId}/delete-comment/{commentId}(postId=${post.id}, commentId=${comment.id})}"
-              method="post">
+        <form
+            th:action="@{/fashionlog/freeboard/{postId}/delete-comment/{commentId}(postId=${post.id}, commentId=${comment.id})}"
+            method="post">
           <button type="submit">Delete</button>
         </form>
       </td>
     </tr>
+    <!-- 자유 게시판 댓글 수정 폼 -->
     <tr th:each="comment : ${comments}" th:attr="id=${'edit-form-' + comment.id}"
         style="display:none;">
       <td colspan="5">
@@ -73,6 +79,7 @@
             <textarea name="content" required th:text="${comment.content}"></textarea>
           </label>
           <button type="submit">Save</button>
+          <!-- commentEditForm.js와 연동 -->
           <button type="button" th:onclick="'hideEditForm(' + ${comment.id} + ')'">Cancel</button>
         </form>
       </td>
