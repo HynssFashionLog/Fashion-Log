@@ -14,6 +14,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 자유 게시판 댓글 Entity
+ *
+ * @author Hynss
+ * @version 1.0.0
+ */
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -45,6 +51,11 @@ public class FreeBoardComment {
 	@Column
 	private LocalDateTime deletedAt;
 
+	/**
+	 * 수정 더티 체킹을 위한 메서드
+	 *
+	 * @param freeBoardCommentDto 수정 할 값을 받아오기 위한 FreeBoardCommentDto
+	 */
 	public void updateFreeBoardComment(FreeBoardCommentDto freeBoardCommentDto) {
 		validateField(freeBoardCommentDto.getContent(), "Content");
 
@@ -52,11 +63,19 @@ public class FreeBoardComment {
 		this.updatedAt = LocalDateTime.now();
 	}
 
+	/**
+	 * 삭제 더티 체킹을 위한 메서드
+	 */
 	public void deleteFreeBoardComment() {
 		this.commentStatus = Boolean.FALSE;
 		this.deletedAt = LocalDateTime.now();
 	}
 
+	/**
+	 *
+	 * @param field 속성
+	 * @param fieldName 속성의 이름
+	 */
 	public static void validateField(String field, String fieldName) {
 		if (field == null || field.isEmpty()) {
 			throw new IllegalArgumentException(fieldName + " cannot be null or empty");

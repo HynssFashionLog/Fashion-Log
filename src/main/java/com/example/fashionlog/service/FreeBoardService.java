@@ -14,6 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 자유 게시판 Service -> FreeBoard API 비즈니스 로직 구현.
+ *
+ * @author Hynss
+ * @version 1.0.0
+ */
 @Service
 @Transactional(readOnly = true)
 public class FreeBoardService {
@@ -28,6 +34,11 @@ public class FreeBoardService {
 		this.freeBoardCommentRepository = freeBoardCommentRepository;
 	}
 
+	/**
+	 * 자유 게시판 글 목록 조회하기 API
+	 *
+	 * @return getPostStatus(글이 삭제되었는지, soft delete 방식)가 true일 경우 자유 게시판의 전체 글을 반환함.
+	 */
 	public Optional<List<FreeBoardDto>> getAllFreeBoards() {
 		List<FreeBoardDto> freeBoards = freeBoardRepository.findAll().stream()
 			.filter(FreeBoard::getPostStatus)
@@ -36,23 +47,40 @@ public class FreeBoardService {
 		return freeBoards.isEmpty() ? Optional.empty() : Optional.of(freeBoards);
 	}
 
+	/**
+	 * 자유 게시판 글 작성하기 API
+	 *
+	 * @param freeBoardDto 컨트롤러에서 DB에 삽입할 DTO를 받아옴.
+	 */
 	@Transactional
 	public void createFreeBoardPost(FreeBoardDto freeBoardDto) {
-		// Not Null 예외처리 로직
+		// Not Null 예외 처리
 		FreeBoard.validateField(freeBoardDto.getTitle(), "Title");
 		FreeBoard.validateField(freeBoardDto.getContent(), "Content");
 
 		freeBoardRepository.save(this.convertToEntity(freeBoardDto));
 	}
 
+	/**
+	 * 자유 게시판 글 상세보기 API
+	 *
+	 * @param id 글 하나를 상세하게 보기위해 게시글 id를 받아옴.
+	 * @return 자유 게시판 데이터베이스에서 id가 같은 게시글을 반환함.
+	 */
 	public Optional<FreeBoardDto> getFreeBoardDtoById(Long id) {
 		return freeBoardRepository.findById(id)
 			.map(this::convertToDto);
 	}
 
+	/**
+	 * 자유 게시판 글 수정하기 API
+	 *
+	 * @param id           수정할 글의 id를 받아옴.
+	 * @param freeBoardDto 컨트롤러에서 DB에 수정할 DTO를 받아옴.
+	 */
 	@Transactional
 	public void updateFreeBoardPost(Long id, FreeBoardDto freeBoardDto) {
-		// Not Null 예외처리 로직
+		// Not Null 예외 처리
 		FreeBoard.validateField(freeBoardDto.getTitle(), "Title");
 		FreeBoard.validateField(freeBoardDto.getContent(), "Content");
 
@@ -62,6 +90,11 @@ public class FreeBoardService {
 		freeBoardRepository.save(freeBoard);
 	}
 
+	/**
+	 * 자유 게시판 글 삭제하기 API
+	 *
+	 * @param id 삭제할 글의 id를 받아옴.
+	 */
 	@Transactional
 	public void deleteFreeBoardPost(Long id) {
 		FreeBoard freeBoard = freeBoardRepository.findById(id)
@@ -70,6 +103,12 @@ public class FreeBoardService {
 		freeBoardRepository.save(freeBoard);
 	}
 
+	/**
+	 * 자유 게시판 글의 댓글 목록 조회하기 API
+	 *
+	 * @param freeBoardId 댓글 들이 속한 자유 게시판 글의 id를 받아옴.
+	 * @return 자유 게시판에서 조회한 글에 해당하는 댓글 목록을 반환함.
+	 */
 	public Optional<List<FreeBoardCommentDto>> getCommentsByFreeBoardId(Long freeBoardId) {
 		List<FreeBoardCommentDto> comments = freeBoardCommentRepository.findByFreeBoardId(
 				freeBoardId).stream()
@@ -79,9 +118,15 @@ public class FreeBoardService {
 		return comments.isEmpty() ? Optional.empty() : Optional.of(comments);
 	}
 
+	/**
+	 * 자유 게시판 글의 댓글 작성하기 API
+	 *
+	 * @param id                  자유 게시판 글의 id를 컨트롤러에서 받아옴.
+	 * @param freeBoardCommentDto 컨트롤러에서 DB에 삽입할 댓글 DTO를 받아옴.
+	 */
 	@Transactional
 	public void createFreeBoardComment(Long id, FreeBoardCommentDto freeBoardCommentDto) {
-		// Not Null 예외처리 로직
+		// Not Null 예외 처리
 		FreeBoardComment.validateField(freeBoardCommentDto.getContent(), "Content");
 
 		FreeBoard freeBoard = freeBoardRepository.findById(id)
@@ -91,10 +136,16 @@ public class FreeBoardService {
 		freeBoardCommentRepository.save(freeBoardComment);
 	}
 
+	/**
+	 * 자유 게시판 글의 댓글 수정하기 API
+	 *
+	 * @param commentId           자유 게시판 글의 댓글 id를 컨트롤러에서 받아옴.
+	 * @param freeBoardCommentDto 컨트롤러에서 DB에 수정할 댓글 DTO를 받아옴.
+	 */
 	@Transactional
 	public void updateFreeBoardComment(Long commentId,
 		FreeBoardCommentDto freeBoardCommentDto) {
-		// Not Null 예외처리 로직
+		// Not Null 예외 처리
 		FreeBoardComment.validateField(freeBoardCommentDto.getContent(), "Content");
 
 		FreeBoardComment freeBoardComment = freeBoardCommentRepository.findById(commentId)
@@ -104,6 +155,11 @@ public class FreeBoardService {
 		freeBoardCommentRepository.save(freeBoardComment);
 	}
 
+	/**
+	 * 자유 게시판 글의 댓글 삭제하기 API
+	 *
+	 * @param commentId 자유 게시판 글의 댓글 id를 컨트롤러에서 받아옴.
+	 */
 	@Transactional
 	public void deleteFreeBoardComment(Long commentId) {
 		FreeBoardComment freeBoardComment = freeBoardCommentRepository.findById(commentId)
@@ -112,6 +168,9 @@ public class FreeBoardService {
 		freeBoardCommentRepository.save(freeBoardComment);
 	}
 
+	/**
+	 * FreeBoard -> FreeBoardDto
+	 */
 	public FreeBoardDto convertToDto(FreeBoard freeBoard) {
 		return FreeBoardDto.builder()
 			.id(freeBoard.getId())
@@ -124,6 +183,9 @@ public class FreeBoardService {
 			.build();
 	}
 
+	/**
+	 * FreeBoardComment -> FreeBoardCommentDto
+	 */
 	public FreeBoardCommentDto convertToDto(FreeBoardComment freeBoardComment) {
 		return FreeBoardCommentDto.builder()
 			.id(freeBoardComment.getId())
@@ -136,6 +198,9 @@ public class FreeBoardService {
 			.build();
 	}
 
+	/**
+	 * FreeBoardDto -> FreeBoard
+	 */
 	public FreeBoard convertToEntity(FreeBoardDto freeBoardDto) {
 		return FreeBoard.builder()
 			.title(freeBoardDto.getTitle())
@@ -148,6 +213,9 @@ public class FreeBoardService {
 			.build();
 	}
 
+	/**
+	 * FreeBoardCommentDto -> FreeBoardComment
+	 */
 	public FreeBoardComment convertToEntity(FreeBoard findedFreeBoard,
 		FreeBoardCommentDto freeBoardCommentDto) {
 		return FreeBoardComment.builder()

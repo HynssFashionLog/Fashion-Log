@@ -6,6 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 자유 게시판 DTO
+ *
+ * @author Hynss
+ * @version 1.0.0
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
