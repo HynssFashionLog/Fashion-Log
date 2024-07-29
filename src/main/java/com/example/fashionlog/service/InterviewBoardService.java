@@ -86,5 +86,13 @@ public class InterviewBoardService {
 			.orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
 		interviewBoardComment.updateInterviewComment(interviewBoardCommentDto);
 	}
+
+	@Transactional
+	public void deleteInterviewBoardComment(Long commentId) {
+		InterviewBoardComment interviewBoardComment = interviewBoardCommentRepository.findById(commentId)
+			.orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+		interviewBoardComment.deleteInterviewComment();
+	}
+
 }
 
