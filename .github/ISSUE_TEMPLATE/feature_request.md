@@ -8,4 +8,5 @@ assignees: cloudisme99, JEESW, LLSNsssz, NamK666
 ---
 
 ## TODO
-    - 할일 작성
+    [ ] 할일 작성
+    [ ] 할일 작성
