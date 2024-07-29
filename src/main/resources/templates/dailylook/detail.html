@@ -3,72 +3,70 @@
 <head>
   <meta charset="UTF-8">
   <title>Daily Look Post Detail</title>
-  <!-- 임시 스크립트 -->
-  <script>
-    function toggleEditForm(commentId) {
-      var viewSpan = document.getElementById('view-' + commentId);
-      var editForm = document.getElementById('edit-' + commentId);
-      var editButton = document.getElementById('edit-button-' + commentId);
-
-      if (editForm.style.display === 'none') {
-        viewSpan.style.display = 'none';
-        editForm.style.display = 'inline';
-        editButton.textContent = '취소';
-      } else {
-        viewSpan.style.display = 'inline';
-        editForm.style.display = 'none';
-        editButton.textContent = '수정';
-      }
-    }
-  </script>
+  <link rel="stylesheet" th:href="@{/dailylook/css/detail.css}">
+  <link rel="stylesheet" th:href="@{/dailylook/css/styles.css}">
+  <script th:src="@{/dailylook/js/detail.js}"></script>
 </head>
 <body>
-<h1>Daily Look Post</h1>
-<div>
-  <h2 th:text="${dailyLook.title}">Title</h2>
-  <p>Content: <span th:text="${dailyLook.content}">Content</span></p>
-  <a href="/fashionlog/dailylook">뒤로</a>
-  <a th:href="@{/fashionlog/dailylook/{id}/edit(id=${dailyLook.id})}" class="edit-btn">수정</a>
-  <form th:action="@{/fashionlog/dailylook/{id}/delete(id=${dailyLook.id})}" method="post">
-    <button type="submit" class="delete-btn">삭제</button>
-  </form>
+<header>
+  <div class="logo-container">
+    <a href="/" class="logo">
+      <img src="#" alt="Logo" class="logo-image">
+    </a>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><button class="login">UserName</button></li>
+      <li><button class="signup">탈퇴</button></li>
+    </ul>
+  </nav>
+</header>
+<div class="container">
+  <h1><a th:href="@{/fashionlog/dailylook}">Daily Look</a></h1>
+  <div class="post-content">
+    <h2 th:text="${dailyLook.title}">Title</h2>
+    <p><span th:text="${dailyLook.content}">Content</span></p>
+  </div>
+  <div class="action-buttons">
+    <a href="/fashionlog/dailylook" class="btn">뒤로</a>
+    <a th:href="@{/fashionlog/dailylook/{id}/edit(id=${dailyLook.id})}" class="btn edit-btn">수정</a>
+    <form th:action="@{/fashionlog/dailylook/{id}/delete(id=${dailyLook.id})}" method="post" style="display: inline;">
+      <button type="submit" class="btn delete-btn">삭제</button>
+    </form>
+  </div>
+  <!-- 댓글 목록 -->
+  <div class="comment-section">
+    <h3>댓글</h3>
+    <ul class="comment-list">
+      <li th:each="comment : ${dailyLookComments}" class="comment">
+        <div class="comment-content">
+          <span th:id="'view-' + ${comment.id}" th:text="${comment.content}">댓글 내용</span>
+        </div>
+        <div class="comment-info">
+          <span class="comment-author">작성자</span>
+          <span class="comment-date" th:text="${#temporals.format(comment.createdAt, 'MM.dd HH:mm:ss')}">07.29 12:12:41</span>
+          <button th:id="'edit-button-' + ${comment.id}" th:onclick="'toggleEditForm(' + ${comment.id} + ')'" class="btn-edit">수정</button>
+          <form th:action="@{/fashionlog/dailylook/{postid}/delete-comment/{commentid}(postid=${dailyLook.id}, commentid=${comment.id})}" method="post" style="display: inline;">
+            <button type="submit" class="btn-delete">삭제</button>
+          </form>
+        </div>
+        <!-- 수정 모드 -->
+        <form th:id="'edit-' + ${comment.id}" style="display: none;"
+              th:action="@{/fashionlog/dailylook/{postid}/edit-comment/{commentid}(postid=${dailyLook.id}, commentid=${comment.id})}"
+              method="post" class="edit-form">
+          <input type="text" name="content" th:value="${comment.content}">
+          <button type="submit">저장</button>
+        </form>
+      </li>
+    </ul>
+    <!-- 댓글 작성 -->
+    <form class="comment-form" th:action="@{/fashionlog/dailylook/{id}/comment(id=${dailyLook.id})}" th:object="${dailyLookComment}" method="post">
+      <textarea id="content" name="content" th:field="*{content}" placeholder="댓글을 입력하세요"></textarea>
+      <button type="submit">등록</button>
+    </form>
+  </div>
 </div>
-<!-- 댓글 목록 -->
-<table>
-  <tbody>
-  <tr th:each="comment:${dailyLookComments}">
-    <td>작성자</td>
-    <td>
-      <!-- 일반 모드 -->
-      <span th:id="'view-' + ${comment.id}" th:text="${comment.content}"></span>
-      <!-- 수정 모드 -->
-      <form th:id="'edit-' + ${comment.id}" style="display: none;"
-            th:action="@{/fashionlog/dailylook/{postid}/edit-comment/{commentid}(postid=${dailyLook.id}, commentid=${comment.id})}"
-            method="post">
-        <input type="text" name="content" th:value="${comment.content}">
-        <button type="submit">저장</button>
-      </form>
-    </td>
-    <td th:if="${comment.updatedAt != null}" th:text="${comment.updatedAt}">작성일</td>
-    <td th:unless="${comment.updatedAt != null}" th:text="${comment.createdAt}">작성일</td>
-    <td>
-      <!-- 수정 버튼 -->
-      <button th:id="'edit-button-' + ${comment.id}" th:onclick="'toggleEditForm(' + ${comment.id} + ')'">수정</button>
-    </td>
-    <td>
-      <!-- 삭제 버튼 -->
-      <form th:action="@{/fashionlog/dailylook/{postid}/delete-comment/{commentid}(postid=${dailyLook.id}, commentid=${comment.id})}" method="post">
-        <button type="submit">삭제</button>
-      </form>
-    </td>
-  </tr>
-  </tbody>
-</table>
-<!-- 댓글 작성 -->
-<form th:action="@{/fashionlog/dailylook/{id}/comment(id=${dailyLook.id})}" th:object="${dailyLookComment}" method="post">
-  <label for="content">댓글</label>
-  <textarea id="content" name="content" th:field="*{content}"></textarea>
-  <button type="submit">등록</button>
-</form>
 </body>
 </html>
