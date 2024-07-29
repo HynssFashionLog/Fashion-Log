@@ -23,25 +23,24 @@
     <p th:text="${comment.content}"></p>
     <p>작성자: <span th:text="${comment.memberId}"></span></p>
     <p>작성일: <span th:text="${comment.createdAt}"></span></p>
-    <form th:action="@{/fashionlog/lookbook/comment/{commentId}/edit(commentId=${comment.id})}" method="post" style="display:inline;">
+    <!-- 댓글 수정 폼 -->
+    <form th:action="@{/fashionlog/lookbook/{lookbookId}/comments/{commentId}/edit(lookbookId=${lookbook.id}, commentId=${comment.id})}" method="post" style="display:inline;">
       <input type="text" name="content" th:value="${comment.content}">
       <input type="submit" value="수정" class="button">
     </form>
-    <form th:action="@{/fashionlog/lookbook/comment/{commentId}/delete(commentId=${comment.id})}" method="post" style="display:inline;">
+    <!-- 댓글 삭제 폼 -->
+    <form th:action="@{/fashionlog/lookbook/{lookbookId}/comments/{commentId}/delete(lookbookId=${lookbook.id}, commentId=${comment.id})}" method="post" style="display:inline;">
       <input type="submit" value="삭제" class="button" onclick="return confirm('정말 삭제하시겠습니까?');">
     </form>
   </div>
 
   <h3>새 댓글 작성</h3>
-  <form th:action="@{/fashionlog/lookbook/{id}/comment(id=${lookbook.id})}" th:object="${newComment}" method="post">
+  <form th:action="@{/fashionlog/lookbook/{id}/comments(id=${lookbook.id})}" th:object="${newComment}" method="post">
     <input type="text" th:field="*{memberId}" placeholder="회원 아이디">
     <textarea th:field="*{content}" placeholder="댓글 내용"></textarea>
     <input type="hidden" th:field="*{commentStatus}" value="true">
     <input type="submit" value="댓글 작성" class="button">
   </form>
-
-
-
 </div>
 </body>
 </html>

@@ -27,15 +27,13 @@ public class LookbookService {
 	}
 
 	public List<LookbookDto> getAllLookbooks() {
-		return lookbookRepository.findAll()
-			.stream()
+		return lookbookRepository.findByDeletedAtIsNull().stream()
 			.map(this::convertToDto)
 			.collect(Collectors.toList());
 	}
 
 	public LookbookDto getLookbookById(Long id) {
-		Lookbook lookbook = lookbookRepository.findById(id)
-			.orElseThrow(() -> new RuntimeException("해당 게시글을 찾을 수 없습니다."));
+		Lookbook lookbook = lookbookRepository.findByIdAndDeletedAtIsNull(id);
 		return convertToDto(lookbook);
 	}
 
@@ -56,7 +54,9 @@ public class LookbookService {
 	}
 
 	public void deleteLookbook(Long id) {
-		lookbookRepository.deleteById(id);
+		Lookbook lookbook = lookbookRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid lookbook ID: " + id));
+		lookbook.setDeletedAt(LocalDateTime.now());
+		lookbookRepository.save(lookbook);
 	}
 
 	private LookbookDto convertToDto(Lookbook lookbook) {
@@ -89,6 +89,7 @@ public class LookbookService {
 
 	public List<LookbookCommentDto> getCommentsByLookbookId(Long lookbookId) {
 		return lookbookCommentRepository.findByLookbookId(lookbookId).stream()
+			.filter(comment -> comment.getDeletedAt() == null)
 			.map(this::convertCommentToDto)
 			.collect(Collectors.toList());
 	}
@@ -98,6 +99,7 @@ public class LookbookService {
 			.orElseThrow(() -> new RuntimeException("Lookbook not found"));
 		LookbookComment comment = convertCommentToEntity(commentDto);
 		comment.setLookbook(lookbook);
+		comment.setCreatedAt(LocalDateTime.now());
 		LookbookComment savedComment = lookbookCommentRepository.save(comment);
 		return convertCommentToDto(savedComment);
 	}
@@ -105,13 +107,19 @@ public class LookbookService {
 	public LookbookCommentDto updateComment(Long id, LookbookCommentDto commentDto) {
 		LookbookComment comment = lookbookCommentRepository.findById(id)
 			.orElseThrow(() -> new RuntimeException("Comment not found"));
+		if (comment.getDeletedAt() != null) {
+			throw new RuntimeException("해당 댓글은 삭제되었습니다.");
+		}
 		comment.setContent(commentDto.getContent());
 		LookbookComment updatedComment = lookbookCommentRepository.save(comment);
 		return convertCommentToDto(updatedComment);
 	}
 
 	public void deleteComment(Long id) {
-		lookbookCommentRepository.deleteById(id);
+		LookbookComment comment = lookbookCommentRepository.findById(id)
+			.orElseThrow(() -> new RuntimeException("Comment not found"));
+		comment.setDeletedAt(LocalDateTime.now());
+		lookbookCommentRepository.save(comment);
 	}
 
 	private LookbookCommentDto convertCommentToDto(LookbookComment comment) {
@@ -133,8 +141,8 @@ public class LookbookService {
 		return comment;
 	}
 
-	public LookbookCommentDto getCommentById(Long commentId) {
-		LookbookComment comment = lookbookCommentRepository.findById(commentId)
+	public LookbookCommentDto getCommentById(Long id) {
+		LookbookComment comment = lookbookCommentRepository.findById(id)
 			.orElseThrow(() -> new RuntimeException("Comment not found"));
 		return convertCommentToDto(comment);
 	}
