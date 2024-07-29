@@ -1,6 +1,7 @@
 package com.example.fashionlog.controller;
 
 import com.example.fashionlog.domain.InterviewBoard;
+import com.example.fashionlog.dto.InterviewBoardCommentDto;
 import com.example.fashionlog.dto.InterviewBoardDto;
 import com.example.fashionlog.service.InterviewBoardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,7 @@ public class InterviewBoardController {
 	@GetMapping("/{id}")
 	public String getInterviewBoardPostById(@PathVariable Long id, Model model) {
 		model.addAttribute("interviewPost", interviewBoardService.getInterviewPostDetail(id));
+		model.addAttribute("interviewComment", interviewBoardService.getCommentList(id));
 		return "interviewboard/detail";
 	}
 
@@ -64,6 +66,13 @@ public class InterviewBoardController {
 	public String deleteInterviewPost(@PathVariable Long id) {
 		interviewBoardService.deleteInterviewPost(id);
 		return "redirect:/fashionlog/interviewboard";
+	}
+
+	@PostMapping("/{id}/comment")
+	public String addComment(@PathVariable Long id,
+		@ModelAttribute InterviewBoardCommentDto interviewBoardCommentDto) {
+		interviewBoardService.addComment(id, interviewBoardCommentDto);
+		return "redirect:/fashionlog/interviewboard/{id}";
 	}
 }
 

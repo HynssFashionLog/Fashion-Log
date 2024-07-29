@@ -24,5 +24,30 @@
         </form>
     </div>
 </div>
+<div class="comment">
+    <section id="comments-section" th:style="'margin-top: 20px;'">
+        <div id="comments-container">
+            <table class="table">
+                <thead>
+                <tr><th>댓글 목록</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="comments : ${interviewComment}">
+                    <td th:text="${comments.content}"></td>
+                    <td th:text="${comments.createdAt}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 댓글 작성 폼 -->
+        <form th:action="@{/fashionlog/interviewboard/{id}/comment(id=${interviewPost.id})}" method="post">
+            <div>
+                <label for="content">댓글 추가:</label>
+                <textarea id="content" name="content"></textarea>
+            </div>
+            <button type="submit">작성하기</button>
+        </form>
+    </section>
+</div>
 </body>
 </html>

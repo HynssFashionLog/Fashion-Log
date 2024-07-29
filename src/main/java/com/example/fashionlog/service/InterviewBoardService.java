@@ -1,7 +1,10 @@
 package com.example.fashionlog.service;
 
 import com.example.fashionlog.domain.InterviewBoard;
+import com.example.fashionlog.domain.InterviewBoardComment;
+import com.example.fashionlog.dto.InterviewBoardCommentDto;
 import com.example.fashionlog.dto.InterviewBoardDto;
+import com.example.fashionlog.repository.InterviewBoardCommentRepository;
 import com.example.fashionlog.repository.InterviewBoardRepository;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,10 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class InterviewBoardService {
 
 	private final InterviewBoardRepository interviewBoardRepository;
+	private final InterviewBoardCommentRepository interviewBoardCommentRepository;
 
 	@Autowired
-	public InterviewBoardService(InterviewBoardRepository interviewBoardRepository) {
+	public InterviewBoardService(InterviewBoardRepository interviewBoardRepository,
+		InterviewBoardCommentRepository interviewBoardCommentRepository) {
 		this.interviewBoardRepository = interviewBoardRepository;
+		this.interviewBoardCommentRepository = interviewBoardCommentRepository;
 	}
 
 	public List<InterviewBoardDto> getAllInterviewPosts() {
@@ -53,6 +59,23 @@ public class InterviewBoardService {
 		InterviewBoard interviewBoard = interviewBoardRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("게시판 정보를 찾을 수 없습니다."));
 		interviewBoardRepository.delete(interviewBoard);
+	}
+
+	public List<InterviewBoardCommentDto> getCommentList(Long id) {
+		List<InterviewBoardComment> interviewBoardCommentList = interviewBoardCommentRepository.findByInterviewBoard_Id(id);
+		return interviewBoardCommentList.stream().map(InterviewBoardCommentDto::fromEntity)
+			.collect(Collectors.toList());
+	}
+
+	@Transactional
+	public void addComment(Long id, InterviewBoardCommentDto interviewBoardCommentDto) {
+		InterviewBoard interviewBoard = interviewBoardRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("게시판 정보를 찾을 수 없습니다."));
+		interviewBoardCommentDto.setCreatedAt(LocalDateTime.now());
+		interviewBoardCommentDto.setStatus(true);
+		InterviewBoardComment interviewBoardComment = interviewBoardCommentDto.toEntity(
+			interviewBoardCommentDto, interviewBoard);
+		interviewBoardCommentRepository.save(interviewBoardComment);
 	}
 }
 
