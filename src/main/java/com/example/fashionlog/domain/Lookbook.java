@@ -50,4 +50,12 @@ public class Lookbook {
 	protected void onUpdate() {
 		updatedAt = LocalDateTime.now();
 	}
+
+	public LocalDateTime getDeletedAt() {
+		return deletedAt;
+	}
+
+	public void setDeletedAt(LocalDateTime deletedAt) {
+		this.deletedAt = deletedAt;
+	}
 }
