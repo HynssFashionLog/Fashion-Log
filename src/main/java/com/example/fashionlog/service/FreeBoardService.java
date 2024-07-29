@@ -87,7 +87,6 @@ public class FreeBoardService {
 		FreeBoard freeBoard = freeBoardRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
 		freeBoard.updateFreeBoard(freeBoardDto);
-		freeBoardRepository.save(freeBoard);
 	}
 
 	/**
@@ -100,7 +99,6 @@ public class FreeBoardService {
 		FreeBoard freeBoard = freeBoardRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
 		freeBoard.deleteFreeBoard();
-		freeBoardRepository.save(freeBoard);
 	}
 
 	/**
@@ -152,7 +150,6 @@ public class FreeBoardService {
 			.orElseThrow(
 				() -> new IllegalArgumentException("comment id:" + commentId + " not found"));
 		freeBoardComment.updateFreeBoardComment(freeBoardCommentDto);
-		freeBoardCommentRepository.save(freeBoardComment);
 	}
 
 	/**
@@ -165,7 +162,6 @@ public class FreeBoardService {
 		FreeBoardComment freeBoardComment = freeBoardCommentRepository.findById(commentId)
 			.orElseThrow(() -> new IllegalArgumentException("id: " + commentId + " not found"));
 		freeBoardComment.deleteFreeBoardComment();
-		freeBoardCommentRepository.save(freeBoardComment);
 	}
 
 	/**
