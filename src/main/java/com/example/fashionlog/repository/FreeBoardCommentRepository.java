@@ -12,6 +12,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface FreeBoardCommentRepository extends JpaRepository<FreeBoardComment, Long> {
 
-	// 자유 게시판 id가 입력받은 id와 같은 댓글들을 조회함.
-	List<FreeBoardComment> findByFreeBoardId(Long freeBoardId);
+	// 자유 게시판 id가 입력받은 id와 같고 삭제되지 않은 댓글들을 조회함.
+	List<FreeBoardComment> findAllByFreeBoardIdAndCommentStatusIsTrue(Long id);
 }
