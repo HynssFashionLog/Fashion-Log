@@ -1,21 +1,43 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
-
 <head>
   <meta charset="UTF-8">
   <title>새 글 작성</title>
+  <link rel="stylesheet" th:href="@{/dailylook/css/styles.css}">
+  <link rel="stylesheet" th:href="@{/dailylook/css/edit-form.css}">
 </head>
 <body>
-<h1>새 글 작성</h1>
-<form th:action="@{/fashionlog/dailylook/new}" th:object="${dailyLook}" method="post">
-  <div>
-    <label for="title">제목</label>
-    <input type="text" id="title" name="title" th:field="*{title}" required>
-    <label for="content">내용</label>
-    <textarea id="content" name="content" th:field="*{content}" required></textarea>
+<header>
+  <div class="logo-container">
+    <a href="/" class="logo">
+      <img src="#" alt="Logo" class="logo-image">
+    </a>
   </div>
-  <button type="submit">작성하기</button>
-</form>
-<a th:href="@{/fashionlog/dailylook}">취소</a>
+  <nav>
+    <ul>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><button class="login">UserName</button></li>
+      <li><button class="signup">탈퇴</button></li>
+    </ul>
+  </nav>
+</header>
+<div class="container">
+  <h1>새 글 작성</h1>
+  <form th:action="@{/fashionlog/dailylook/new}" th:object="${dailyLook}" method="post">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input type="text" id="title" name="title" th:field="*{title}" required>
+    </div>
+    <div class="form-group">
+      <label for="content">Content</label>
+      <textarea id="content" name="content" th:field="*{content}" required></textarea>
+    </div>
+  </form>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">등록</button>
+    <a th:href="@{/fashionlog/dailylook}" class="btn btn-secondary">취소</a>
+  </div>
+</div>
 </body>
 </html>

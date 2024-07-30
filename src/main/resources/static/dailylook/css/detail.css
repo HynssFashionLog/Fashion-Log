@@ -123,3 +123,22 @@
 .comment-form button:hover {
   opacity: 0.8;
 }
+
+/* 테이블 스타일 */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+tr {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+tr:last-child {
+  border-bottom: none;
+}
+
+td {
+  padding: 10px 0;
+}
+
