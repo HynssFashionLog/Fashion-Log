@@ -26,7 +26,14 @@
 <div class="container">
   <h1><a th:href="@{/fashionlog/dailylook}">Daily Look</a></h1>
   <div class="post-content">
-    <h2 th:text="${dailyLook.title}">Title</h2>
+    <div>
+      <h2 th:text="${dailyLook.title}">Title</h2>
+      <span>작성자</span>
+      <span class="post-date" th:if="${dailyLook.updatedAt}"
+            th:text="${#temporals.format(dailyLook.updatedAt, 'MM.dd HH:mm:ss')}"></span>
+      <span class="post-date" th:unless="${dailyLook.updatedAt}"
+            th:text="${#temporals.format(dailyLook.createdAt, 'MM.dd HH:mm:ss')}"></span>
+    </div>
     <p><span th:text="${dailyLook.content}">Content</span></p>
   </div>
   <div class="action-buttons">
@@ -46,7 +53,8 @@
         </div>
         <div class="comment-info">
           <span class="comment-author">작성자</span>
-          <span class="comment-date" th:text="${#temporals.format(comment.createdAt, 'MM.dd HH:mm:ss')}">07.29 12:12:41</span>
+          <span class="comment-date" th:if="${comment.updatedAt}" th:text="${#temporals.format(comment.updatedAt, 'MM.dd HH:mm:ss')}"></span>
+          <span class="comment-date" th:unless="${comment.updatedAt}" th:text="${#temporals.format(comment.createdAt, 'MM.dd HH:mm:ss')}"></span>
           <button th:id="'edit-button-' + ${comment.id}" th:onclick="'toggleEditForm(' + ${comment.id} + ')'" class="btn-edit">수정</button>
           <form th:action="@{/fashionlog/dailylook/{postid}/delete-comment/{commentid}(postid=${dailyLook.id}, commentid=${comment.id})}" method="post" style="display: inline;">
             <button type="submit" class="btn-delete">삭제</button>
