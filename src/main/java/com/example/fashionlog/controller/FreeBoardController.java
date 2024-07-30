@@ -6,7 +6,7 @@ import com.example.fashionlog.service.FreeBoardService;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,16 +21,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author Hynss
  * @version 1.0.0
  */
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/fashionlog/freeboard")
 public class FreeBoardController {
 
 	private final FreeBoardService freeBoardService;
-
-	@Autowired
-	public FreeBoardController(FreeBoardService freeBoardService) {
-		this.freeBoardService = freeBoardService;
-	}
 
 	/**
 	 * 자유 게시판 글 목록 조회
@@ -62,7 +58,7 @@ public class FreeBoardController {
 	 * @param freeBoardDto 폼에서 작성한 값들을 freeBoardDto로 받아옴.
 	 * @return 제목과 내용이 비어있는지 안 비어있는지에 따라 각각의 대상 페이지에 리다이렉트
 	 */
-	@PostMapping
+	@PostMapping("/new")
 	public String saveFreeBoardPost(@ModelAttribute FreeBoardDto freeBoardDto) {
 		// Not Null 예외 처리
 		try {

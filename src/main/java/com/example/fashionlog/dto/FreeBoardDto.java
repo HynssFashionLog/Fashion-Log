@@ -1,6 +1,7 @@
 package com.example.fashionlog.dto;
 
 import com.example.fashionlog.domain.FreeBoard;
+import com.example.fashionlog.domain.Updatable;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,15 +18,27 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class FreeBoardDto {
+public class FreeBoardDto implements Updatable {
 
-	private Long id;
-	private String title;
-	private String content;
-	private Boolean postStatus;
-	private LocalDateTime createdAt;
-	private LocalDateTime updatedAt;
-	private LocalDateTime deletedAt;
+	private Long id; // 게시물 id
+	private String title; // 게시물 제목
+	private String content; // 내용
+	private Boolean status; // 게시물의 삭제 여부(소프트 딜리트)
+	private LocalDateTime createdAt; // 게시물 생성일
+	private LocalDateTime updatedAt; // 게시물 수정일
+	private LocalDateTime deletedAt; // 게시물 삭제일
+
+	// Updatable getTitle 구현
+	@Override
+	public String getTitle() {
+		return this.title;
+	}
+
+	// Updatable getContent 구현
+	@Override
+	public String getContent() {
+		return this.content;
+	}
 
 	/**
 	 * FreeBoardDto -> FreeBoard
@@ -34,7 +47,7 @@ public class FreeBoardDto {
 		return FreeBoard.builder()
 			.title(freeBoardDto.getTitle())
 			.content(freeBoardDto.getContent())
-			.postStatus(freeBoardDto.getPostStatus() != null ? freeBoardDto.getPostStatus() : true)
+			.status(freeBoardDto.getStatus() != null ? freeBoardDto.getStatus() : true)
 			.createdAt(freeBoardDto.getCreatedAt() != null ? freeBoardDto.getCreatedAt()
 				: LocalDateTime.now())
 			.updatedAt(freeBoardDto.getUpdatedAt())
@@ -50,7 +63,7 @@ public class FreeBoardDto {
 			.id(freeBoard.getId())
 			.title(freeBoard.getTitle())
 			.content(freeBoard.getContent())
-			.postStatus(freeBoard.getPostStatus())
+			.status(freeBoard.getStatus())
 			.createdAt(freeBoard.getCreatedAt())
 			.updatedAt(freeBoard.getUpdatedAt())
 			.deletedAt(freeBoard.getDeletedAt())
