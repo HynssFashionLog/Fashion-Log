@@ -12,6 +12,12 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+/**
+ * 게시글 Base Entity
+ *
+ * @author Hynss
+ * @version 1.0.0
+ */
 @Getter
 @MappedSuperclass
 @SuperBuilder
@@ -20,26 +26,38 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
 
+	// 제목
 	@Column(nullable = false)
 	private String title;
 
+	// 내용
 	@Column(nullable = false)
 	private String content;
 
+	// 게시글이 삭제 되었는지 여부 (소프트 딜리트)
 	@Column(nullable = false)
 	private Boolean status = true;
 
+	// 게시글 생성일
 	@CreatedDate
 	@Column(nullable = false, updatable = false)
 	private LocalDateTime createdAt;
 
+	// 게시글 수정일
 	@LastModifiedDate
 	@Column
 	private LocalDateTime updatedAt;
 
+	// 게시글 삭제일
 	@Column
 	private LocalDateTime deletedAt;
 
+	/**
+	 * 더티 체킹 방식 수정 로직
+	 *
+	 * @param dto 제목과 내용을 받아 오기 위한 DTO
+	 * @param <T> T에는 게시판 클래스가 들어감
+	 */
 	public <T extends Updatable> void update(T dto) {
 		// Not Null 예외 처리
 		validateField(dto.getTitle(), "Title");
@@ -49,6 +67,9 @@ public abstract class BaseEntity {
 		this.content = dto.getContent();
 	}
 
+	/**
+	 * 소프트 딜리트를 위한 더티 체킹 방식 삭제 로직
+	 */
 	public void delete() {
 		this.status = Boolean.FALSE;
 		this.deletedAt = LocalDateTime.now();
