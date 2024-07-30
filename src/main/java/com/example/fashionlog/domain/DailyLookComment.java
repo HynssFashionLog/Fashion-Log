@@ -1,7 +1,5 @@
 package com.example.fashionlog.domain;
 
-import com.example.fashionlog.dto.DailyLookCommentDto;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,19 +9,20 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDateTime;
+import jakarta.persistence.Table;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DailyLookComment {
+@Table(name = "daily_look_comment")
+public class DailyLookComment extends CommentBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,27 +33,4 @@ public class DailyLookComment {
     @JoinColumn(name = "daily_look_id")
     private DailyLook dailyLook;
 
-    @Column(nullable = false)
-    private String content;
-
-    @Column(nullable = false)
-    private Boolean commentStatus;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-    @Column
-    private LocalDateTime updatedAt;
-    @Column
-    private LocalDateTime deletedAt;
-
-    public void updateDailyLookComment(DailyLookCommentDto dailyLookCommentDto, DailyLook dailyLook) {
-        this.dailyLook = dailyLook;
-        this.content = dailyLookCommentDto.getContent();
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    public void deleteDailyLookComment() {
-        this.commentStatus = Boolean.FALSE;
-        this.deletedAt = LocalDateTime.now();
-    }
 }

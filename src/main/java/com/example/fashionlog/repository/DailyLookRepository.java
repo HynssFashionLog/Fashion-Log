@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DailyLookRepository extends JpaRepository<DailyLook, Long> {
 
-    Optional<DailyLook> findByIdAndPostStatusIsTrue(Long id);
+    Optional<DailyLook> findByIdAndStatusIsTrue(Long id);
 
-    List<DailyLook> findAllByPostStatusIsTrue();
+    List<DailyLook> findAllByStatusIsTrue();
 }

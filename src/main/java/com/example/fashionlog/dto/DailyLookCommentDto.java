@@ -1,5 +1,6 @@
 package com.example.fashionlog.dto;
 
+import com.example.fashionlog.domain.CommentUpdatable;
 import com.example.fashionlog.domain.DailyLook;
 import com.example.fashionlog.domain.DailyLookComment;
 
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DailyLookCommentDto {
+public class DailyLookCommentDto implements CommentUpdatable {
 
     private Long id;
     private Long dailyLookId;
@@ -26,6 +27,11 @@ public class DailyLookCommentDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
+
+    @Override
+    public String getContent() {
+        return this.content;
+    }
 
     public static DailyLookCommentDto convertToDto(DailyLookComment dailyLookComment) {
 
