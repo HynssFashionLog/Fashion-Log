@@ -44,7 +44,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="comments : ${interviewComment}">
+    <tr th:if="${comments.status}" th:each="comments : ${interviewComment}">
       <td>
         <span class="comment-content" th:text="${comments.content}"
               th:data-id="${comments.id}"></span>
@@ -62,6 +62,13 @@
           <button type="button" class="save-edit">저장</button>
           <button type="button" class="cancel-edit">취소</button>
         </div>
+      </td>
+      <td>
+        <form
+            th:action="@{/fashionlog/interviewboard/{postId}/delete-comment/{commentId}(postId=${interviewPost.id}, commentId=${comments.id})}"
+            method="post">
+          <button type="submit" onclick="alert('댓글이 삭제 되었습니다.')">삭제</button>
+        </form>
       </td>
     </tr>
     </tbody>

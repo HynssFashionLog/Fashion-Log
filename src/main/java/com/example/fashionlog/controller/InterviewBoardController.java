@@ -76,9 +76,17 @@ public class InterviewBoardController {
 	}
 
 	@PostMapping("/{postId}/edit-comment/{commentId}")
-	public String editComment(@PathVariable("postId") Long postId, @PathVariable("commentId") Long commentId,
+	public String editComment(@PathVariable("postId") Long postId,
+		@PathVariable("commentId") Long commentId,
 		@ModelAttribute InterviewBoardCommentDto interviewBoardCommentDto) {
 		interviewBoardService.updateInterviewComment(postId, commentId, interviewBoardCommentDto);
+		return "redirect:/fashionlog/interviewboard/" + postId;
+	}
+
+	@PostMapping("/{postId}/delete-comment/{commentId}")
+	public String deleteInterviewBoardComment(@PathVariable("postId") Long postId,
+		@PathVariable("commentId") Long commentId) {
+		interviewBoardService.deleteInterviewBoardComment(commentId);
 		return "redirect:/fashionlog/interviewboard/" + postId;
 	}
 }

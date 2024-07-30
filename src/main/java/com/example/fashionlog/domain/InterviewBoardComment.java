@@ -53,4 +53,9 @@ public class InterviewBoardComment {
 		this.content = interviewBoardCommentDto.getContent();
 		this.updatedAt = LocalDateTime.now();
 	}
+
+	public void deleteInterviewComment() {
+		this.status = Boolean.FALSE;
+		this.deletedAt = LocalDateTime.now();
+	}
 }
