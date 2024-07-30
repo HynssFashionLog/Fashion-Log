@@ -87,7 +87,7 @@ public class DailyLookController {
         @PathVariable("commentid") Long commentId,
         @ModelAttribute("dailyLookComment") DailyLookCommentDto dailyLookCommentDto
     ) {
-        dailyLookService.editDailyLookComment(postId, commentId, dailyLookCommentDto);
+        dailyLookService.editDailyLookComment(commentId, dailyLookCommentDto);
 
         return "redirect:/fashionlog/dailylook/" + postId;
     }

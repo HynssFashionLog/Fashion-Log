@@ -30,7 +30,7 @@ public class DailyLookService {
 
     @Transactional(readOnly = true)
     public List<DailyLookDto> getAllDailyLookPost() {
-        List<DailyLook> dailyLookList = dailyLookRepository.findAllByPostStatusIsTrue();
+        List<DailyLook> dailyLookList = dailyLookRepository.findAllByStatusIsTrue();
         return dailyLookList.stream().map(DailyLookDto::convertToDto).collect(Collectors.toList());
     }
 
@@ -57,17 +57,17 @@ public class DailyLookService {
     @Transactional
     public void editDailyLookPost(Long id, DailyLookDto dailyLookDto) {
         DailyLook dailyLook = findDailyLookById(id);
-        dailyLook.updateDailyLook(dailyLookDto);
+        dailyLook.update(dailyLookDto);
     }
 
     @Transactional
     public void deleteDailyLookPost(Long id) {
         DailyLook dailyLook = findDailyLookById(id);
-        dailyLook.deleteDailyLook();
+        dailyLook.delete();
     }
 
     private DailyLook findDailyLookById(Long id) {
-        return dailyLookRepository.findByIdAndPostStatusIsTrue(id)
+        return dailyLookRepository.findByIdAndStatusIsTrue(id)
             .orElseThrow(() -> new EntityNotFoundException("post를 찾지 못했습니다."));
     }
 
@@ -85,17 +85,16 @@ public class DailyLookService {
     }
 
     @Transactional
-    public void editDailyLookComment(Long postId, Long commentId,
+    public void editDailyLookComment(Long commentId,
         DailyLookCommentDto dailyLookCommentDto) {
-        DailyLook dailyLook = findDailyLookById(postId);
         DailyLookComment dailyLookComment = getDailyLookComment(commentId);
-        dailyLookComment.updateDailyLookComment(dailyLookCommentDto, dailyLook);
+        dailyLookComment.updateComment(dailyLookCommentDto);
     }
 
     @Transactional
     public void deleteDailyLookComment(Long commentId) {
         DailyLookComment dailyLookComment = getDailyLookComment(commentId);
-        dailyLookComment.deleteDailyLookComment();
+        dailyLookComment.deleteComment();
     }
 
     private DailyLookComment getDailyLookComment(Long commentId) {

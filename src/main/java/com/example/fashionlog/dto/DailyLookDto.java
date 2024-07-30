@@ -2,6 +2,7 @@ package com.example.fashionlog.dto;
 
 import com.example.fashionlog.domain.DailyLook;
 
+import com.example.fashionlog.domain.Updatable;
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DailyLookDto {
+public class DailyLookDto implements Updatable {
 
     private Long id;
     private String title;
@@ -26,12 +27,22 @@ public class DailyLookDto {
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
 
+    @Override
+    public String getTitle() {
+        return this.title;
+    }
+
+    @Override
+    public String getContent() {
+        return this.content;
+    }
+
     public static DailyLookDto convertToDto(DailyLook dailyLook) {
         return DailyLookDto.builder()
             .id(dailyLook.getId())
             .title(dailyLook.getTitle())
             .content(dailyLook.getContent())
-            .postStatus(dailyLook.getPostStatus())
+            .postStatus(dailyLook.getStatus())
             .createdAt(dailyLook.getCreatedAt())
             .updatedAt(dailyLook.getUpdatedAt())
             .deletedAt(dailyLook.getDeletedAt())
@@ -43,7 +54,7 @@ public class DailyLookDto {
             .id(dailyLookDto.getId())
             .title(dailyLookDto.getTitle())
             .content(dailyLookDto.getContent())
-            .postStatus(dailyLookDto.getPostStatus())
+            .status(dailyLookDto.getPostStatus())
             .createdAt(LocalDateTime.now())
             .updatedAt(dailyLookDto.getUpdatedAt())
             .deletedAt(dailyLookDto.getDeletedAt())

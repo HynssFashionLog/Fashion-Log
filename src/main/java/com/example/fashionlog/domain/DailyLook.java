@@ -1,57 +1,29 @@
 package com.example.fashionlog.domain;
 
-import com.example.fashionlog.dto.DailyLookDto;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-import java.time.LocalDateTime;
+import jakarta.persistence.Table;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Getter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class DailyLook {
+@Table(name = "daily_look")
+public class DailyLook extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "daily_look_id")
     private Long id;
-
-    @Column(nullable = false)
-    private String title;
-
-    @Column(nullable = false)
-    private String content;
-
-    @Column(nullable = false)
-    private Boolean postStatus;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-    @Column
-    private LocalDateTime updatedAt;
-    @Column
-    private LocalDateTime deletedAt;
-
-    public void updateDailyLook(DailyLookDto dailyLookDto) {
-        this.title = dailyLookDto.getTitle();
-        this.content = dailyLookDto.getContent();
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    public void deleteDailyLook() {
-        this.postStatus = Boolean.FALSE;
-        this.deletedAt = LocalDateTime.now();
-    }
 
 }
