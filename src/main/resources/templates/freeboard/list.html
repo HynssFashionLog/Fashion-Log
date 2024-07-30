@@ -2,11 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>자유 게시판</title>
-  <link rel="stylesheet" th:href="@{/freeboard/css/style.css}"/>
+  <title>Free Board List</title>
 </head>
 <body>
-<h1>자유 게시판</h1>
+<h1>Free Board</h1>
 <table>
   <thead>
   <tr>
@@ -15,14 +14,15 @@
     <th>작성일</th>
   </tr>
   </thead>
-  <!-- 자유 게시판 글 목록 -->
   <tbody>
-  <tr th:each="post : ${posts}">
+  <tr th:each="post:${freeboards}">
     <td>
-      <a th:href="@{/fashionlog/freeboard/{id}(id=${post.id})}" th:text="${post.title}"></a>
+      <a th:text="${post.title}" th:href="@{/fashionlog/freeboard/{id}(id=${post.id})}">제목</a>
     </td>
-    <td></td>
-    <td th:text="${post.createdAt}"></td>
+    <td>작성자</td>
+    <!-- updateAt이 null 이 아니면 updateAt 표시 -->
+    <td th:if="${post.updatedAt != null}" th:text="${post.updatedAt}">작성일</td>
+    <td th:unless="${post.updatedAt != null}" th:text="${post.createdAt}">작성일</td>
   </tr>
   </tbody>
 </table>

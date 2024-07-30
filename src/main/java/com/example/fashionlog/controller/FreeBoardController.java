@@ -42,7 +42,7 @@ public class FreeBoardController {
 	public String getAllFreeBoardList(Model model) {
 		List<FreeBoardDto> freeBoardDto = freeBoardService.getAllFreeBoards()
 			.orElse(Collections.emptyList());
-		model.addAttribute("posts", freeBoardDto);
+		model.addAttribute("freeboards", freeBoardDto);
 		return "freeboard/list";
 	}
 
@@ -91,8 +91,9 @@ public class FreeBoardController {
 		List<FreeBoardCommentDto> freeBoardCommentDto = freeBoardService.getCommentsByFreeBoardId(
 			id).orElse(Collections.emptyList());
 
-		model.addAttribute("post", freeBoardDto);
-		model.addAttribute("comments", freeBoardCommentDto);
+		model.addAttribute("freeBoard", freeBoardDto);
+		model.addAttribute("freeBoardComments", freeBoardCommentDto);
+		model.addAttribute("freeBoardComment", new FreeBoardCommentDto());
 
 		return "freeboard/detail";
 	}
@@ -106,7 +107,7 @@ public class FreeBoardController {
 	 */
 	@GetMapping("/{id}/edit")
 	public String editFreeBoardForm(@PathVariable("id") Long id, Model model) {
-		model.addAttribute("post",
+		model.addAttribute("freeBoard",
 			freeBoardService.getFreeBoardDtoById(id).orElse(new FreeBoardDto()));
 		return "freeboard/edit";
 	}

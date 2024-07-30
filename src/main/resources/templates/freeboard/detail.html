@@ -2,90 +2,72 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>자유 게시글 상세보기</title>
-  <link rel="stylesheet" th:href="@{/freeboard/css/style.css}"/>
-  <script th:src="@{/freeboard/js/commentEditForm.js}"></script>
+  <title>Free Board Post Detail</title>
+  <link rel="stylesheet" th:href="@{/freeboard/css/detail.css}">
+  <link rel="stylesheet" th:href="@{/freeboard/css/styles.css}">
+  <script th:src="@{/freeboard/js/detail.js}"></script>
 </head>
 <body>
-<!-- 자유 게시판 글 상세 보기 -->
-<h1>제목</h1>
-<div class="post-detail">
-  <h2 th:text="${post.title}">Title</h2>
-  <p class="post-meta">
-    작성자: <span>Member</span>
-    작성일: <span th:text="${post.createdAt}">CreatedAt</span>
-  </p>
-  <div class="post-content" th:text="${post.content}">Content</div>
-  <div class="post-actions">
-    <a th:href="@{/fashionlog/freeboard}">목록으로</a>
-    <a th:href="@{/fashionlog/freeboard/{id}/edit(id=${post.id})}" class="edit-btn">수정</a>
-    <form th:action="@{/fashionlog/freeboard/{id}/delete(id=${post.id})}" method="post"
-          class="delete-form">
-      <button type="submit">삭제</button>
+<header>
+  <div class="logo-container">
+    <a href="/" class="logo">
+      <img src="#" alt="Logo" class="logo-image">
+    </a>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><button class="login">UserName</button></li>
+      <li><button class="signup">탈퇴</button></li>
+    </ul>
+  </nav>
+</header>
+<div class="container">
+  <h1><a th:href="@{/fashionlog/freeboard}">Free Board</a></h1>
+  <div class="post-content">
+    <h2 th:text="${freeBoard.title}">Title</h2>
+    <p><span th:text="${freeBoard.content}">Content</span></p>
+  </div>
+  <div class="action-buttons">
+    <a href="/fashionlog/freeboard" class="btn">뒤로</a>
+    <a th:href="@{/fashionlog/freeboard/{id}/edit(id=${freeBoard.id})}" class="btn edit-btn">수정</a>
+    <form th:action="@{/fashionlog/freeboard/{id}/delete(id=${freeBoard.id})}" method="post" style="display: inline;">
+      <button type="submit" class="btn delete-btn">삭제</button>
     </form>
   </div>
-</div>
-
-<!-- 자유 게시판 댓글 작성 폼 -->
-<h3>댓글 작성</h3>
-<form th:action="@{/fashionlog/freeboard/{postId}/comment(postId=${post.id})}" method="post">
-  <div>
-    <label for="content">내용</label>
-    <textarea id="content" name="content" required></textarea>
+  <!-- 댓글 목록 -->
+  <div class="comment-section">
+    <h3>댓글</h3>
+    <ul class="comment-list">
+      <li th:each="comment : ${freeBoardComments}" class="comment">
+        <div class="comment-content">
+          <span th:id="'view-' + ${comment.id}" th:text="${comment.content}">댓글 내용</span>
+        </div>
+        <div class="comment-info">
+          <span class="comment-author">작성자</span>
+          <span class="comment-date" th:if="${comment.updatedAt}" th:text="${#temporals.format(comment.updatedAt, 'MM.dd HH:mm:ss')}"></span>
+          <span class="comment-date" th:unless="${comment.updatedAt}" th:text="${#temporals.format(comment.createdAt, 'MM.dd HH:mm:ss')}"></span>
+          <button th:id="'edit-button-' + ${comment.id}" th:onclick="'toggleEditForm(' + ${comment.id} + ')'" class="btn-edit">수정</button>
+          <form th:action="@{/fashionlog/freeboard/{postid}/delete-comment/{commentid}(postid=${freeBoard.id}, commentid=${comment.id})}" method="post" style="display: inline;">
+            <button type="submit" class="btn-delete">삭제</button>
+          </form>
+        </div>
+        <!-- 수정 모드 -->
+        <form th:id="'edit-' + ${comment.id}" style="display: none;"
+              th:action="@{/fashionlog/freeboard/{postid}/edit-comment/{commentid}(postid=${freeBoard.id}, commentid=${comment.id})}"
+              method="post" class="edit-form">
+          <input type="text" name="content" th:value="${comment.content}">
+          <button type="submit">저장</button>
+        </form>
+      </li>
+    </ul>
+    <!-- 댓글 작성 -->
+    <form class="comment-form" th:action="@{/fashionlog/freeboard/{id}/comment(id=${freeBoard.id})}" th:object="${freeBoardComment}" method="post">
+      <textarea id="content" name="content" th:field="*{content}" placeholder="댓글을 입력하세요"></textarea>
+      <button type="submit">등록</button>
+    </form>
   </div>
-  <button type="submit">작성 완료</button>
-</form>
-
-<!-- 자유게시판 댓글 목록 및 수정 폼 -->
-<div class="post-comments">
-  <table>
-    <thead>
-    <tr>
-      <th>작성자</th>
-      <th>내용</th>
-      <th>작성일</th>
-      <th>수정 버튼</th>
-      <th>삭제 버튼</th>
-    </tr>
-    </thead>
-    <tbody>
-    <!-- 자유 게시판 댓글 목록 -->
-    <tr th:each="comment : ${comments}">
-      <td>작성자</td>
-      <td th:text="${comment.content}"></td>
-      <td th:text="${comment.createdAt}"></td>
-      <td>
-        <!-- commentEditForm.js와 연동 -->
-        <button type="button" th:onclick="'showEditForm(' + ${comment.id} + ')'"
-                th:id="'edit-btn-' + ${comment.id}">Edit
-        </button>
-      </td>
-      <td>
-        <form
-            th:action="@{/fashionlog/freeboard/{postId}/delete-comment/{commentId}(postId=${post.id}, commentId=${comment.id})}"
-            method="post">
-          <button type="submit">Delete</button>
-        </form>
-      </td>
-    </tr>
-    <!-- 자유 게시판 댓글 수정 폼 -->
-    <tr th:each="comment : ${comments}" th:attr="id=${'edit-form-' + comment.id}"
-        style="display:none;">
-      <td colspan="5">
-        <form
-            th:action="@{/fashionlog/freeboard/{postId}/edit-comment/{commentId}(postId=${post.id}, commentId=${comment.id})}"
-            method="post">
-          <label>
-            <textarea name="content" required th:text="${comment.content}"></textarea>
-          </label>
-          <button type="submit">Save</button>
-          <!-- commentEditForm.js와 연동 -->
-          <button type="button" th:onclick="'hideEditForm(' + ${comment.id} + ')'">Cancel</button>
-        </form>
-      </td>
-    </tr>
-    </tbody>
-  </table>
 </div>
 </body>
 </html>
