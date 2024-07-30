@@ -9,7 +9,7 @@ import com.example.fashionlog.repository.FreeBoardRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Hynss
  * @version 1.0.0
  */
+@RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
 public class FreeBoardService {
@@ -26,20 +27,13 @@ public class FreeBoardService {
 	private final FreeBoardRepository freeBoardRepository;
 	private final FreeBoardCommentRepository freeBoardCommentRepository;
 
-	@Autowired
-	public FreeBoardService(FreeBoardRepository freeBoardRepository,
-		FreeBoardCommentRepository freeBoardCommentRepository) {
-		this.freeBoardRepository = freeBoardRepository;
-		this.freeBoardCommentRepository = freeBoardCommentRepository;
-	}
-
 	/**
 	 * 자유 게시판 글 목록 조회하기 API
 	 *
 	 * @return getPostStatus(글이 삭제되었는지, soft delete 방식)가 true일 경우 자유 게시판의 전체 글을 반환함.
 	 */
 	public Optional<List<FreeBoardDto>> getAllFreeBoards() {
-		List<FreeBoardDto> freeBoards = freeBoardRepository.findAllByPostStatusIsTrue().stream()
+		List<FreeBoardDto> freeBoards = freeBoardRepository.findAllByStatusIsTrue().stream()
 			.map(FreeBoardDto::convertToDto)
 			.collect(Collectors.toList());
 		return freeBoards.isEmpty() ? Optional.empty() : Optional.of(freeBoards);
@@ -66,7 +60,7 @@ public class FreeBoardService {
 	 * @return 자유 게시판 데이터베이스에서 id가 같은 게시글을 반환함.
 	 */
 	public Optional<FreeBoardDto> getFreeBoardDtoById(Long id) {
-		return freeBoardRepository.findByIdAndPostStatusIsTrue(id)
+		return freeBoardRepository.findByIdAndStatusIsTrue(id)
 			.map(FreeBoardDto::convertToDto);
 	}
 
@@ -84,7 +78,7 @@ public class FreeBoardService {
 
 		FreeBoard freeBoard = freeBoardRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
-		freeBoard.updateFreeBoard(freeBoardDto);
+		freeBoard.update(freeBoardDto);
 	}
 
 	/**
@@ -96,7 +90,7 @@ public class FreeBoardService {
 	public void deleteFreeBoardPost(Long id) {
 		FreeBoard freeBoard = freeBoardRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
-		freeBoard.deleteFreeBoard();
+		freeBoard.delete();
 	}
 
 	/**
@@ -147,7 +141,7 @@ public class FreeBoardService {
 		FreeBoardComment freeBoardComment = freeBoardCommentRepository.findById(commentId)
 			.orElseThrow(
 				() -> new IllegalArgumentException("comment id:" + commentId + " not found"));
-		freeBoardComment.updateFreeBoardComment(freeBoardCommentDto);
+		freeBoardComment.updateComment(freeBoardCommentDto);
 	}
 
 	/**
@@ -159,6 +153,6 @@ public class FreeBoardService {
 	public void deleteFreeBoardComment(Long commentId) {
 		FreeBoardComment freeBoardComment = freeBoardCommentRepository.findById(commentId)
 			.orElseThrow(() -> new IllegalArgumentException("id: " + commentId + " not found"));
-		freeBoardComment.deleteFreeBoardComment();
+		freeBoardComment.deleteComment();
 	}
 }
