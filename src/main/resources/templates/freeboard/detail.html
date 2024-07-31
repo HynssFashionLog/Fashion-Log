@@ -26,7 +26,14 @@
 <div class="container">
   <h1><a th:href="@{/fashionlog/freeboard}">Free Board</a></h1>
   <div class="post-content">
-    <h2 th:text="${freeBoard.title}">Title</h2>
+    <div>
+      <h2 th:text="${freeBoard.title}">Title</h2>
+      <span>작성자</span>
+      <span class="post-date" th:if="${freeBoard.updatedAt}"
+            th:text="${#temporals.format(freeBoard.updatedAt, 'MM.dd HH:mm:ss')}"></span>
+      <span class="post-date" th:unless="${freeBoard.updatedAt}"
+            th:text="${#temporals.format(freeBoard.createdAt, 'MM.dd HH:mm:ss')}"></span>
+    </div>
     <p><span th:text="${freeBoard.content}">Content</span></p>
   </div>
   <div class="action-buttons">

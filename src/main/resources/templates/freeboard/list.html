@@ -3,29 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <title>Free Board List</title>
+  <link rel="stylesheet" th:href="@{/freeboard/css/styles.css}">
+  <link rel="stylesheet" th:href="@{/freeboard/css/list.css}">
 </head>
 <body>
-<h1>Free Board</h1>
-<table>
-  <thead>
-  <tr>
-    <th>제목</th>
-    <th>작성자</th>
-    <th>작성일</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="post:${freeboards}">
-    <td>
-      <a th:text="${post.title}" th:href="@{/fashionlog/freeboard/{id}(id=${post.id})}">제목</a>
-    </td>
-    <td>작성자</td>
-    <!-- updateAt이 null 이 아니면 updateAt 표시 -->
-    <td th:if="${post.updatedAt != null}" th:text="${post.updatedAt}">작성일</td>
-    <td th:unless="${post.updatedAt != null}" th:text="${post.createdAt}">작성일</td>
-  </tr>
-  </tbody>
-</table>
-<a th:href="@{/fashionlog/freeboard/new}">새 글 작성</a>
+<header>
+  <div class="logo-container">
+    <a href="/" class="logo">
+      <img src="#" alt="Logo" class="logo-image">
+    </a>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Contact</a></li>
+      <li>
+        <button class="login">UserName</button>
+      </li>
+      <li>
+        <button class="signup">탈퇴</button>
+      </li>
+    </ul>
+  </nav>
+</header>
+<div class="container">
+  <h1>Free Board</h1>
+
+  <hr>
+
+  <table>
+    <thead>
+    <tr>
+      <th>제목</th>
+      <th>작성자</th>
+      <th>작성일</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="post:${freeboards}" class="post-item">
+      <td>
+        <a th:text="${post.title}" th:href="@{/fashionlog/freeboard/{id}(id=${post.id})}">제목</a>
+      </td>
+      <td>작성자</td>
+      <!-- updateAt이 null 이 아니면 updateAt 표시 -->
+      <td th:if="${post.updatedAt != null}" th:text="${post.updatedAt}">작성일</td>
+      <td th:unless="${post.updatedAt != null}" th:text="${post.createdAt}">작성일</td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="actions"></div>
+  <a class="btn btn-primary" th:href="@{/fashionlog/freeboard/new}">새 글 작성</a>
+</div>
 </body>
 </html>
