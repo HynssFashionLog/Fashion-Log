@@ -1,6 +1,7 @@
 package com.example.fashionlog.dto;
 
 import com.example.fashionlog.domain.InterviewBoard;
+import com.example.fashionlog.domain.Updatable;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InterviewBoardDto {
+public class InterviewBoardDto implements Updatable {
 
 	private Long id;
 	private String title;
@@ -20,6 +21,16 @@ public class InterviewBoardDto {
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 	private LocalDateTime deletedAt;
+
+	@Override
+	public String getTitle() {
+		return this.title;
+	}
+
+	@Override
+	public String getContent() {
+		return this.content;
+	}
 
 	public static InterviewBoardDto fromEntity(InterviewBoard interviewBoard) {
 		return InterviewBoardDto.builder()
