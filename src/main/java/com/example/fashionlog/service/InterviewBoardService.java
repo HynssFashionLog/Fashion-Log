@@ -37,7 +37,8 @@ public class InterviewBoardService {
 	public void createInterviewPost(InterviewBoardDto interviewBoardDto) {
 		interviewBoardDto.setCreatedAt(LocalDateTime.now());
 		interviewBoardDto.setStatus(true);
-		interviewBoardRepository.save(interviewBoardDto.toEntity());
+		InterviewBoard interviewBoard = InterviewBoardDto.toEntity(interviewBoardDto);
+		interviewBoardRepository.save(interviewBoard);
 	}
 
 

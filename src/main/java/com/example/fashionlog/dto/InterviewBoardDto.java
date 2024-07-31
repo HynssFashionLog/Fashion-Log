@@ -36,15 +36,15 @@ public class InterviewBoardDto {
 
 	}
 
-	public InterviewBoard toEntity() {
-		return new InterviewBoard(
-			this.id,
-			this.title,
-			this.content,
-			this.status,
-			this.createdAt,
-			this.updatedAt,
-			this.updatedAt
-		);
+	public static InterviewBoard toEntity(InterviewBoardDto interviewBoardDto) {
+		return InterviewBoard.builder()
+			.id(interviewBoardDto.getId())
+			.title(interviewBoardDto.getTitle())
+			.content(interviewBoardDto.getContent())
+			.status(interviewBoardDto.getStatus())
+			.createdAt(interviewBoardDto.getCreatedAt())
+			.updatedAt(interviewBoardDto.getUpdatedAt())
+			.deletedAt(interviewBoardDto.getDeletedAt())
+			.build();
 	}
 }
