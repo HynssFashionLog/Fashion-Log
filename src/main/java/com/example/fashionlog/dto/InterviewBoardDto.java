@@ -4,15 +4,13 @@ import com.example.fashionlog.domain.InterviewBoard;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class InterviewBoardDto {
 
 	private Long id;
@@ -36,15 +34,15 @@ public class InterviewBoardDto {
 
 	}
 
-	public InterviewBoard toEntity() {
-		return new InterviewBoard(
-			this.id,
-			this.title,
-			this.content,
-			this.status,
-			this.createdAt,
-			this.updatedAt,
-			this.updatedAt
-		);
+	public static InterviewBoard toEntity(InterviewBoardDto interviewBoardDto) {
+		return InterviewBoard.builder()
+			.id(interviewBoardDto.getId())
+			.title(interviewBoardDto.getTitle())
+			.content(interviewBoardDto.getContent())
+			.status(interviewBoardDto.getStatus())
+			.createdAt(interviewBoardDto.getCreatedAt())
+			.updatedAt(interviewBoardDto.getUpdatedAt())
+			.deletedAt(interviewBoardDto.getDeletedAt())
+			.build();
 	}
 }

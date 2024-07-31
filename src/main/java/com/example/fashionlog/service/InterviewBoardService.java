@@ -28,7 +28,7 @@ public class InterviewBoardService {
 	}
 
 	public List<InterviewBoardDto> getAllInterviewPosts() {
-		List<InterviewBoard> interviewPostList = interviewBoardRepository.findAll();
+		List<InterviewBoard> interviewPostList = interviewBoardRepository.findAllByStatusIsTrue();
 		return interviewPostList.stream().map(InterviewBoardDto::fromEntity)
 			.collect(Collectors.toList());
 	}
@@ -37,7 +37,8 @@ public class InterviewBoardService {
 	public void createInterviewPost(InterviewBoardDto interviewBoardDto) {
 		interviewBoardDto.setCreatedAt(LocalDateTime.now());
 		interviewBoardDto.setStatus(true);
-		interviewBoardRepository.save(interviewBoardDto.toEntity());
+		InterviewBoard interviewBoard = InterviewBoardDto.toEntity(interviewBoardDto);
+		interviewBoardRepository.save(interviewBoard);
 	}
 
 
@@ -58,7 +59,7 @@ public class InterviewBoardService {
 	public void deleteInterviewPost(Long id) {
 		InterviewBoard interviewBoard = interviewBoardRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("게시판 정보를 찾을 수 없습니다."));
-		interviewBoardRepository.delete(interviewBoard);
+		interviewBoard.deleteInterviewBoard();
 	}
 
 	public List<InterviewBoardCommentDto> getCommentList(Long id) {
