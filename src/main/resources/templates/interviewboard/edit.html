@@ -1,21 +1,43 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
-    <title>인터뷰 게시글 수정</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <meta charset="UTF-8">
+    <title>Edit Interview Board Post</title>
+    <link rel="stylesheet" th:href="@{/interview/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/interview/css/edit-form.css}">
 </head>
 <body>
-<h1>인터뷰 게시글 수정</h1>
-<form th:action="@{/fashionlog/interviewboard/{id}/edit(id=${interviewPost.id})}" method="post">
-    <div>
-        <label for="title">제목</label>
-        <input type="text" id="title" name="title" th:value="${interviewPost.title}">
+<header>
+    <div class="logo-container">
+        <a href="/" class="logo">
+            <img src="#" alt="Logo" class="logo-image">
+        </a>
     </div>
-    <div>
-        <label for="content">내용</label>
-        <textarea id="content" name="content" th:text="${interviewPost.content}"></textarea>
-    </div>
-    <button type="submit">저장</button>
-</form>
+    <nav>
+        <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><button class="login">UserName</button></li>
+            <li><button class="signup">탈퇴</button></li>
+        </ul>
+    </nav>
+</header>
+<div class="container">
+    <h1>Edit Interview Board Post</h1>
+    <form th:action="@{/fashionlog/interviewboard/{id}/edit(id=${interviewPost.id})}" th:object="${interviewPost}" method="post">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" th:field="*{title}" required>
+        </div>
+        <div class="form-group">
+            <label for="content">Content</label>
+            <textarea id="content" name="content" th:field="*{content}" required></textarea>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">저장</button>
+            <a th:href="@{/fashionlog/interviewboard/{id}(id=${interviewPost.id})}" class="btn btn-secondary">취소</a>
+        </div>
+    </form>
+</div>
 </body>
 </html>
