@@ -27,7 +27,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public abstract class CommentBaseEntity {
 
 	// 내용
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "TEXT")
 	private String content;
 
 	// 댓글이 삭제 되었는지 여부 (소프트 딜리트)
