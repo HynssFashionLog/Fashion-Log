@@ -52,14 +52,14 @@ public class InterviewBoardService {
 	public void updateInterviewPost(Long id, InterviewBoardDto interviewBoardDto) {
 		InterviewBoard interviewBoard = interviewBoardRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("게시판 정보를 찾을 수 없습니다."));
-		interviewBoard.updateInterviewBoard(interviewBoardDto);
+		interviewBoard.update(interviewBoardDto);
 	}
 
 	@Transactional
 	public void deleteInterviewPost(Long id) {
 		InterviewBoard interviewBoard = interviewBoardRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("게시판 정보를 찾을 수 없습니다."));
-		interviewBoard.deleteInterviewBoard();
+		interviewBoard.delete();
 	}
 
 	public List<InterviewBoardCommentDto> getCommentList(Long id) {
@@ -75,7 +75,7 @@ public class InterviewBoardService {
 		interviewBoardCommentDto.setId(null);
 		interviewBoardCommentDto.setBoardId(id);
 		interviewBoardCommentDto.setCreatedAt(LocalDateTime.now());
-		interviewBoardCommentDto.setStatus(true);
+		interviewBoardCommentDto.setCommentStatus(true);
 		InterviewBoardComment interviewBoardComment = interviewBoardCommentDto.toEntity(
 			interviewBoardCommentDto, interviewBoard);
 		interviewBoardCommentRepository.save(interviewBoardComment);
@@ -85,14 +85,14 @@ public class InterviewBoardService {
 	public void updateInterviewComment(Long postId, Long commentId, InterviewBoardCommentDto interviewBoardCommentDto) {
 		InterviewBoardComment interviewBoardComment = interviewBoardCommentRepository.findById(commentId)
 			.orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
-		interviewBoardComment.updateInterviewComment(interviewBoardCommentDto);
+		interviewBoardComment.updateComment(interviewBoardCommentDto);
 	}
 
 	@Transactional
 	public void deleteInterviewBoardComment(Long commentId) {
 		InterviewBoardComment interviewBoardComment = interviewBoardCommentRepository.findById(commentId)
 			.orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
-		interviewBoardComment.deleteInterviewComment();
+		interviewBoardComment.deleteComment();
 	}
 
 }
