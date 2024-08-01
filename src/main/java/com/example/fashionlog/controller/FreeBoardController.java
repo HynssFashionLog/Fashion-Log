@@ -37,7 +37,7 @@ public class FreeBoardController {
 	@GetMapping
 	public String getAllFreeBoardList(Model model) {
 		List<FreeBoardDto> freeBoardDto = freeBoardService.getAllFreeBoards()
-			.orElse(Collections.emptyList());
+				.orElse(Collections.emptyList());
 		model.addAttribute("freeboards", freeBoardDto);
 		return "freeboard/list";
 	}
@@ -48,7 +48,8 @@ public class FreeBoardController {
 	 * @return freeboard/form.html을 사용자 화면으로 반환
 	 */
 	@GetMapping("/new")
-	public String newFreeBoardForm() {
+	public String newFreeBoardForm(Model model) {
+		model.addAttribute("freeBoard", new FreeBoardDto());
 		return "freeboard/form";
 	}
 
@@ -85,7 +86,7 @@ public class FreeBoardController {
 		}
 		FreeBoardDto freeBoardDto = freeBoardDtoOpt.get();
 		List<FreeBoardCommentDto> freeBoardCommentDto = freeBoardService.getCommentsByFreeBoardId(
-			id).orElse(Collections.emptyList());
+				id).orElse(Collections.emptyList());
 
 		model.addAttribute("freeBoard", freeBoardDto);
 		model.addAttribute("freeBoardComments", freeBoardCommentDto);
@@ -104,7 +105,7 @@ public class FreeBoardController {
 	@GetMapping("/{id}/edit")
 	public String editFreeBoardForm(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("freeBoard",
-			freeBoardService.getFreeBoardDtoById(id).orElse(new FreeBoardDto()));
+				freeBoardService.getFreeBoardDtoById(id).orElse(new FreeBoardDto()));
 		return "freeboard/edit";
 	}
 
@@ -117,7 +118,7 @@ public class FreeBoardController {
 	 */
 	@PostMapping("/{id}/edit")
 	public String editFreeBoardPost(@PathVariable("id") Long id,
-		@ModelAttribute FreeBoardDto freeBoardDto) {
+									@ModelAttribute FreeBoardDto freeBoardDto) {
 		// Not Null 예외 처리
 		try {
 			freeBoardService.updateFreeBoardPost(id, freeBoardDto);
@@ -148,7 +149,7 @@ public class FreeBoardController {
 	 */
 	@PostMapping("/{postid}/comment")
 	public String saveFreeBoardComment(@PathVariable("postid") Long postId,
-		@ModelAttribute FreeBoardCommentDto freeBoardCommentDto) {
+									   @ModelAttribute FreeBoardCommentDto freeBoardCommentDto) {
 		// Not Null 예외 처리
 		try {
 			freeBoardService.createFreeBoardComment(postId, freeBoardCommentDto);
@@ -168,8 +169,8 @@ public class FreeBoardController {
 	 */
 	@PostMapping("/{postid}/edit-comment/{commentid}")
 	public String editFreeBoardComment(@PathVariable("postid") Long postId,
-		@PathVariable("commentid") Long commentId,
-		@ModelAttribute FreeBoardCommentDto freeBoardCommentDto) {
+									   @PathVariable("commentid") Long commentId,
+									   @ModelAttribute FreeBoardCommentDto freeBoardCommentDto) {
 		// Not Null 예외 처리
 		try {
 			freeBoardService.updateFreeBoardComment(commentId, freeBoardCommentDto);
@@ -188,7 +189,7 @@ public class FreeBoardController {
 	 */
 	@PostMapping("/{postid}/delete-comment/{commentid}")
 	public String deleteFreeBoardComment(@PathVariable("postid") Long postId,
-		@PathVariable("commentid") Long commentId) {
+										 @PathVariable("commentid") Long commentId) {
 		freeBoardService.deleteFreeBoardComment(commentId);
 		return "redirect:/fashionlog/freeboard/" + postId;
 	}
