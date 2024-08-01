@@ -8,6 +8,7 @@ import com.example.fashionlog.repository.LookbookCommentRepository;
 import com.example.fashionlog.repository.LookbookRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,125 +27,144 @@ public class LookbookService {
 		this.lookbookCommentRepository = lookbookCommentRepository;
 	}
 
-	public List<LookbookDto> getAllLookbooks() {
-		return lookbookRepository.findByDeletedAtIsNull().stream()
-			.map(this::convertToDto)
+	/**
+	 * 룩북 게시판 글 목록 조회하기 API
+	 *
+	 * @return getPostStatus(글이 삭제되었는지, soft delete 방식)가 true일 경우 룩북 게시판의 전체 글을 반환함.
+	 */
+	public Optional<List<LookbookDto>> getAllLookbooks() {
+		List<LookbookDto> lookbooks = lookbookRepository.findByDeletedAtIsNull().stream()
+			.map(LookbookDto::convertToDto)
 			.collect(Collectors.toList());
+		return lookbooks.isEmpty() ? Optional.empty() : Optional.of(lookbooks);
 	}
 
-	public LookbookDto getLookbookById(Long id) {
-		Lookbook lookbook = lookbookRepository.findByIdAndDeletedAtIsNull(id);
-		return convertToDto(lookbook);
+	/**
+	 * 룩북 글 상세보기 API
+	 *
+	 * @param id 글 하나를 상세하게 보기위해 게시글 id를 받아옴.
+	 * @return 룩북 게시판 데이터베이스에서 id가 같은 게시글을 반환함.
+	 */
+	public Optional<LookbookDto> getLookbookById(Long id) {
+		return lookbookRepository.findByIdAndStatusIsTrue(id)
+			.map(LookbookDto::convertToDto);
 	}
 
-	public LookbookDto createLookbook(LookbookDto lookbookDto) {
-		Lookbook lookbook = convertToEntity(lookbookDto);
-		lookbook.setCreatedAt(LocalDateTime.now());
-		Lookbook savedLookbook = lookbookRepository.save(lookbook);
-		return convertToDto(savedLookbook);
+	/**
+	 * 룩북 게시판 글 작성하기 API
+	 *
+	 * @param lookbookDto 컨트롤러에서 DB에 삽입할 DTO를 받아옴.
+	 */
+	@Transactional
+	public void createLookbookPost(LookbookDto lookbookDto) {
+		// Not Null 예외 처리
+		Lookbook.validateField(lookbookDto.getTitle(), "Title");
+		Lookbook.validateField(lookbookDto.getContent(), "Content");
+		lookbookRepository.save(LookbookDto.convertToEntity(lookbookDto));
 	}
 
-	public LookbookDto updateLookbook(Long id, LookbookDto lookbookDto) {
+	/**
+	 * 룩북 게시판 글 수정하기 API
+	 *
+	 * @param id           수정할 글의 id를 받아옴.
+	 * @param lookbookDto 컨트롤러에서 DB에 수정할 DTO를 받아옴.
+	 */
+	@Transactional
+	public void updateLookbook(Long id, LookbookDto lookbookDto) {
+		// Not Null 예외 처리
+		Lookbook.validateField(lookbookDto.getTitle(), "Title");
+		Lookbook.validateField(lookbookDto.getContent(), "Content");
+
 		Lookbook lookbook = lookbookRepository.findById(id)
-			.orElseThrow(() -> new RuntimeException("Lookbook not found"));
-		updateLookbookFromDto(lookbook, lookbookDto);
-		lookbook.setUpdatedAt(LocalDateTime.now());
-		Lookbook updatedLookbook = lookbookRepository.save(lookbook);
-		return convertToDto(updatedLookbook);
+			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
+		lookbook.update(lookbookDto);
 	}
 
+	/**
+	 * 룩북 게시판 글 상세보기 API
+	 *
+	 * @param id 글 하나를 상세하게 보기위해 게시글 id를 받아옴.
+	 * @return 룩북 게시판 데이터베이스에서 id가 같은 게시글을 반환함.
+	 */
+	public Optional<LookbookDto> getLookbookDtoById(Long id) {
+		return lookbookRepository.findByIdAndStatusIsTrue(id)
+			.map(LookbookDto::convertToDto);
+	}
+
+
+	/**
+	 * 룩북 게시판 글 삭제하기 API
+	 *
+	 * @param id 삭제할 글의 id를 받아옴.
+	 */
+	@Transactional
 	public void deleteLookbook(Long id) {
-		Lookbook lookbook = lookbookRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid lookbook ID: " + id));
-		lookbook.setDeletedAt(LocalDateTime.now());
-		lookbookRepository.save(lookbook);
+		Lookbook lookbook = lookbookRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
+		lookbook.delete();
 	}
 
-	private LookbookDto convertToDto(Lookbook lookbook) {
-		LookbookDto dto = new LookbookDto();
-		dto.setId(lookbook.getId());
-		dto.setMemberId(lookbook.getMemberId());
-		dto.setTitle(lookbook.getTitle());
-		dto.setContent(lookbook.getContent());
-		dto.setPostStatus(lookbook.isPostStatus());
-		dto.setCreatedAt(lookbook.getCreatedAt());
-		dto.setUpdatedAt(lookbook.getUpdatedAt());
-		return dto;
-	}
-
-	private Lookbook convertToEntity(LookbookDto dto) {
-		Lookbook lookbook = new Lookbook();
-		lookbook.setMemberId(dto.getMemberId());
-		lookbook.setTitle(dto.getTitle());
-		lookbook.setContent(dto.getContent());
-		lookbook.setPostStatus(dto.isPostStatus());
-		return lookbook;
-	}
-
-	private void updateLookbookFromDto(Lookbook lookbook, LookbookDto dto) {
-		lookbook.setMemberId(dto.getMemberId());
-		lookbook.setTitle(dto.getTitle());
-		lookbook.setContent(dto.getContent());
-		lookbook.setPostStatus(dto.isPostStatus());
-	}
-
-	public List<LookbookCommentDto> getCommentsByLookbookId(Long lookbookId) {
-		return lookbookCommentRepository.findByLookbookId(lookbookId).stream()
-			.filter(comment -> comment.getDeletedAt() == null)
-			.map(this::convertCommentToDto)
+	/**
+	 * 룩북 게시판 글의 댓글 목록 조회하기 API
+	 *
+	 * @param lookbookId 댓글 들이 속한 룩북 게시판 글의 id를 받아옴.
+	 * @return 룩북 게시판에서 조회한 글에 해당하는 댓글 목록을 반환함.
+	 */
+	public Optional<List<LookbookCommentDto>> getCommentsByLookbookId(Long lookbookId) {
+		List<LookbookCommentDto> comments = lookbookCommentRepository
+			.findAllByLookbookIdAndCommentStatusIsTrue(lookbookId).stream()
+			.filter(LookbookComment::getCommentStatus)
+			.map(LookbookCommentDto::convertToDto)
 			.collect(Collectors.toList());
+		return comments.isEmpty() ? Optional.empty() : Optional.of(comments);
 	}
 
-	public LookbookCommentDto createComment(LookbookCommentDto commentDto) {
-		Lookbook lookbook = lookbookRepository.findById(commentDto.getLookbookId())
-			.orElseThrow(() -> new RuntimeException("Lookbook not found"));
-		LookbookComment comment = convertCommentToEntity(commentDto);
-		comment.setLookbook(lookbook);
-		comment.setCreatedAt(LocalDateTime.now());
-		LookbookComment savedComment = lookbookCommentRepository.save(comment);
-		return convertCommentToDto(savedComment);
+	/**
+	 * 룩북 게시판 글의 댓글 작성하기 API
+	 *
+	 * @param id                  룩북 게시판 글의 id를 컨트롤러에서 받아옴.
+	 * @param lookbookCommentDto 컨트롤러에서 DB에 삽입할 댓글 DTO를 받아옴.
+	 */
+	@Transactional
+	public void createLookbookComment(Long id, LookbookCommentDto lookbookCommentDto) {
+		// Not Null 예외 처리
+		LookbookComment.validateField(lookbookCommentDto.getContent(), "Content");
+
+		Lookbook lookbook = lookbookRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
+		LookbookComment lookbookComment = LookbookCommentDto.convertToEntity(lookbook,
+			lookbookCommentDto);
+		lookbookCommentRepository.save(lookbookComment);
 	}
 
-	public LookbookCommentDto updateComment(Long id, LookbookCommentDto commentDto) {
-		LookbookComment comment = lookbookCommentRepository.findById(id)
-			.orElseThrow(() -> new RuntimeException("Comment not found"));
-		if (comment.getDeletedAt() != null) {
-			throw new RuntimeException("해당 댓글은 삭제되었습니다.");
-		}
-		comment.setContent(commentDto.getContent());
-		LookbookComment updatedComment = lookbookCommentRepository.save(comment);
-		return convertCommentToDto(updatedComment);
+	/**
+	 * 룩북 게시판 글의 댓글 수정하기 API
+	 *
+	 * @param commentId           자유 게시판 글의 댓글 id를 컨트롤러에서 받아옴.
+	 * @param lookbookCommentDto 컨트롤러에서 DB에 수정할 댓글 DTO를 받아옴.
+	 */
+	@Transactional
+	public void updateLookbookComment(Long commentId,
+		LookbookCommentDto lookbookCommentDto) {
+		// Not Null 예외 처리
+		LookbookComment.validateField(lookbookCommentDto.getContent(), "Content");
+
+		LookbookComment lookbookComment = lookbookCommentRepository.findById(commentId)
+			.orElseThrow(
+				() -> new IllegalArgumentException("comment id:" + commentId + " not found"));
+		lookbookComment.updateComment(lookbookCommentDto);
 	}
 
-	public void deleteComment(Long id) {
-		LookbookComment comment = lookbookCommentRepository.findById(id)
-			.orElseThrow(() -> new RuntimeException("Comment not found"));
-		comment.setDeletedAt(LocalDateTime.now());
-		lookbookCommentRepository.save(comment);
-	}
-
-	private LookbookCommentDto convertCommentToDto(LookbookComment comment) {
-		LookbookCommentDto dto = new LookbookCommentDto();
-		dto.setId(comment.getId());
-		dto.setLookbookId(comment.getLookbook().getId());
-		dto.setMemberId(comment.getMemberId());
-		dto.setContent(comment.getContent());
-		dto.setCreatedAt(comment.getCreatedAt());
-		dto.setUpdatedAt(comment.getUpdatedAt());
-		return dto;
-	}
-
-	private LookbookComment convertCommentToEntity(LookbookCommentDto dto) {
-		LookbookComment comment = new LookbookComment();
-		comment.setMemberId(dto.getMemberId());
-		comment.setContent(dto.getContent());
-		comment.setCommentStatus(dto.getCommentStatus() != null ? dto.getCommentStatus() : true); // 기본값으로 true 설정
-		return comment;
-	}
-
-	public LookbookCommentDto getCommentById(Long id) {
-		LookbookComment comment = lookbookCommentRepository.findById(id)
-			.orElseThrow(() -> new RuntimeException("Comment not found"));
-		return convertCommentToDto(comment);
+	/**
+	 * 룩북 게시판 글의 댓글 삭제하기 API
+	 *
+	 * @param commentId 룩북 게시판 글의 댓글 id를 컨트롤러에서 받아옴.
+	 */
+	@Transactional
+	public void deleteLookbookComment(Long commentId) {
+		LookbookComment lookbookComment = lookbookCommentRepository.findById(commentId)
+			.orElseThrow(() -> new IllegalArgumentException("id: " + commentId + " not found"));
+		lookbookComment.deleteComment();
 	}
 
 }
