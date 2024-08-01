@@ -1,46 +1,80 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
-  <title>상세 페이지</title>
-  <link rel="stylesheet" th:href="@{/css/lookbook.css}">
+  <meta charset="UTF-8">
+  <title>Lookbook Post Detail</title>
+  <link rel="stylesheet" th:href="@{/lookbook/css/detail.css}">
+  <link rel="stylesheet" th:href="@{/lookbook/css/styles.css}">
+  <script th:src="@{/lookbook/js/detail.js}"></script>
 </head>
 <body>
+<header>
+  <div class="logo-container">
+    <a href="/" class="logo">
+      <img src="#" alt="Logo" class="logo-image">
+    </a>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><button class="login">UserName</button></li>
+      <li><button class="signup">탈퇴</button></li>
+    </ul>
+  </nav>
+</header>
 <div class="container">
-  <h1 th:text="${lookbook.title}"></h1>
-  <p th:text="${lookbook.content}"></p>
-  <p>회원 아이디: <span th:text="${lookbook.memberId}"></span></p>
-  <p>글 상태: <span th:text="${lookbook.postStatus ? 'Posted' : 'Not Posted'}"></span></p>
-  <p>작성일: <span th:text="${lookbook.createdAt}"></span></p>
-  <p>수정일: <span th:text="${lookbook.updatedAt}"></span></p>
-  <a th:href="@{/fashionlog/lookbook/{id}/edit(id=${lookbook.id})}" class="button">수정</a>
-  <form th:action="@{/fashionlog/lookbook/{id}/delete(id=${lookbook.id})}" method="post" style="display:inline;">
-    <input type="submit" value="삭제" class="button" onclick="return confirm('정말 삭제하시겠습니까?');">
-  </form>
-  <a href="/fashionlog/lookbook" class="button">Lookbook 게시판으로 돌아가기</a>
-
-  <h2>댓글</h2>
-  <div th:each="comment : ${comments}" class="comment">
-    <p th:text="${comment.content}"></p>
-    <p>작성자: <span th:text="${comment.memberId}"></span></p>
-    <p>작성일: <span th:text="${comment.createdAt}"></span></p>
-    <!-- 댓글 수정 폼 -->
-    <form th:action="@{/fashionlog/lookbook/{lookbookId}/comments/{commentId}/edit(lookbookId=${lookbook.id}, commentId=${comment.id})}" method="post" style="display:inline;">
-      <input type="text" name="content" th:value="${comment.content}">
-      <input type="submit" value="수정" class="button">
-    </form>
-    <!-- 댓글 삭제 폼 -->
-    <form th:action="@{/fashionlog/lookbook/{lookbookId}/comments/{commentId}/delete(lookbookId=${lookbook.id}, commentId=${comment.id})}" method="post" style="display:inline;">
-      <input type="submit" value="삭제" class="button" onclick="return confirm('정말 삭제하시겠습니까?');">
+  <h1><a th:href="@{/fashionlog/lookbook}">Look Book</a></h1>
+  <div class="post-content">
+    <div>
+      <h2 th:text="${lookBook.title}">Title</h2>
+      <span>작성자</span>
+      <span class="post-date" th:if="${lookBook.updatedAt}"
+            th:text="${#temporals.format(lookBook.updatedAt, 'MM.dd HH:mm:ss')}"></span>
+      <span class="post-date" th:unless="${lookBook.updatedAt}"
+            th:text="${#temporals.format(lookBook.createdAt, 'MM.dd HH:mm:ss')}"></span>
+    </div>
+    <p><span th:text="${lookBook.content}">Content</span></p>
+  </div>
+  <div class="action-buttons">
+    <a href="/fashionlog/lookbook" class="btn">뒤로</a>
+    <a th:href="@{/fashionlog/lookbook/{id}/edit(id=${lookBook.id})}" class="btn edit-btn">수정</a>
+    <form th:action="@{/fashionlog/lookbook/{id}/delete(id=${lookBook.id})}" method="post" style="display: inline;">
+      <button type="submit" class="btn delete-btn">삭제</button>
     </form>
   </div>
-
-  <h3>새 댓글 작성</h3>
-  <form th:action="@{/fashionlog/lookbook/{id}/comments(id=${lookbook.id})}" th:object="${newComment}" method="post">
-    <input type="text" th:field="*{memberId}" placeholder="회원 아이디">
-    <textarea th:field="*{content}" placeholder="댓글 내용"></textarea>
-    <input type="hidden" th:field="*{commentStatus}" value="true">
-    <input type="submit" value="댓글 작성" class="button">
-  </form>
+  <!-- 댓글 목록 -->
+  <div class="comment-section">
+    <h3>댓글</h3>
+    <ul class="comment-list">
+      <li th:each="comment : ${lookBookComments}" class="comment">
+        <div class="comment-content">
+          <span th:id="'view-' + ${comment.id}" th:text="${comment.content}">댓글 내용</span>
+        </div>
+        <div class="comment-info">
+          <span class="comment-author">작성자</span>
+          <span class="comment-date" th:if="${comment.updatedAt}" th:text="${#temporals.format(comment.updatedAt, 'MM.dd HH:mm:ss')}"></span>
+          <span class="comment-date" th:unless="${comment.updatedAt}" th:text="${#temporals.format(comment.createdAt, 'MM.dd HH:mm:ss')}"></span>
+          <button th:id="'edit-button-' + ${comment.id}" th:onclick="'toggleEditForm(' + ${comment.id} + ')'" class="btn-edit">수정</button>
+          <form th:action="@{/fashionlog/lookbook/{postid}/delete-comment/{commentid}(postid=${lookBook.id}, commentid=${comment.id})}" method="post" style="display: inline;">
+            <button type="submit" class="btn-delete">삭제</button>
+          </form>
+        </div>
+        <!-- 수정 모드 -->
+        <form th:id="'edit-' + ${comment.id}" style="display: none;"
+              th:action="@{/fashionlog/lookbook/{postid}/edit-comment/{commentid}(postid=${lookBook.id}, commentid=${comment.id})}"
+              method="post" class="edit-form">
+          <input type="text" name="content" th:value="${comment.content}">
+          <button type="submit">저장</button>
+        </form>
+      </li>
+    </ul>
+    <!-- 댓글 작성 -->
+    <form class="comment-form" th:action="@{/fashionlog/lookbook/{id}/comment(id=${lookBook.id})}" th:object="${lookBookComment}" method="post">
+      <textarea id="content" name="content" th:field="*{content}" placeholder="댓글을 입력하세요"></textarea>
+      <button type="submit">등록</button>
+    </form>
+  </div>
 </div>
 </body>
 </html>

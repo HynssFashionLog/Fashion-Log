@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "lookbook_comments")
@@ -14,49 +15,17 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LookbookComment {
+@SuperBuilder
+public class LookbookComment extends CommentBaseEntity {
 
+	// 댓글 아이디(PK)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "lookbook_comment_id")
 	private Long id;
 
+	// 게시물 아이디(FK)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lookbook_id", nullable = false)
 	private Lookbook lookbook;
-
-	@Column(name = "member_id", nullable = false)
-	private String memberId;
-
-	@Column(columnDefinition = "TEXT", nullable = false)
-	private String content;
-
-	@Column(name = "comment_status", nullable = false)
-	private Boolean commentStatus;
-
-	@Column(name = "created_at")
-	private LocalDateTime createdAt;
-
-	@Column(name = "updated_at")
-	private LocalDateTime updatedAt;
-
-	@Column(name = "deleted_at")
-	private LocalDateTime deletedAt;
-
-	@PrePersist
-	protected void onCreate() {
-		createdAt = LocalDateTime.now();
-	}
-
-	@PreUpdate
-	protected void onUpdate() {
-		updatedAt = LocalDateTime.now();
-	}
-
-	public LocalDateTime getDeletedAt() {
-		return deletedAt;
-	}
-
-	public void setDeletedAt(LocalDateTime deletedAt) {
-		this.deletedAt = deletedAt;
-	}
 }
