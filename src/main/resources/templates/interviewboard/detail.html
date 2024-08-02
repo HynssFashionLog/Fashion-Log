@@ -71,7 +71,7 @@
     </ul>
     <!-- 댓글 작성 -->
     <form class="comment-form" th:action="@{/fashionlog/interviewboard/{id}/comment(id=${interviewPost.id})}" th:object="${interviewPost}" method="post">
-      <textarea id="content" name="content" th:field="*{content}" placeholder="댓글을 입력하세요"></textarea>
+      <textarea id="content" name="content" placeholder="댓글을 입력하세요"></textarea>
       <button type="submit">등록</button>
     </form>
   </div>

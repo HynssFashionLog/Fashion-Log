@@ -63,7 +63,8 @@ public class InterviewBoardService {
 	}
 
 	public List<InterviewBoardCommentDto> getCommentList(Long id) {
-		List<InterviewBoardComment> interviewBoardCommentList = interviewBoardCommentRepository.findByInterviewBoard_Id(id);
+		List<InterviewBoardComment> interviewBoardCommentList =
+			interviewBoardCommentRepository.findAllByCommentStatusIsTrueAndInterviewBoardId(id);
 		return interviewBoardCommentList.stream().map(InterviewBoardCommentDto::fromEntity)
 			.collect(Collectors.toList());
 	}
@@ -82,15 +83,18 @@ public class InterviewBoardService {
 	}
 
 	@Transactional
-	public void updateInterviewComment(Long postId, Long commentId, InterviewBoardCommentDto interviewBoardCommentDto) {
-		InterviewBoardComment interviewBoardComment = interviewBoardCommentRepository.findById(commentId)
+	public void updateInterviewComment(Long postId, Long commentId,
+		InterviewBoardCommentDto interviewBoardCommentDto) {
+		InterviewBoardComment interviewBoardComment = interviewBoardCommentRepository.findById(
+				commentId)
 			.orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
 		interviewBoardComment.updateComment(interviewBoardCommentDto);
 	}
 
 	@Transactional
 	public void deleteInterviewBoardComment(Long commentId) {
-		InterviewBoardComment interviewBoardComment = interviewBoardCommentRepository.findById(commentId)
+		InterviewBoardComment interviewBoardComment = interviewBoardCommentRepository.findById(
+				commentId)
 			.orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
 		interviewBoardComment.deleteComment();
 	}
