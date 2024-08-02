@@ -44,6 +44,10 @@ public class SecurityConfig {
 				.requestMatchers("/fashionlog/management").hasRole(Role.ADMIN.name())
 				// 공지사항 페이지는 인증된 사용자만 접근 가능
 				.requestMatchers("/fashionlog/notice").authenticated()
+        // 공지사항 새 글 등록은 ADMIN 역할을 가진 사용자만 접근 가능
+        .requestMatchers("/fashionlog/notice/new").hasRole(Role.ADMIN.name())
+        // 공지사항 글은 인증된 사용자만 접근 가능
+        .requestMatchers("/fashionlog/notice/**").authenticated()
 				// /fashionlog/** 경로는 NORMAL 또는 ADMIN 역할을 가진 사용자만 접근 가능
 				.requestMatchers("/fashionlog/**").hasAnyRole(Role.NORMAL.name(), Role.ADMIN.name())
 				// 그 외 모든 요청은 인증된 사용자만 접근 가능
