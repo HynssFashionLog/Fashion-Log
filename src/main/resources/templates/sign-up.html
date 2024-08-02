@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>회원가입</title>
+</head>
+<body>
+<header>
+  <div class="logo-container">
+    <a href="/" class="logo">
+      <img src="#" alt="Logo" class="logo-image">
+    </a>
+  </div>
+</header>
+<h1>회원가입</h1>
+<div>
+  <form th:action="@{/fashionlog/sign-up}" method="post" th:object="${member}">
+    <label for="email">이메일</label>
+    <input type="email" id="email" th:field="*{email}" required>
+
+    <label for="nickname">닉네임</label>
+    <input type="text" id="nickname" th:field="*{nickname}" required>
+
+    <label for="password">패스워드</label>
+    <input type="text" id="password" th:field="*{password}" required>
+
+    <label for="name">이름</label>
+    <input type="text" id="name" th:field="*{name}" required>
+
+    <label for="phone">핸드폰 번호</label>
+    <input type="text" id="phone" th:field="*{phone}" required>
+
+    <button type="submit">가입</button>
+  </form>
+</div>
+</body>
+</html>
