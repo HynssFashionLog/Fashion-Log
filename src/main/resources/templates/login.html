@@ -9,7 +9,7 @@
 <body>
 <header>
   <div class="logo-container">
-    <a href="/" class="logo">
+    <a th:href="@{/fashionlog}" class="logo">
       <img src="#" alt="Logo" class="logo-image">
     </a>
   </div>
@@ -29,7 +29,7 @@
     </div>
     <div class="remember-forgot">
       <div class="remember-me">
-        <label><input type="checkbox"> 로그인 상태 유지</label>
+        <label><input type="checkbox" name="remember-me"> 로그인 상태 유지</label>
       </div>
     </div>
     <button type="submit" class="login-button">로그인</button>
