@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>새 공지사항 작성</title>
+    <link rel="stylesheet" th:href="@{/notice/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/notice/css/edit-form.css}">
+</head>
+<body>
+<header>
+    <div class="logo-container">
+        <a href="/" class="logo">
+            <img src="#" alt="Logo" class="logo-image">
+        </a>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><button class="login">UserName</button></li>
+            <li><button class="signup">탈퇴</button></li>
+        </ul>
+    </nav>
+</header>
+<div class="container">
+    <h1>새 공지사항 작성</h1>
+    <form th:action="@{/fashionlog/notice/new}" th:object="${notice}" method="post">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" th:field="*{title}" required>
+        </div>
+        <div>
+            <label>분류:</label>
+            <div th:each="cat : ${categories}">
+                <input type="radio" th:field="*{category}" th:value="${cat}" th:id="${'category-' + cat}"/>
+                <label th:for="${'category-' + cat}" th:text="${cat.displayName}"></label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="content">Content</label>
+            <textarea id="content" name="content" th:field="*{content}" required></textarea>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">등록</button>
+            <a th:href="@{/fashionlog/notice}" class="btn btn-secondary">취소</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>
