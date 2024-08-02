@@ -26,6 +26,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class CommentBaseEntity {
 
+	// 회원 id
+	@Column(nullable = false)
+	private Long memberId;
+
 	// 내용
 	@Column(nullable = false, columnDefinition = "TEXT")
 	private String content;
