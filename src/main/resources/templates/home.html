@@ -2,12 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>Fashion Log 홈</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" th:href="@{/css/home.css}">
 </head>
 <body>
 <header>
   <div class="logo-container">
-    <a href="/" class="logo">
+    <a th:href="@{/fashionlog}" class="logo">
       <img src="#" alt="Logo" class="logo-image">
     </a>
   </div>
@@ -27,9 +29,13 @@
     </form>
   </nav>
 </header>
-<a th:href="@{/fashionlog/freeboard}">freeboard</a>
-<a th:href="@{/fashionlog/dailylook}">dailylook</a>
-<a th:href="@{/fashionlog/interviewboard}">interviewboard</a>
-<a th:href="@{/fashionlog/lookbook}">lookbook</a>
+<div class="main-content">
+  <a th:href="@{/fashionlog/notice}" id="notice"><span>Notice</span></a>
+  <a th:href="@{/fashionlog/freeboard}" id="freetalk"><span>Free Talk</span></a>
+  <a th:href="@{/fashionlog/lookbook}" id="lookbook"><span>LookBook</span></a>
+  <a th:href="@{/fashionlog/trade}" id="buysell"><span>Buy Sell Trade</span></a>
+  <a th:href="@{/fashionlog/interviewboard}" id="interview"><span>Interview</span></a>
+  <a th:href="@{/fashionlog/dailylook}" id="dailylook"><span>DailyLook</span></a>
+</div>
 </body>
 </html>
