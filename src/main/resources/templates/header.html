@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fashion Log Header</title>
+</head>
+<body>
+<header th:fragment="header">
+  <div class="logo-container">
+    <a th:href="@{/fashionlog}" class="logo">
+      <img src="#" alt="Logo" class="logo-image">
+    </a>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Contact</a></li>
+      <li>
+        <button class="login">UserName</button>
+      </li>
+      <li>
+        <button class="signup">탈퇴</button>
+      </li>
+    </ul>
+    <form th:action="@{/logout}" method="post">
+      <input type="submit" value="Logout">
+    </form>
+  </nav>
+</header>
+</body>
+</html>

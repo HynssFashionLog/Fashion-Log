@@ -3,25 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>새 글 작성</title>
-    <link rel="stylesheet" th:href="@{/interview/css/styles.css}">
-    <link rel="stylesheet" th:href="@{/interview/css/edit-form.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/board/edit-form.css}">
 </head>
 <body>
-<header>
-    <div class="logo-container">
-        <a href="/" class="logo">
-            <img src="#" alt="Logo" class="logo-image">
-        </a>
-    </div>
-    <nav>
-        <ul>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Contact</a></li>
-            <li><button class="login">UserName</button></li>
-            <li><button class="signup">탈퇴</button></li>
-        </ul>
-    </nav>
-</header>
+<div th:replace="~{header :: header}"></div>
+
 <div class="container">
     <h1>새 글 작성</h1>
     <form th:action="@{/fashionlog/interviewboard/new}" th:object="${interviewPost}" method="post">
