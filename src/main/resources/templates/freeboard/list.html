@@ -3,29 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Free Board List</title>
-  <link rel="stylesheet" th:href="@{/freeboard/css/styles.css}">
-  <link rel="stylesheet" th:href="@{/freeboard/css/list.css}">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" th:href="@{/css/board/list.css}">
 </head>
 <body>
-<header>
-  <div class="logo-container">
-    <a href="/" class="logo">
-      <img src="#" alt="Logo" class="logo-image">
-    </a>
-  </div>
-  <nav>
-    <ul>
-      <li><a href="#">About Us</a></li>
-      <li><a href="#">Contact</a></li>
-      <li>
-        <button class="login">UserName</button>
-      </li>
-      <li>
-        <button class="signup">탈퇴</button>
-      </li>
-    </ul>
-  </nav>
-</header>
+<div th:replace="~{header :: header}"></div>
+
 <div class="container">
   <h1>Free Board</h1>
 
