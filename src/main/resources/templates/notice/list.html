@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
   <title>Notice List</title>
@@ -50,7 +51,9 @@
     </tbody>
   </table>
   <div class="actions"></div>
-  <a class="btn btn-primary" th:href="@{/fashionlog/notice/new}">새 글 작성</a>
+  <div sec:authorize="hasRole('ADMIN')">
+    <a class="btn btn-primary" th:href="@{/fashionlog/notice/new}">새 글 작성</a>
+  </div>
   </div>
 </body>
 </html>

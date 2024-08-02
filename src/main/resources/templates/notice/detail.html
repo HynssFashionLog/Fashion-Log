@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
   <title>Notice Detail</title>
@@ -39,8 +40,8 @@
   </div>
   <div class="action-buttons">
     <a href="/fashionlog/notice" class="btn">뒤로</a>
-    <a th:href="@{/fashionlog/notice/{id}/edit(id=${notice.id})}" class="btn edit-btn">수정</a>
-    <form th:action="@{/fashionlog/notice/{id}/delete(id=${notice.id})}" method="post" style="display: inline;">
+    <a sec:authorize="hasRole('ADMIN')" th:href="@{/fashionlog/notice/{id}/edit(id=${notice.id})}" class="btn edit-btn">수정</a>
+    <form sec:authorize="hasRole('ADMIN')" th:action="@{/fashionlog/notice/{id}/delete(id=${notice.id})}" method="post" style="display: inline;">
       <button type="submit" class="btn delete-btn">삭제</button>
     </form>
   </div>
@@ -71,10 +72,12 @@
       </li>
     </ul>
     <!-- 댓글 작성 -->
-    <form class="comment-form" th:action="@{/fashionlog/notice/{id}/comment(id=${notice.id})}" th:object="${notice}" method="post">
-      <textarea id="content" name="content" placeholder="댓글을 입력하세요"></textarea>
-      <button type="submit">등록</button>
-    </form>
+    <div sec:authorize="hasAnyRole('ADMIN', 'NORMAL')">
+      <form class="comment-form" th:action="@{/fashionlog/notice/{id}/comment(id=${notice.id})}" th:object="${notice}" method="post">
+        <textarea id="content" name="content" placeholder="댓글을 입력하세요"></textarea>
+        <button type="submit">등록</button>
+      </form>
+    </div>
   </div>
 
 </div>
