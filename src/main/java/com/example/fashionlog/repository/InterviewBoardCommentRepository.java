@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface InterviewBoardCommentRepository extends
 	JpaRepository<InterviewBoardComment, Long> {
 
-	List<InterviewBoardComment> findByInterviewBoard_Id(Long id);
+	List<InterviewBoardComment> findAllByCommentStatusIsTrueAndInterviewBoardId(Long id);
 }
