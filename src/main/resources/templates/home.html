@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<header>
+  <div class="logo-container">
+    <a href="/" class="logo">
+      <img src="#" alt="Logo" class="logo-image">
+    </a>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Contact</a></li>
+      <li>
+        <button class="login">UserName</button>
+      </li>
+      <li>
+        <button class="signup">탈퇴</button>
+      </li>
+    </ul>
+    <form th:action="@{/logout}" method="post">
+      <input type="submit" value="Logout">
+    </form>
+  </nav>
+</header>
+<a th:href="@{/fashionlog/freeboard}">freeboard</a>
+<a th:href="@{/fashionlog/dailylook}">dailylook</a>
+<a th:href="@{/fashionlog/interviewboard}">interviewboard</a>
+<a th:href="@{/fashionlog/lookbook}">lookbook</a>
+</body>
+</html>

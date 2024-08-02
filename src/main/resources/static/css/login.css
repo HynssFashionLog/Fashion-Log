@@ -1,0 +1,98 @@
+/* login.css */
+
+/* 로그인 컨테이너 스타일 */
+.login-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* 로그인 폼 제목 스타일 */
+.login-form h1 {
+  font-size: 24px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* 폼 그룹 스타일 */
+.form-group {
+  margin-bottom: 20px;
+}
+
+/* 라벨 스타일 */
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+/* 입력 필드 스타일 */
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+/* 로그인 상태 유지 및 비밀번호 찾기 컨테이너 */
+.remember-forgot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* 로그인 상태 유지 체크박스 스타일 */
+.remember-me {
+  display: flex;
+  align-items: center;
+}
+
+.remember-me input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+/* 비밀번호 찾기 링크 스타일 */
+.forgot-password {
+  font-size: 14px;
+}
+
+/* 로그인 버튼 스타일 */
+.login-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #343a40;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* 로그인 버튼 호버 효과 */
+.login-button:hover {
+  background-color: #23272b;
+}
+
+/* 회원가입 링크 컨테이너 스타일 */
+.signup-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+/* 회원가입 링크 스타일 */
+.signup-link a {
+  color: #3498db;
+  text-decoration: none;
+}
+
+/* 회원가입 링크 호버 효과 */
+.signup-link a:hover {
+  text-decoration: underline;
+}
