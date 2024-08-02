@@ -1,5 +1,8 @@
 package com.example.fashionlog.domain;
 
+import lombok.Getter;
+
+@Getter
 public enum Category {
 	ALL("전체"),
 	DAILY_LOOK("데일리룩게시판"),
@@ -14,7 +17,4 @@ public enum Category {
 		this.displayName = displayName;
 	}
 
-	public String getDisplayName() {
-		return displayName;
-	}
 }
