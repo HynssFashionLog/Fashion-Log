@@ -1,10 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Fashion Log Header</title>
-</head>
-<body>
 <header th:fragment="header">
   <div class="logo-container">
     <a th:href="@{/fashionlog}" class="logo">
@@ -16,18 +9,18 @@
       <li><a href="#">About Us</a></li>
       <li><a href="#">Contact</a></li>
       <li>
-        <button class="login">UserName</button>
+        <button class="nav-btn login">UserName</button>
+      </li>
+      <li>
+        <form th:action="@{/logout}" method="post">
+          <input type="submit" value="Logout" class="nav-btn logout">
+        </form>
       </li>
       <li>
         <form th:action="@{/fashionlog/withdrawal}" method="post">
-          <input type="submit" value="회원 탈퇴">
+          <input type="submit" value="회원 탈퇴" class="nav-btn withdrawal">
         </form>
       </li>
     </ul>
-    <form th:action="@{/logout}" method="post">
-      <input type="submit" value="Logout">
-    </form>
   </nav>
 </header>
-</body>
-</html>
