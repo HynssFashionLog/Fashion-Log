@@ -4,6 +4,10 @@ import com.example.fashionlog.domain.Member;
 import com.example.fashionlog.service.CurrentUserProvider;
 import com.example.fashionlog.service.DailyLookService;
 
+import com.example.fashionlog.service.FreeBoardService;
+import com.example.fashionlog.service.InterviewBoardService;
+import com.example.fashionlog.service.LookbookService;
+import com.example.fashionlog.service.NoticeService;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -22,8 +26,12 @@ import org.springframework.stereotype.Component;
 public class AuthorizationAspect {
 
     private final CurrentUserProvider currentUserProvider;
-
     private final DailyLookService dailyLookService;
+    private final FreeBoardService freeBoardService;
+//    private final InterviewBoardService interviewBoardService;
+//    private final LookbookService lookbookService;
+//    private final NoticeService noticeService;
+//    private final TradeSerive tradeSerive;
 
     /**
      * AuthorizationAspect 생성자
@@ -31,9 +39,15 @@ public class AuthorizationAspect {
      * @param currentUserProvider 현재 사용자 정보를 제공하는 서비스
      */
     public AuthorizationAspect(CurrentUserProvider currentUserProvider,
-        DailyLookService dailyLookService) {
+        DailyLookService dailyLookService, FreeBoardService freeBoardService,
+        InterviewBoardService interviewBoardService, LookbookService lookbookService,
+        NoticeService noticeService) {
         this.currentUserProvider = currentUserProvider;
         this.dailyLookService = dailyLookService;
+        this.freeBoardService = freeBoardService;
+//        this.interviewBoardService = interviewBoardService;
+//        this.lookbookService = lookbookService;
+//        this.noticeService = noticeService;
     }
 
 
@@ -101,6 +115,11 @@ public class AuthorizationAspect {
     private boolean checkPostAuthor(String boardType, Long postId, String memberEmail) {
         return switch (boardType) {
             case "DailyLook" -> dailyLookService.isPostAuthor(postId, memberEmail);
+            case "FreeBoard" -> freeBoardService.isPostAuthor(postId, memberEmail);
+//            case "Interview" -> interviewBoardService.isPostAuthor(postId, memberEmail);
+//            case "LookBook" -> lookbookService.isPostAuthor(postId, memberEmail);
+//            case "Notice" -> noticeService.isPostAuthor(postId, memberEmail);
+//            case "Trade" -> tradeService.isPostAuthor(postId, memberEmail);
             default -> throw new IllegalArgumentException("알수 없는 보드타입: " + boardType);
         };
     }
@@ -108,6 +127,11 @@ public class AuthorizationAspect {
     private boolean checkCommentAuthor(String boardType, Long commentId, String memberEmail) {
         return switch (boardType) {
             case "DailyLook" -> dailyLookService.isCommentAuthor(commentId, memberEmail);
+            case "FreeBoard" -> freeBoardService.isCommentAuthor(commentId, memberEmail);
+//            case "Interview" -> interviewBoardService.isCommentAuthor(commentId, memberEmail);
+//            case "LookBook" -> lookbookService.isCommentAuthor(commentId, memberEmail);
+//            case "Notice" -> noticeService.isCommentAuthor(commentId, memberEmail);
+//            case "Trade" -> tradeService.isCommentAuthor(commentId, memberEmail);
             default -> throw new IllegalArgumentException("알수 없는 보드타입: " + boardType);
         };
     }
