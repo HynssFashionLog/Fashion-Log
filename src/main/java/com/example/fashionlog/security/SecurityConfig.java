@@ -2,13 +2,11 @@ package com.example.fashionlog.security;
 
 import com.example.fashionlog.domain.Role;
 import com.example.fashionlog.service.CustomUserDetailsService;
-
 import javax.sql.DataSource;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -23,6 +21,7 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
  */
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -41,6 +40,8 @@ public class SecurityConfig {
         http.authorizeHttpRequests(configurer -> configurer
                 // 정적 리소르에 대한 접근 허용
                 .requestMatchers("/css/**", "/js/**", "/image/**").permitAll()
+                // 메인 페이지는 인증된 사용자만 접근 가능
+                .requestMatchers("/fashionlog").authenticated()
                 // 회원가입 페이지는 모든 사용자에게 접근 허용
                 .requestMatchers("/fashionlog/sign-up").permitAll()
                 // 관리자 페이지는 ADMIN 역할을 가진 사용자만 접근 가능
