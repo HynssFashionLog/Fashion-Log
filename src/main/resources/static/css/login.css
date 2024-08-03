@@ -1,5 +1,12 @@
 /* login.css */
+.logo-container {
+  text-align: center;
+}
 
+.logo-image {
+  max-height: 50px;
+  width: auto;
+}
 /* 로그인 컨테이너 스타일 */
 .login-container {
   max-width: 400px;
