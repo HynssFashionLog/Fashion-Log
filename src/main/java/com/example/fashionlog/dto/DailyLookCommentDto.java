@@ -4,6 +4,7 @@ import com.example.fashionlog.domain.CommentUpdatable;
 import com.example.fashionlog.domain.DailyLook;
 import com.example.fashionlog.domain.DailyLookComment;
 
+import com.example.fashionlog.domain.Member;
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ import lombok.NoArgsConstructor;
 public class DailyLookCommentDto implements CommentUpdatable {
 
     private Long id;
+    private Long memberId;
     private Long dailyLookId;
     private String content;
     private Boolean commentStatus;
@@ -37,6 +39,7 @@ public class DailyLookCommentDto implements CommentUpdatable {
 
         return DailyLookCommentDto.builder()
             .id(dailyLookComment.getId())
+            .memberId(dailyLookComment.getMember().getMemberId())
             .dailyLookId(dailyLookComment.getDailyLook().getId())
             .content(dailyLookComment.getContent())
             .commentStatus(dailyLookComment.getCommentStatus())
@@ -46,10 +49,12 @@ public class DailyLookCommentDto implements CommentUpdatable {
             .build();
     }
 
-    public static DailyLookComment convertToEntity(DailyLookCommentDto dailyLookCommentDto, DailyLook dailyLook) {
+    public static DailyLookComment convertToEntity(DailyLookCommentDto dailyLookCommentDto,
+        DailyLook dailyLook, Member member) {
 
         return DailyLookComment.builder()
             .id(dailyLookCommentDto.getId())
+            .member(member)
             .dailyLook(dailyLook)
             .content(dailyLookCommentDto.getContent())
             .commentStatus(dailyLookCommentDto.getCommentStatus())

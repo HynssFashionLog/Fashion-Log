@@ -1,4 +1,4 @@
-package com.example.fashionlog;
+package com.example.fashionlog.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
