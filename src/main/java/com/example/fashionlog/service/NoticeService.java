@@ -1,5 +1,6 @@
 package com.example.fashionlog.service;
 
+import com.example.fashionlog.domain.Category;
 import com.example.fashionlog.domain.Member;
 import com.example.fashionlog.domain.Notice;
 import com.example.fashionlog.domain.NoticeComment;
@@ -89,6 +90,16 @@ public class NoticeService {
 	public void deleteNoticeComment(Long commentId) {
 		NoticeComment noticeComment = findByIdAndCommentStatusIsTrue(commentId);
 		noticeComment.deleteComment();
+	}
+
+	public Optional<List<NoticeDto>> getNoticeListByDailyLook(Category category) {
+		System.out.println(category);
+		List<NoticeDto> getNotice = noticeRepository.findTop5ByCategoryAndStatusIsTrueOrderByCreatedAtDesc(category)
+			.stream()
+			.map(NoticeDto::convertToDto)
+			.collect(Collectors.toList());
+		System.out.println(getNotice);
+		return getNotice.isEmpty() ? Optional.empty() : Optional.of(getNotice);
 	}
 
 	private Notice findByIdAndStatusIsTrue(Long id) {

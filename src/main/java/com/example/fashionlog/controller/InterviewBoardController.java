@@ -1,10 +1,15 @@
 package com.example.fashionlog.controller;
 
+import com.example.fashionlog.domain.Category;
 import com.example.fashionlog.domain.InterviewBoard;
 import com.example.fashionlog.dto.InterviewBoardCommentDto;
 import com.example.fashionlog.dto.InterviewBoardDto;
+import com.example.fashionlog.dto.NoticeDto;
 import com.example.fashionlog.service.InterviewBoardService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.fashionlog.service.NoticeService;
+import java.util.Collections;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,20 +18,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/fashionlog/interviewboard")
 public class InterviewBoardController {
 
 	private final InterviewBoardService interviewBoardService;
-
-	@Autowired
-	public InterviewBoardController(InterviewBoardService interviewBoardService) {
-		this.interviewBoardService = interviewBoardService;
-	}
+	private final NoticeService noticeService;
 
 	@GetMapping
 	public String getAllInterviewBoards(Model model) {
+		List<NoticeDto> noticeDto = noticeService.getNoticeListByDailyLook(Category.INTERVIEW)
+			.orElse(Collections.emptyList());
 		model.addAttribute("interviewBoards", interviewBoardService.getAllInterviewPosts());
+		model.addAttribute("interviewNotice", noticeDto);
 		return "interviewboard/list";
 	}
 

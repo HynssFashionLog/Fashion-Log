@@ -67,3 +67,59 @@ th {
   background-color: #2980b9;
   text-decoration: none;
 }
+
+/* 공지사항 스타일 */
+.notice-item {
+  background-color: #f3d7db;
+}
+
+.notice-item:hover {
+  background-color: #ffeeba;
+}
+
+/* 인터뷰 게시물 스타일 */
+.interview-item {
+  background-color: #e6f3ff;
+}
+
+.interview-item:hover {
+  background-color: #d1e7ff;
+}
+
+/* 제목 열 스타일 */
+.post-item td:first-child {
+  font-weight: bold;
+}
+
+.post-item td:first-child a {
+  color: #333;
+  text-decoration: none;
+}
+
+.post-item td:first-child a:hover {
+  text-decoration: underline;
+}
+
+/* 분류 태그 스타일 */
+.category {
+  display: inline-block;
+  padding: 2px 5px;
+  margin-right: 10px;
+  font-size: 0.8em;
+  font-weight: normal;
+  color: #fff;
+  background-color: #f5526e;
+  border-radius: 3px;
+}
+
+/* 작성자와 작성일 스타일 */
+.post-item td:nth-child(2),
+.post-item td:last-child {
+  font-size: 0.9em;
+  color: #666;
+}
+
+/* 공통 스타일 오버라이드 */
+.post-item:hover {
+  background-color: inherit;
+}
