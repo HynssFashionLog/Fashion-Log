@@ -3,6 +3,7 @@ package com.example.fashionlog.dto;
 import com.example.fashionlog.domain.CommentUpdatable;
 import com.example.fashionlog.domain.FreeBoard;
 import com.example.fashionlog.domain.FreeBoardComment;
+import com.example.fashionlog.domain.Member;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,10 +41,10 @@ public class FreeBoardCommentDto implements CommentUpdatable {
 	 * FreeBoardCommentDto -> FreeBoardComment
 	 */
 	public static FreeBoardComment convertToEntity(FreeBoard findedFreeBoard,
-		FreeBoardCommentDto freeBoardCommentDto) {
+		FreeBoardCommentDto freeBoardCommentDto, Member member) {
 		return FreeBoardComment.builder()
+			.member(member)
 			.freeBoard(findedFreeBoard)
-			.memberId(freeBoardCommentDto.getMemberId())
 			.content(freeBoardCommentDto.getContent())
 			.commentStatus(freeBoardCommentDto.getCommentStatus() != null
 				? freeBoardCommentDto.getCommentStatus() : true)
@@ -61,8 +62,8 @@ public class FreeBoardCommentDto implements CommentUpdatable {
 	public static FreeBoardCommentDto convertToDto(FreeBoardComment freeBoardComment) {
 		return FreeBoardCommentDto.builder()
 			.id(freeBoardComment.getId())
+			.memberId(freeBoardComment.getMember().getMemberId())
 			.freeBoardId(freeBoardComment.getFreeBoard().getId())
-			.memberId(freeBoardComment.getMemberId())
 			.content(freeBoardComment.getContent())
 			.commentStatus(freeBoardComment.getCommentStatus())
 			.createdAt(freeBoardComment.getCreatedAt())
