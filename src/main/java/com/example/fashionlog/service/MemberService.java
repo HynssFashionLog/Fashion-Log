@@ -35,6 +35,18 @@ public class MemberService {
      */
     @Transactional
     public void createMember(MemberDto memberDto) {
+        // 중복 체크 항목 널 체크
+        if (memberDto.getEmail() == null || memberDto.getNickname() == null ||
+            memberDto.getPassword() == null || memberDto.getName() == null ||
+            memberDto.getPhone() == null) {
+            throw new IllegalArgumentException("All fields are required");
+        }
+        // 각 항목 중복 검사
+        validateDuplicateValue("email", memberDto.getEmail());
+        validateDuplicateValue("nickname", memberDto.getNickname());
+        validateDuplicateValue("phone", memberDto.getPhone());
+
+
         memberDto.setStatus(Boolean.TRUE);
         memberDto.setRole(Role.NORMAL);
         memberDto.setCreatedAt(LocalDateTime.now());
@@ -45,6 +57,20 @@ public class MemberService {
 
         Member member = MemberDto.convertToEntity(memberDto);
         memberRepository.save(member);
+    }
+
+    private void validateDuplicateValue(String fieldName, String value) {
+        boolean isDuplicate = switch (fieldName) {
+            case "email" -> memberRepository.existsByEmail(value);
+            case "nickname" -> memberRepository.existsByNickname(value);
+            case "phone" -> memberRepository.existsByPhone(value);
+            default -> throw new IllegalArgumentException("잘못된 필드 이름: " + fieldName);
+        };
+
+        if (isDuplicate) {
+            throw new IllegalArgumentException(fieldName + "(" + value + ")" + "사용 중");
+        }
+
     }
 
     /**
@@ -67,5 +93,17 @@ public class MemberService {
             // 로그아웃 처리
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
+    }
+
+    public boolean isNicknameDuplicate(String nickname) {
+        return memberRepository.existsByNickname(nickname);
+    }
+
+    public boolean isEmailDuplicate(String email) {
+        return memberRepository.existsByEmail(email);
+    }
+
+    public boolean isPhoneDuplicate(String phone) {
+        return memberRepository.existsByPhone(phone);
     }
 }
