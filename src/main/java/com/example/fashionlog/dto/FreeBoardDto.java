@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 public class FreeBoardDto implements Updatable {
 
 	private Long id; // 게시물 id
+	private Long memberId; // 회원 id
 	private String title; // 게시물 제목
 	private String content; // 내용
 	private Boolean status; // 게시물의 삭제 여부(소프트 딜리트)
@@ -45,6 +46,7 @@ public class FreeBoardDto implements Updatable {
 	 */
 	public static FreeBoard convertToEntity(FreeBoardDto freeBoardDto) {
 		return FreeBoard.builder()
+			.memberId(freeBoardDto.getMemberId())
 			.title(freeBoardDto.getTitle())
 			.content(freeBoardDto.getContent())
 			.status(freeBoardDto.getStatus() != null ? freeBoardDto.getStatus() : true)
@@ -61,6 +63,7 @@ public class FreeBoardDto implements Updatable {
 	public static FreeBoardDto convertToDto(FreeBoard freeBoard) {
 		return FreeBoardDto.builder()
 			.id(freeBoard.getId())
+			.memberId(freeBoard.getMemberId())
 			.title(freeBoard.getTitle())
 			.content(freeBoard.getContent())
 			.status(freeBoard.getStatus())
