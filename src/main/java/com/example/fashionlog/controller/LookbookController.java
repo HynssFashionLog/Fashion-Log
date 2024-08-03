@@ -1,12 +1,14 @@
 package com.example.fashionlog.controller;
 
+import com.example.fashionlog.domain.Category;
 import com.example.fashionlog.dto.LookbookCommentDto;
 import com.example.fashionlog.dto.LookbookDto;
+import com.example.fashionlog.dto.NoticeDto;
 import com.example.fashionlog.service.LookbookService;
+import com.example.fashionlog.service.NoticeService;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,17 +17,18 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/fashionlog/lookbook")
 public class LookbookController {
 
 	private final LookbookService lookbookService;
+	private final NoticeService noticeService;
 
 	@Autowired
-	public LookbookController(LookbookService lookbookService) {
+	public LookbookController(LookbookService lookbookService, NoticeService noticeService) {
 		this.lookbookService = lookbookService;
+		this.noticeService = noticeService;
 	}
 
 	/**
@@ -38,7 +41,10 @@ public class LookbookController {
 	public String getAllLookbookList(Model model) {
 		List<LookbookDto> lookbookDto = lookbookService.getAllLookbooks()
 			.orElse(Collections.emptyList());
+		List<NoticeDto> noticeDto = noticeService.getNoticeListByCategory(Category.LOOKBOOK)
+			.orElse(Collections.emptyList());
 		model.addAttribute("lookbooks", lookbookDto);
+		model.addAttribute("lookbookNotice", noticeDto);
 		return "lookbook/list";
 	}
 

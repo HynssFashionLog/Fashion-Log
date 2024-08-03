@@ -1,5 +1,6 @@
 package com.example.fashionlog.repository;
 
+import com.example.fashionlog.domain.Category;
 import com.example.fashionlog.domain.Notice;
 import java.util.List;
 import java.util.Optional;
@@ -10,4 +11,6 @@ public interface NoticeRepository extends JpaRepository<Notice,Long> {
 	List<Notice> findAllByStatusIsTrueOrderByCreatedAtDesc();
 
 	Optional<Notice> findByIdAndStatusIsTrue(Long id);
+
+	List<Notice> findTop5ByCategoryAndStatusIsTrueOrderByCreatedAtDesc(Category category);
 }
