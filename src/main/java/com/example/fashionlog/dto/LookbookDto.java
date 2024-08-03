@@ -2,6 +2,7 @@ package com.example.fashionlog.dto;
 
 import com.example.fashionlog.domain.FreeBoard;
 import com.example.fashionlog.domain.Lookbook;
+import com.example.fashionlog.domain.Member;
 import com.example.fashionlog.domain.Updatable;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
 public class LookbookDto implements Updatable {
 
 	private Long id;
+	private Long memberId;
 	private String title;
 	private String content;
 	private Boolean status;
@@ -36,8 +38,9 @@ public class LookbookDto implements Updatable {
 	}
 
 
-	public static Lookbook convertToEntity(LookbookDto lookbookDto) {
+	public static Lookbook convertToEntity(LookbookDto lookbookDto, Member member) {
 		return Lookbook.builder()
+			.member(member)
 			.title(lookbookDto.getTitle())
 			.content(lookbookDto.getContent())
 			.status(lookbookDto.getStatus() != null ? lookbookDto.getStatus() : true)
@@ -54,6 +57,7 @@ public class LookbookDto implements Updatable {
 	public static LookbookDto convertToDto(Lookbook lookbook) {
 		return LookbookDto.builder()
 			.id(lookbook.getId())
+			.memberId(lookbook.getMember().getMemberId())
 			.title(lookbook.getTitle())
 			.content(lookbook.getContent())
 			.status(lookbook.getStatus())

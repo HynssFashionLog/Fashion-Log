@@ -1,9 +1,9 @@
 package com.example.fashionlog.dto;
 
 import com.example.fashionlog.domain.CommentUpdatable;
-import com.example.fashionlog.domain.FreeBoardComment;
 import com.example.fashionlog.domain.Lookbook;
 import com.example.fashionlog.domain.LookbookComment;
+import com.example.fashionlog.domain.Member;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,6 +18,7 @@ public class LookbookCommentDto implements CommentUpdatable {
 
 	private Long id;
 	private Long lookbookId;
+	private Long memberId;
 	private String content;
 	private Boolean commentStatus;
 	private LocalDateTime createdAt;
@@ -34,8 +35,9 @@ public class LookbookCommentDto implements CommentUpdatable {
 	 * LookbookCommentDto -> LookbookComment
 	 */
 	public static LookbookComment convertToEntity(Lookbook findedLookbook,
-		LookbookCommentDto lookbookCommentDto) {
+		LookbookCommentDto lookbookCommentDto, Member member) {
 		return LookbookComment.builder()
+			.member(member)
 			.lookbook(findedLookbook)
 			.content(lookbookCommentDto.getContent())
 			.commentStatus(lookbookCommentDto.getCommentStatus() != null
@@ -54,6 +56,7 @@ public class LookbookCommentDto implements CommentUpdatable {
 	public static LookbookCommentDto convertToDto(LookbookComment lookbookComment) {
 		return LookbookCommentDto.builder()
 			.id(lookbookComment.getId())
+			.memberId(lookbookComment.getMember().getMemberId())
 			.lookbookId(lookbookComment.getLookbook().getId())
 			.content(lookbookComment.getContent())
 			.commentStatus(lookbookComment.getCommentStatus())
