@@ -1,6 +1,7 @@
 package com.example.fashionlog.dto;
 
 import com.example.fashionlog.domain.FreeBoard;
+import com.example.fashionlog.domain.Member;
 import com.example.fashionlog.domain.Updatable;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -44,9 +45,9 @@ public class FreeBoardDto implements Updatable {
 	/**
 	 * FreeBoardDto -> FreeBoard
 	 */
-	public static FreeBoard convertToEntity(FreeBoardDto freeBoardDto) {
+	public static FreeBoard convertToEntity(FreeBoardDto freeBoardDto, Member member) {
 		return FreeBoard.builder()
-			.memberId(freeBoardDto.getMemberId())
+			.member(member)
 			.title(freeBoardDto.getTitle())
 			.content(freeBoardDto.getContent())
 			.status(freeBoardDto.getStatus() != null ? freeBoardDto.getStatus() : true)
@@ -63,7 +64,7 @@ public class FreeBoardDto implements Updatable {
 	public static FreeBoardDto convertToDto(FreeBoard freeBoard) {
 		return FreeBoardDto.builder()
 			.id(freeBoard.getId())
-			.memberId(freeBoard.getMemberId())
+			.memberId(freeBoard.getMember().getMemberId())
 			.title(freeBoard.getTitle())
 			.content(freeBoard.getContent())
 			.status(freeBoard.getStatus())

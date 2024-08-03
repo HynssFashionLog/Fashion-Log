@@ -2,9 +2,7 @@ package com.example.fashionlog.dto;
 
 import com.example.fashionlog.domain.Member;
 import com.example.fashionlog.domain.Role;
-
 import java.time.LocalDateTime;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,6 +23,7 @@ public class MemberDto {
     String phone;
     String email;
     String password;
+    Boolean status;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
     LocalDateTime deletedAt;
@@ -41,6 +40,7 @@ public class MemberDto {
             .phone(memberDto.getPhone())
             .email(memberDto.getEmail())
             .password(memberDto.getPassword())
+            .status(memberDto.getStatus())
             .createdAt(LocalDateTime.now())
             .updatedAt(memberDto.getUpdatedAt())
             .deletedAt(memberDto.getDeletedAt())
@@ -59,6 +59,7 @@ public class MemberDto {
             .phone(member.getPhone())
             .email(member.getEmail())
             .password(member.getPassword())
+            .status(member.getStatus())
             .createdAt(member.getCreatedAt())
             .updatedAt(member.getUpdatedAt())
             .deletedAt(member.getDeletedAt())

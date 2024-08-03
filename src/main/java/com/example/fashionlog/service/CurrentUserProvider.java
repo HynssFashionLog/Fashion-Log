@@ -31,7 +31,7 @@ public class CurrentUserProvider {
     @Transactional(readOnly = true)
     public Member getCurrentUser() {
         String currentUserEmail = SecurityUtil.getCurrentUserEmail();
-        return memberRepository.findByEmail(currentUserEmail);
+        return memberRepository.findByEmailAndStatusIsTrue(currentUserEmail);
     }
 
 }
