@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Trade Post Detail</title>
+  <link rel="stylesheet" th:href="@{/trade/css/detail.css}">
+  <link rel="stylesheet" th:href="@{/trade/css/styles.css}">
+  <script th:src="@{/trade/js/detail.js}"></script>
+</head>
+<body>
+<header>
+  <div class="logo-container">
+    <a href="/" class="logo">
+      <img src="#" alt="Logo" class="logo-image">
+    </a>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><button class="login">UserName</button></li>
+      <li><button class="signup">탈퇴</button></li>
+    </ul>
+  </nav>
+</header>
+<div class="container">
+  <h1><a th:href="@{/fashionlog/trade}">Trade</a></h1>
+  <div class="post-content">
+    <div>
+      <h2 th:text="${trade.title}">Title</h2>
+      <span>작성자</span>
+      <span class="post-date" th:if="${trade.updatedAt}"
+            th:text="${#temporals.format(trade.updatedAt, 'MM.dd HH:mm:ss')}"></span>
+      <span class="post-date" th:unless="${trade.updatedAt}"
+            th:text="${#temporals.format(trade.createdAt, 'MM.dd HH:mm:ss')}"></span>
+    </div>
+    <p><span th:text="${trade.content}">Content</span></p>
+  </div>
+  <div class="action-buttons">
+    <a href="/fashionlog/trade" class="btn">뒤로</a>
+    <a th:href="@{/fashionlog/trade/{id}/edit(id=${trade.id})}" class="btn edit-btn">수정</a>
+    <form th:action="@{/fashionlog/trade/{id}/delete(id=${trade.id})}" method="post" style="display: inline;">
+      <button type="submit" class="btn delete-btn">삭제</button>
+    </form>
+  </div>
+  <!-- 댓글 목록 -->
+  <div class="comment-section">
+    <h3>댓글</h3>
+    <ul class="comment-list">
+      <li th:each="comment : ${tradeComments}" class="comment">
+        <div class="comment-content">
+          <span th:id="'view-' + ${comment.id}" th:text="${comment.content}">댓글 내용</span>
+        </div>
+        <div class="comment-info">
+          <span class="comment-author">작성자</span>
+          <span class="comment-date" th:if="${comment.updatedAt}" th:text="${#temporals.format(comment.updatedAt, 'MM.dd HH:mm:ss')}"></span>
+          <span class="comment-date" th:unless="${comment.updatedAt}" th:text="${#temporals.format(comment.createdAt, 'MM.dd HH:mm:ss')}"></span>
+          <button th:id="'edit-button-' + ${comment.id}" th:onclick="'toggleEditForm(' + ${comment.id} + ')'" class="btn-edit">수정</button>
+          <form th:action="@{/fashionlog/trade/{postid}/delete-comment/{commentid}(postid=${trade.id}, commentid=${comment.id})}" method="post" style="display: inline;">
+            <button type="submit" class="btn-delete">삭제</button>
+          </form>
+        </div>
+        <!-- 수정 모드 -->
+        <form th:id="'edit-' + ${comment.id}" style="display: none;"
+              th:action="@{/fashionlog/trade/{postid}/edit-comment/{commentid}(postid=${trade.id}, commentid=${comment.id})}"
+              method="post" class="edit-form">
+          <input type="text" name="content" th:value="${comment.content}">
+          <button type="submit">저장</button>
+        </form>
+      </li>
+    </ul>
+    <!-- 댓글 작성 -->
+    <form class="comment-form" th:action="@{/fashionlog/trade/{id}/comment(id=${trade.id})}" th:object="${tradeComment}" method="post">
+      <textarea id="content" name="content" th:field="*{content}" placeholder="댓글을 입력하세요"></textarea>
+      <button type="submit">등록</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>
