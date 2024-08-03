@@ -30,17 +30,29 @@ public class MemberService {
 
 	private final MemberRepository memberRepository;
 	private final PasswordEncoder passwordEncoder;
+  
+    /**
+     * 회원 가입
+     *
+     * @param memberDto 컨트롤러에서 회원 정보를 DTO로 받아옴.
+     */
+    @Transactional
+    public void createMember(MemberDto memberDto) {
+        // 중복 체크 항목 널 체크
+        if (memberDto.getEmail() == null || memberDto.getNickname() == null ||
+            memberDto.getPassword() == null || memberDto.getName() == null ||
+            memberDto.getPhone() == null) {
+            throw new IllegalArgumentException("All fields are required");
+        }
+        // 각 항목 중복 검사
+        validateDuplicateValue("email", memberDto.getEmail());
+        validateDuplicateValue("nickname", memberDto.getNickname());
+        validateDuplicateValue("phone", memberDto.getPhone());
 
-	/**
-	 * 회원 가입
-	 *
-	 * @param memberDto 컨트롤러에서 회원 정보를 DTO로 받아옴.
-	 */
-	@Transactional
-	public void createMember(MemberDto memberDto) {
-		memberDto.setStatus(Boolean.TRUE);
-		memberDto.setRole(Role.NORMAL);
-		memberDto.setCreatedAt(LocalDateTime.now());
+
+        memberDto.setStatus(Boolean.TRUE);
+        memberDto.setRole(Role.NORMAL);
+        memberDto.setCreatedAt(LocalDateTime.now());
 
 		// 비밀번호 암호화
 		String encodedPassword = getEncodedPassword(memberDto);
@@ -50,12 +62,27 @@ public class MemberService {
 		memberRepository.save(member);
 	}
 
-	/**
-	 * 비밀번호 변환로직
-	 */
-	private String getEncodedPassword(MemberDto memberDto) {
-		return passwordEncoder.encode(memberDto.getPassword());
-	}
+
+    private void validateDuplicateValue(String fieldName, String value) {
+        boolean isDuplicate = switch (fieldName) {
+            case "email" -> memberRepository.existsByEmail(value);
+            case "nickname" -> memberRepository.existsByNickname(value);
+            case "phone" -> memberRepository.existsByPhone(value);
+            default -> throw new IllegalArgumentException("잘못된 필드 이름: " + fieldName);
+        };
+
+        if (isDuplicate) {
+            throw new IllegalArgumentException(fieldName + "(" + value + ")" + "사용 중");
+        }
+
+    }
+
+    /**
+     * 비밀번호 변환로직
+     */
+    private String getEncodedPassword(MemberDto memberDto) {
+        return passwordEncoder.encode(memberDto.getPassword());
+    }
 
 	/**
 	 * 회원 정보 보기
@@ -68,6 +95,7 @@ public class MemberService {
 			.toList();
 		return members.isEmpty() ? Optional.empty() : Optional.of(members);
 	}
+
 
 	/**
 	 * 회원 권한 정보 수정하기
@@ -94,4 +122,16 @@ public class MemberService {
 			new SecurityContextLogoutHandler().logout(request, response, auth);
 		}
 	}
+
+    public boolean isNicknameDuplicate(String nickname) {
+        return memberRepository.existsByNickname(nickname);
+    }
+
+    public boolean isEmailDuplicate(String email) {
+        return memberRepository.existsByEmail(email);
+    }
+
+    public boolean isPhoneDuplicate(String phone) {
+        return memberRepository.existsByPhone(phone);
+    }
 }

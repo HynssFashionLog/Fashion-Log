@@ -44,6 +44,8 @@ public class SecurityConfig {
                 .requestMatchers("/fashionlog").authenticated()
                 // 회원가입 페이지는 모든 사용자에게 접근 허용
                 .requestMatchers("/fashionlog/sign-up").permitAll()
+                // 중복 확인 기능 모든 사용자에게 허용
+                .requestMatchers("/fashionlog/sign-up/check-*").permitAll()
                 // 관리자 페이지는 ADMIN 역할을 가진 사용자만 접근 가능
                 .requestMatchers("/fashionlog/management").hasRole(Role.ADMIN.name())
                 // 공지사항 페이지는 인증된 사용자만 접근 가능
@@ -96,11 +98,11 @@ public class SecurityConfig {
 
     /**
      * Remember Me 기능을 위한 PersistentTokenRepository 빈을 생성합니다.
-     *
+     * <p>
      * CREATE TABLE persistent_logins ( username VARCHAR(64) NOT NULL, series VARCHAR(64) PRIMARY
      * KEY, token VARCHAR(64) NOT NULL, last_used TIMESTAMP NOT NULL ); 로 persistent_logins DB에 추가한
      * 후 사용 가능
-     *
+     * <p>
      * persistent_logins 엔티티 구현으로 자동 생성
      *
      * @return tokenRepository

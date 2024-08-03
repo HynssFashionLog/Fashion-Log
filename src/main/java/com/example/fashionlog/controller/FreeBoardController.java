@@ -1,8 +1,11 @@
 package com.example.fashionlog.controller;
 
+import com.example.fashionlog.domain.Category;
 import com.example.fashionlog.dto.FreeBoardCommentDto;
 import com.example.fashionlog.dto.FreeBoardDto;
+import com.example.fashionlog.dto.NoticeDto;
 import com.example.fashionlog.service.FreeBoardService;
+import com.example.fashionlog.service.NoticeService;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class FreeBoardController {
 
 	private final FreeBoardService freeBoardService;
+	private final NoticeService noticeService;
 
 	/**
 	 * 자유 게시판 글 목록 조회
@@ -39,7 +43,10 @@ public class FreeBoardController {
 		try {
 			List<FreeBoardDto> freeBoardDto = freeBoardService.getAllFreeBoards()
 				.orElse(Collections.emptyList());
+			List<NoticeDto> noticeDto = noticeService.getNoticeListByCategory(Category.FREE)
+				.orElse(Collections.emptyList());
 			model.addAttribute("freeboards", freeBoardDto);
+			model.addAttribute("freeNotice", noticeDto);
 			return "freeboard/list";
 		} catch (SecurityException e) {
 			return "home";
