@@ -7,7 +7,10 @@ import com.example.fashionlog.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,9 +28,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
-
+	private final MemberRepository memberRepository;
+	private final PasswordEncoder passwordEncoder;
+  
     /**
      * 회원 가입
      *
@@ -51,13 +54,14 @@ public class MemberService {
         memberDto.setRole(Role.NORMAL);
         memberDto.setCreatedAt(LocalDateTime.now());
 
-        // 비밀번호 암호화
-        String encodedPassword = getEncodedPassword(memberDto);
-        memberDto.setPassword(encodedPassword);
+		// 비밀번호 암호화
+		String encodedPassword = getEncodedPassword(memberDto);
+		memberDto.setPassword(encodedPassword);
 
-        Member member = MemberDto.convertToEntity(memberDto);
-        memberRepository.save(member);
-    }
+		Member member = MemberDto.convertToEntity(memberDto);
+		memberRepository.save(member);
+	}
+
 
     private void validateDuplicateValue(String fieldName, String value) {
         boolean isDuplicate = switch (fieldName) {
@@ -80,20 +84,44 @@ public class MemberService {
         return passwordEncoder.encode(memberDto.getPassword());
     }
 
-    /**
-     * 회원 탈퇴
-     */
-    @Transactional
-    public void withdrawMember(HttpServletRequest request, HttpServletResponse response) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Member currentUser = memberRepository.findByEmailAndStatusIsTrue(auth.getName());
-        if (currentUser != null) {
-            currentUser.deleteMember();
+	/**
+	 * 회원 정보 보기
+	 */
+	@PreAuthorize("hasRole('ADMIN')")
+	@Transactional(readOnly = true)
+	public Optional<List<MemberDto>> getAllMembers() {
+		List<MemberDto> members = memberRepository.findAll().stream()
+			.map(MemberDto::convertToDto)
+			.toList();
+		return members.isEmpty() ? Optional.empty() : Optional.of(members);
+	}
 
-            // 로그아웃 처리
-            new SecurityContextLogoutHandler().logout(request, response, auth);
-        }
-    }
+
+	/**
+	 * 회원 권한 정보 수정하기
+	 */
+	@PreAuthorize("hasRole('ADMIN')")
+	@Transactional
+	public void updateUserRole(Long memberId, Role role, MemberDto memberDto) {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new IllegalArgumentException("User not found"));
+		member.updateRole(memberDto, role);
+	}
+
+	/**
+	 * 회원 탈퇴
+	 */
+	@Transactional
+	public void withdrawMember(HttpServletRequest request, HttpServletResponse response) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Member currentUser = memberRepository.findByEmailAndStatusIsTrue(auth.getName());
+		if (currentUser != null) {
+			currentUser.deleteMember();
+
+			// 로그아웃 처리
+			new SecurityContextLogoutHandler().logout(request, response, auth);
+		}
+	}
 
     public boolean isNicknameDuplicate(String nickname) {
         return memberRepository.existsByNickname(nickname);
