@@ -15,5 +15,14 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AuthCheck {
 
-	String[] value(); // 권한(ADMIN, NORMAL, BANNED) 리스트
+	String[] value() default {}; // 권한(ADMIN, NORMAL, BANNED) 리스트
+
+	boolean checkAuthor() default false;
+
+	String Type() default "";
+
+	String idParam() default "id";
+
+	AuthorType AUTHOR_TYPE();
+
 }

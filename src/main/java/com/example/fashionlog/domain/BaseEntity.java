@@ -2,6 +2,9 @@ package com.example.fashionlog.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -27,8 +30,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public abstract class BaseEntity {
 
 	// 회원 id
-	@Column(nullable = false)
-	private Long memberId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "member_id", nullable = false)
+	private Member member;
 
 	// 제목
 	@Column(nullable = false)
@@ -40,7 +44,7 @@ public abstract class BaseEntity {
 
 	// 게시글이 삭제 되었는지 여부 (소프트 딜리트)
 	@Column(nullable = false)
-	private Boolean status = true;
+	private Boolean status;
 
 	// 게시글 생성일
 	@CreatedDate
@@ -89,5 +93,15 @@ public abstract class BaseEntity {
 		if (field == null || field.isEmpty()) {
 			throw new IllegalArgumentException(fieldName + " cannot be null or empty");
 		}
+	}
+
+	/**
+	 * 작성자 확인 메소드
+	 *
+	 * @param memberEmail 확인할 회원의 이메일
+	 * @return 작성자 여부
+	 */
+	public boolean isAuthor(String memberEmail) {
+		return this.member.getEmail().equals(memberEmail);
 	}
 }

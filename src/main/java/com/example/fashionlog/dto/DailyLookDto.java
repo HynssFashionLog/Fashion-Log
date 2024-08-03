@@ -2,6 +2,7 @@ package com.example.fashionlog.dto;
 
 import com.example.fashionlog.domain.DailyLook;
 
+import com.example.fashionlog.domain.Member;
 import com.example.fashionlog.domain.Updatable;
 import java.time.LocalDateTime;
 
@@ -20,6 +21,7 @@ import lombok.NoArgsConstructor;
 public class DailyLookDto implements Updatable {
 
     private Long id;
+    private Long memberId;
     private String title;
     private String content;
     private Boolean postStatus;
@@ -40,6 +42,7 @@ public class DailyLookDto implements Updatable {
     public static DailyLookDto convertToDto(DailyLook dailyLook) {
         return DailyLookDto.builder()
             .id(dailyLook.getId())
+            .memberId(dailyLook.getMember().getMemberId())
             .title(dailyLook.getTitle())
             .content(dailyLook.getContent())
             .postStatus(dailyLook.getStatus())
@@ -49,9 +52,10 @@ public class DailyLookDto implements Updatable {
             .build();
     }
 
-    public static DailyLook convertToEntity(DailyLookDto dailyLookDto) {
+    public static DailyLook convertToEntity(DailyLookDto dailyLookDto, Member member) {
         return DailyLook.builder()
             .id(dailyLookDto.getId())
+            .member(member)
             .title(dailyLookDto.getTitle())
             .content(dailyLookDto.getContent())
             .status(dailyLookDto.getPostStatus())
