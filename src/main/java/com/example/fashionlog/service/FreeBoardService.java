@@ -36,7 +36,6 @@ public class FreeBoardService implements BoardService {
 	 *
 	 * @return getPostStatus(글이 삭제되었는지, soft delete 방식)가 true일 경우 자유 게시판의 전체 글을 반환함.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "FreeBoard", AUTHOR_TYPE = AuthorType.POST)
 	public Optional<List<FreeBoardDto>> getAllFreeBoards() {
 		List<FreeBoardDto> freeBoards = freeBoardRepository.findAllByStatusIsTrue().stream()
 			.map(FreeBoardDto::convertToDto)
@@ -68,7 +67,6 @@ public class FreeBoardService implements BoardService {
 	 * @param id 글 하나를 상세하게 보기위해 게시글 id를 받아옴.
 	 * @return 자유 게시판 데이터베이스에서 id가 같은 게시글을 반환함.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "FreeBoard", AUTHOR_TYPE = AuthorType.POST)
 	public Optional<FreeBoardDto> getFreeBoardDtoById(Long id) {
 		return freeBoardRepository.findByIdAndStatusIsTrue(id)
 			.map(FreeBoardDto::convertToDto);
@@ -80,7 +78,7 @@ public class FreeBoardService implements BoardService {
 	 * @param id           수정할 글의 id를 받아옴.
 	 * @param freeBoardDto 컨트롤러에서 DB에 수정할 DTO를 받아옴.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "FreeBoard", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "FreeBoard", AUTHOR_TYPE = AuthorType.POST)
 	@Transactional
 	public void updateFreeBoardPost(Long id, FreeBoardDto freeBoardDto) {
 		// Not Null 예외 처리
@@ -97,7 +95,7 @@ public class FreeBoardService implements BoardService {
 	 *
 	 * @param id 삭제할 글의 id를 받아옴.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "FreeBoard", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "FreeBoard", AUTHOR_TYPE = AuthorType.POST)
 	@Transactional
 	public void deleteFreeBoardPost(Long id) {
 		FreeBoard freeBoard = freeBoardRepository.findById(id)
@@ -111,7 +109,6 @@ public class FreeBoardService implements BoardService {
 	 * @param freeBoardId 댓글 들이 속한 자유 게시판 글의 id를 받아옴.
 	 * @return 자유 게시판에서 조회한 글에 해당하는 댓글 목록을 반환함.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "FreeBoard", AUTHOR_TYPE = AuthorType.POST)
 	public Optional<List<FreeBoardCommentDto>> getCommentsByFreeBoardId(Long freeBoardId) {
 		List<FreeBoardCommentDto> comments = freeBoardCommentRepository
 			.findAllByFreeBoardIdAndCommentStatusIsTrue(freeBoardId).stream()
@@ -127,7 +124,7 @@ public class FreeBoardService implements BoardService {
 	 * @param id                  자유 게시판 글의 id를 컨트롤러에서 받아옴.
 	 * @param freeBoardCommentDto 컨트롤러에서 DB에 삽입할 댓글 DTO를 받아옴.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "FreeBoard", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "FreeBoard", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
 	public void createFreeBoardComment(Long id, FreeBoardCommentDto freeBoardCommentDto) {
 		// Not Null 예외 처리
@@ -148,7 +145,7 @@ public class FreeBoardService implements BoardService {
 	 * @param commentId           자유 게시판 글의 댓글 id를 컨트롤러에서 받아옴.
 	 * @param freeBoardCommentDto 컨트롤러에서 DB에 수정할 댓글 DTO를 받아옴.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "FreeBoard", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "FreeBoard", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
 	public void updateFreeBoardComment(Long commentId,
 		FreeBoardCommentDto freeBoardCommentDto) {
@@ -167,7 +164,7 @@ public class FreeBoardService implements BoardService {
 	 *
 	 * @param commentId 자유 게시판 글의 댓글 id를 컨트롤러에서 받아옴.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "FreeBoard", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "FreeBoard", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
 	public void deleteFreeBoardComment(Long commentId) {
 		FreeBoardComment freeBoardComment = freeBoardCommentRepository.findById(commentId)
@@ -185,7 +182,7 @@ public class FreeBoardService implements BoardService {
 	@Override
 	public boolean isPostAuthor(Long postId, String memberEmail) {
 		return freeBoardRepository.findById(postId)
-			.map(dailyLook -> dailyLook.isAuthor(memberEmail))
+			.map(freeBoard -> freeBoard.isAuthor(memberEmail))
 			.orElse(false);
 	}
 
@@ -199,7 +196,7 @@ public class FreeBoardService implements BoardService {
 	@Override
 	public boolean isCommentAuthor(Long commentId, String memberEmail) {
 		return freeBoardCommentRepository.findById(commentId)
-			.map(dailyLook -> dailyLook.isAuthor(memberEmail))
+			.map(freeBoard -> freeBoard.isAuthor(memberEmail))
 			.orElse(false);
 	}
 }
