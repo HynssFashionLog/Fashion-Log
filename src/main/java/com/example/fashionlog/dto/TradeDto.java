@@ -1,5 +1,6 @@
 package com.example.fashionlog.dto;
 
+import com.example.fashionlog.domain.Member;
 import com.example.fashionlog.domain.Trade;
 import com.example.fashionlog.domain.Updatable;
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class TradeDto implements Updatable {
 
 	private Long id;
+	private Long memberId;
 	private String title;
 	private String content;
 	private Boolean status;
@@ -23,29 +25,32 @@ public class TradeDto implements Updatable {
 	private LocalDateTime deletedAt;
 
 	@Override
-	public String getTitle(){
+	public String getTitle() {
 		return this.title;
 	}
 
 	@Override
-	public String getContent(){
+	public String getContent() {
 		return this.content;
 	}
 
-	public static Trade convertToEntity(TradeDto tradeDto){
+	public static Trade convertToEntity(TradeDto tradeDto, Member member) {
 		return Trade.builder()
+			.member(member)
 			.title(tradeDto.getTitle())
 			.content(tradeDto.getContent())
 			.status(tradeDto.getStatus() != null ? tradeDto.getStatus() : true)
-			.createdAt(tradeDto.getCreatedAt() != null ? tradeDto.getCreatedAt() : LocalDateTime.now())
+			.createdAt(
+				tradeDto.getCreatedAt() != null ? tradeDto.getCreatedAt() : LocalDateTime.now())
 			.updatedAt(tradeDto.getUpdatedAt())
 			.deletedAt(tradeDto.getDeletedAt())
 			.build();
 	}
 
-	public static TradeDto convertToDto(Trade trade){
+	public static TradeDto convertToDto(Trade trade) {
 		return TradeDto.builder()
 			.id(trade.getId())
+			.memberId(trade.getMember().getMemberId())
 			.title(trade.getTitle())
 			.content(trade.getContent())
 			.status(trade.getStatus())
