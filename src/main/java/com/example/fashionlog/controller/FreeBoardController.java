@@ -147,10 +147,9 @@ public class FreeBoardController {
 	 * @return 자유 게시판 글 목록 페이지로 리다이렉트
 	 */
 	@PostMapping("/{id}/delete")
-	public String deleteFreeBoardPost(@PathVariable("id") Long id,
-		@ModelAttribute FreeBoardDto freeBoardDto) {
+	public String deleteFreeBoardPost(@PathVariable("id") Long id) {
 		try {
-			freeBoardService.deleteFreeBoardPost(id, freeBoardDto);
+			freeBoardService.deleteFreeBoardPost(id);
 			return "redirect:/fashionlog/freeboard";
 		} catch (SecurityException e) {
 			return "redirect:/fashionlog/freeboard/{id}";
@@ -210,10 +209,9 @@ public class FreeBoardController {
 	 */
 	@PostMapping("/{postid}/delete-comment/{commentid}")
 	public String deleteFreeBoardComment(@PathVariable("postid") Long postId,
-		@PathVariable("commentid") Long commentId,
-		@ModelAttribute FreeBoardCommentDto freeBoardCommentDto) {
+		@PathVariable("commentid") Long commentId) {
 		try {
-			freeBoardService.deleteFreeBoardComment(commentId, freeBoardCommentDto);
+			freeBoardService.deleteFreeBoardComment(commentId);
 			return "redirect:/fashionlog/freeboard/" + postId;
 		} catch (SecurityException e) {
 			return "redirect:/fashionlog/freeboard/" + postId;

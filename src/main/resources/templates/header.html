@@ -19,7 +19,9 @@
         <button class="login">UserName</button>
       </li>
       <li>
-        <button class="signup">탈퇴</button>
+        <form th:action="@{/fashionlog/withdrawal}" method="post">
+          <input type="submit" value="회원 탈퇴">
+        </form>
       </li>
     </ul>
     <form th:action="@{/logout}" method="post">
