@@ -1,9 +1,14 @@
 package com.example.fashionlog.controller;
 
+import com.example.fashionlog.domain.Category;
 import com.example.fashionlog.dto.DailyLookCommentDto;
 import com.example.fashionlog.dto.DailyLookDto;
+import com.example.fashionlog.dto.NoticeDto;
 import com.example.fashionlog.service.DailyLookService;
 
+import com.example.fashionlog.service.NoticeService;
+import java.util.Collections;
+import java.util.List;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
@@ -19,14 +24,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class DailyLookController {
 
     private final DailyLookService dailyLookService;
+    private final NoticeService noticeService;
 
-    public DailyLookController(DailyLookService dailyLookService) {
+    public DailyLookController(DailyLookService dailyLookService, NoticeService noticeService) {
         this.dailyLookService = dailyLookService;
+        this.noticeService = noticeService;
     }
 
     @GetMapping
     public String getAllDailyLookPost(Model model) {
+        List<NoticeDto> noticeDto = noticeService.getNoticeListByCategory(Category.DAILY_LOOK)
+            .orElse(Collections.emptyList());
         model.addAttribute("dailylooks", dailyLookService.getAllDailyLookPost());
+        model.addAttribute("dailyLookNotice", noticeDto);
         return "dailylook/list";
     }
 
