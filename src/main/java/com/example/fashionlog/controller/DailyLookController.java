@@ -33,7 +33,7 @@ public class DailyLookController {
 
     @GetMapping
     public String getAllDailyLookPost(Model model) {
-        List<NoticeDto> noticeDto = noticeService.getNoticeListByDailyLook(Category.DAILY_LOOK)
+        List<NoticeDto> noticeDto = noticeService.getNoticeListByCategory(Category.DAILY_LOOK)
             .orElse(Collections.emptyList());
         model.addAttribute("dailylooks", dailyLookService.getAllDailyLookPost());
         model.addAttribute("dailyLookNotice", noticeDto);

@@ -41,7 +41,7 @@ public class LookbookController {
 	public String getAllLookbookList(Model model) {
 		List<LookbookDto> lookbookDto = lookbookService.getAllLookbooks()
 			.orElse(Collections.emptyList());
-		List<NoticeDto> noticeDto = noticeService.getNoticeListByDailyLook(Category.LOOKBOOK)
+		List<NoticeDto> noticeDto = noticeService.getNoticeListByCategory(Category.LOOKBOOK)
 			.orElse(Collections.emptyList());
 		model.addAttribute("lookbooks", lookbookDto);
 		model.addAttribute("lookbookNotice", noticeDto);

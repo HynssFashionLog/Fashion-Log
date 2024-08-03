@@ -40,7 +40,7 @@ public class TradeController {
 	public String getAllTradeList(Model model) {
 		List<TradeDto> tradeDto = tradeService.getAllTrades()
 			.orElse(Collections.emptyList());
-		List<NoticeDto> noticeDto = noticeService.getNoticeListByDailyLook(Category.TRADE)
+		List<NoticeDto> noticeDto = noticeService.getNoticeListByCategory(Category.TRADE)
 			.orElse(Collections.emptyList());
 		model.addAttribute("trades", tradeDto);
 		model.addAttribute("tradeNotice", noticeDto);

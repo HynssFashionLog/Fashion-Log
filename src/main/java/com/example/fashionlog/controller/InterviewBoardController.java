@@ -28,7 +28,7 @@ public class InterviewBoardController {
 
 	@GetMapping
 	public String getAllInterviewBoards(Model model) {
-		List<NoticeDto> noticeDto = noticeService.getNoticeListByDailyLook(Category.INTERVIEW)
+		List<NoticeDto> noticeDto = noticeService.getNoticeListByCategory(Category.INTERVIEW)
 			.orElse(Collections.emptyList());
 		model.addAttribute("interviewBoards", interviewBoardService.getAllInterviewPosts());
 		model.addAttribute("interviewNotice", noticeDto);

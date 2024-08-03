@@ -43,7 +43,7 @@ public class FreeBoardController {
 		try {
 			List<FreeBoardDto> freeBoardDto = freeBoardService.getAllFreeBoards()
 				.orElse(Collections.emptyList());
-			List<NoticeDto> noticeDto = noticeService.getNoticeListByDailyLook(Category.FREE)
+			List<NoticeDto> noticeDto = noticeService.getNoticeListByCategory(Category.FREE)
 				.orElse(Collections.emptyList());
 			model.addAttribute("freeboards", freeBoardDto);
 			model.addAttribute("freeNotice", noticeDto);
