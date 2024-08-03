@@ -8,6 +8,11 @@
   margin-bottom: 20px;
 }
 
+.post-content-main {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
 .post-content h2 {
   font-size: 20px;
   margin-top: 0;
@@ -41,6 +46,11 @@
 
 .comment-content {
   margin-bottom: 5px;
+}
+
+.comment-content-main {
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 .comment-info {

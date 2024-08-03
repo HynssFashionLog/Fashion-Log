@@ -1,6 +1,7 @@
 package com.example.fashionlog.dto;
 
 import com.example.fashionlog.domain.CommentUpdatable;
+import com.example.fashionlog.domain.Member;
 import com.example.fashionlog.domain.Trade;
 import com.example.fashionlog.domain.TradeComment;
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ public class TradeCommentDto implements CommentUpdatable {
 
 	private Long id;
 	private Long tradeId;
+	private Long memberId;
 	private String content;
 	private Boolean commentStatus;
 	private LocalDateTime createdAt;
@@ -32,8 +34,9 @@ public class TradeCommentDto implements CommentUpdatable {
 	 * TradeCommentDto -> TradeComment
 	 */
 	public static TradeComment convertToEntity(Trade findedTrade,
-		TradeCommentDto tradeCommentDto) {
+		TradeCommentDto tradeCommentDto, Member member) {
 		return TradeComment.builder()
+			.member(member)
 			.trade(findedTrade)
 			.content(tradeCommentDto.getContent())
 			.commentStatus(
@@ -49,9 +52,10 @@ public class TradeCommentDto implements CommentUpdatable {
 	/**
 	 * TradeComment -> TradeCommentDto
 	 */
-	public static TradeCommentDto convertToDto(TradeComment tradeComment){
+	public static TradeCommentDto convertToDto(TradeComment tradeComment) {
 		return TradeCommentDto.builder()
 			.id(tradeComment.getId())
+			.memberId(tradeComment.getMember().getMemberId())
 			.tradeId(tradeComment.getTrade().getId())
 			.content(tradeComment.getContent())
 			.commentStatus(tradeComment.getCommentStatus())

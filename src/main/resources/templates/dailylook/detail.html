@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Daily Look Post Detail</title>
-  <link rel="stylesheet" th:href="@{/css/board/detail.css}">
   <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" th:href="@{/css/board/detail.css}">
   <script th:src="@{/js/detail.js}"></script>
 </head>
 <body>
@@ -21,7 +21,7 @@
       <span class="post-date" th:unless="${dailyLook.updatedAt}"
             th:text="${#temporals.format(dailyLook.createdAt, 'MM.dd HH:mm:ss')}"></span>
     </div>
-    <p><span th:text="${dailyLook.content}">Content</span></p>
+    <p><span class="post-content-main" th:text="${dailyLook.content}">Content</span></p>
   </div>
   <div class="action-buttons">
     <a href="/fashionlog/dailylook" class="btn">뒤로</a>
@@ -36,7 +36,7 @@
     <ul class="comment-list">
       <li th:each="comment : ${dailyLookComments}" class="comment">
         <div class="comment-content">
-          <span th:id="'view-' + ${comment.id}" th:text="${comment.content}">댓글 내용</span>
+          <p th:id="'view-' + ${comment.id}" th:text="${comment.content}"><span class="comment-content-main"></span>댓글 내용</p>
         </div>
         <div class="comment-info">
           <span class="comment-author">작성자</span>
