@@ -3,6 +3,7 @@ package com.example.fashionlog.dto;
 import com.example.fashionlog.domain.CommentUpdatable;
 import com.example.fashionlog.domain.InterviewBoard;
 import com.example.fashionlog.domain.InterviewBoardComment;
+import com.example.fashionlog.domain.Member;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
 public class InterviewBoardCommentDto implements CommentUpdatable {
 
 	private Long id;
+	private Long memberId;
 	private Long boardId;
 	private String content;
 	private Boolean commentStatus;
@@ -31,6 +33,7 @@ public class InterviewBoardCommentDto implements CommentUpdatable {
 	public static InterviewBoardCommentDto fromEntity(InterviewBoardComment interviewBoardComment) {
 		return InterviewBoardCommentDto.builder()
 			.id(interviewBoardComment.getId())
+			.memberId(interviewBoardComment.getMember().getMemberId())
 			.boardId(interviewBoardComment.getInterviewBoard().getId())
 			.content(interviewBoardComment.getContent())
 			.commentStatus(interviewBoardComment.getCommentStatus())
@@ -41,9 +44,10 @@ public class InterviewBoardCommentDto implements CommentUpdatable {
 	}
 
 	public InterviewBoardComment toEntity(InterviewBoardCommentDto interviewBoardCommentDto,
-		InterviewBoard interviewBoard) {
+		InterviewBoard interviewBoard, Member member) {
 		return InterviewBoardComment.builder()
 			.id(interviewBoardCommentDto.getId())
+			.member(member)
 			.interviewBoard(interviewBoard)
 			.content(interviewBoardCommentDto.getContent())
 			.commentStatus(interviewBoardCommentDto.getCommentStatus())

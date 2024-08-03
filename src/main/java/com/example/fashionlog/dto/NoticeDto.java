@@ -1,6 +1,7 @@
 package com.example.fashionlog.dto;
 
 import com.example.fashionlog.domain.Category;
+import com.example.fashionlog.domain.Member;
 import com.example.fashionlog.domain.Notice;
 import com.example.fashionlog.domain.NoticeUpdatable;
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
 public class NoticeDto implements NoticeUpdatable {
 
 	private Long id;
+	private Long memberId;
 	private String title;
 	private String content;
 	private Boolean status;
@@ -42,6 +44,7 @@ public class NoticeDto implements NoticeUpdatable {
 	public static NoticeDto convertToDto(Notice notice) {
 		return NoticeDto.builder()
 			.id(notice.getId())
+			.memberId(notice.getMember().getMemberId())
 			.title(notice.getTitle())
 			.content(notice.getContent())
 			.status(notice.getStatus())
@@ -52,9 +55,10 @@ public class NoticeDto implements NoticeUpdatable {
 			.build();
 	}
 
-	public static Notice convertToEntity(NoticeDto noticeDto) {
+	public static Notice convertToEntity(NoticeDto noticeDto, Member member) {
 		return Notice.builder()
 			.id(noticeDto.getId())
+			.member(member)
 			.title(noticeDto.getTitle())
 			.content(noticeDto.getContent())
 			.status(noticeDto.getStatus())

@@ -1,5 +1,6 @@
 package com.example.fashionlog.service;
 
+import com.example.fashionlog.domain.Member;
 import com.example.fashionlog.domain.Notice;
 import com.example.fashionlog.domain.NoticeComment;
 import com.example.fashionlog.dto.NoticeCommentDto;
@@ -21,6 +22,7 @@ public class NoticeService {
 
 	private final NoticeRepository noticeRepository;
 	private final NoticeCommentRepository noticeCommentRepository;
+	private final CurrentUserProvider currentUserProvider;
 
 	public Optional<List<NoticeDto>> getAllNotices() {
 		List<NoticeDto> notices = noticeRepository.findAllByStatusIsTrueOrderByCreatedAtDesc()
@@ -32,8 +34,9 @@ public class NoticeService {
 
 	@Transactional
 	public void createNotice(NoticeDto noticeDto) {
+		Member currentUser = currentUserProvider.getCurrentUser();
 		noticeDto.setStatus(true);
-		Notice notice = NoticeDto.convertToEntity(noticeDto);
+		Notice notice = NoticeDto.convertToEntity(noticeDto, currentUser);
 		noticeRepository.save(notice);
 	}
 
@@ -64,10 +67,13 @@ public class NoticeService {
 	@Transactional
 	public void createNoticeComment(Long id, NoticeCommentDto noticeCommentDto) {
 		Notice notice = findByIdAndStatusIsTrue(id);
+		Member currentUser = currentUserProvider.getCurrentUser();
+
 		noticeCommentDto.setNoticeId(null);
 		noticeCommentDto.setNoticeId(id);
 		noticeCommentDto.setCommentStatus(true);
-		NoticeComment noticeComment = NoticeCommentDto.convertToEntity(noticeCommentDto, notice);
+
+		NoticeComment noticeComment = NoticeCommentDto.convertToEntity(noticeCommentDto, notice, currentUser);
 		noticeCommentRepository.save(noticeComment);
 	}
 
