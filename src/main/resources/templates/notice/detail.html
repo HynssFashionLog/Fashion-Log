@@ -17,7 +17,7 @@
     <div>
       <span th:text="${notice.category.getDisplayName()}"></span>
       <h2 th:text="${notice.title}">Title</h2>
-      <span>작성자</span>
+      <span th:text="${notice.authorName}">작성자</span>
       <span class="post-date" th:if="${notice.updatedAt}"
             th:text="${#temporals.format(notice.updatedAt, 'MM.dd HH:mm:ss')}"></span>
       <span class="post-date" th:unless="${notice.updatedAt}"
@@ -41,7 +41,7 @@
           <span th:id="'view-' + ${comment.id}" th:text="${comment.content}">댓글 내용</span>
         </div>
         <div class="comment-info">
-          <span class="comment-author">작성자</span>
+          <span th:text="${comment.authorName}" class="comment-author">작성자</span>
           <span class="comment-date" th:if="${comment.updatedAt}" th:text="${#temporals.format(comment.updatedAt, 'MM.dd HH:mm:ss')}"></span>
           <span class="comment-date" th:unless="${comment.updatedAt}" th:text="${#temporals.format(comment.createdAt, 'MM.dd HH:mm:ss')}"></span>
           <button th:id="'edit-button-' + ${comment.id}" th:onclick="'toggleEditForm(' + ${comment.id} + ')'" class="btn-edit">수정</button>
