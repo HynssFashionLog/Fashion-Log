@@ -33,7 +33,7 @@
       <td th:if="${notice.updatedAt != null}" th:text="${notice.updatedAt}">작성일</td>
       <td th:unless="${notice.updatedAt != null}" th:text="${notice.createdAt}">작성일</td>
     </tr>
-    <tr th:each="interview:${interviewBoards}" class="post-item interview-item">
+    <tr th:each="interview:${interviewBoards}" class="post-item board-item">
       <td>
         <a th:text="${interview.title}" th:href="@{/fashionlog/interviewboard/{id}(id=${interview.id})}">제목</a>
       </td>

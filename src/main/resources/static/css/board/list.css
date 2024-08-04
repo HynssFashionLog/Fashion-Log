@@ -77,12 +77,12 @@ th {
   background-color: #ffeeba;
 }
 
-/* 인터뷰 게시물 스타일 */
-.interview-item {
+/* 게시판 스타일 */
+.board-item {
   background-color: #e6f3ff;
 }
 
-.interview-item:hover {
+.board-item:hover {
   background-color: #d1e7ff;
 }
 

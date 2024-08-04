@@ -1,5 +1,7 @@
 package com.example.fashionlog.service.board;
 
+import com.example.fashionlog.aop.AuthCheck;
+import com.example.fashionlog.aop.AuthorType;
 import com.example.fashionlog.domain.board.InterviewBoard;
 import com.example.fashionlog.domain.comment.InterviewBoardComment;
 import com.example.fashionlog.domain.Member;
@@ -18,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
-public class InterviewBoardService {
+public class InterviewBoardService implements BoardService {
 
 	private final InterviewBoardRepository interviewBoardRepository;
 	private final InterviewBoardCommentRepository interviewBoardCommentRepository;
@@ -30,6 +32,7 @@ public class InterviewBoardService {
 			.collect(Collectors.toList());
 	}
 
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Interview", AUTHOR_TYPE = AuthorType.POST)
 	@Transactional
 	public void createInterviewPost(InterviewBoardDto interviewBoardDto) {
 		Member currentUser = currentUserProvider.getCurrentUser();
@@ -49,6 +52,7 @@ public class InterviewBoardService {
 		return InterviewBoardDto.fromEntity(interviewBoard);
 	}
 
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "Interview", AUTHOR_TYPE = AuthorType.POST)
 	@Transactional
 	public void updateInterviewPost(Long id, InterviewBoardDto interviewBoardDto) {
 		InterviewBoard interviewBoard = interviewBoardRepository.findById(id)
@@ -56,6 +60,7 @@ public class InterviewBoardService {
 		interviewBoard.update(interviewBoardDto);
 	}
 
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "Interview", AUTHOR_TYPE = AuthorType.POST)
 	@Transactional
 	public void deleteInterviewPost(Long id) {
 		InterviewBoard interviewBoard = interviewBoardRepository.findById(id)
@@ -70,6 +75,7 @@ public class InterviewBoardService {
 			.collect(Collectors.toList());
 	}
 
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Interview", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
 	public void addComment(Long id, InterviewBoardCommentDto interviewBoardCommentDto) {
 		Member currentUser = currentUserProvider.getCurrentUser();
@@ -86,6 +92,7 @@ public class InterviewBoardService {
 		interviewBoardCommentRepository.save(interviewBoardComment);
 	}
 
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "Interview", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
 	public void updateInterviewComment(Long postId, Long commentId,
 		InterviewBoardCommentDto interviewBoardCommentDto) {
@@ -95,12 +102,41 @@ public class InterviewBoardService {
 		interviewBoardComment.updateComment(interviewBoardCommentDto);
 	}
 
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "Interview", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
 	public void deleteInterviewBoardComment(Long commentId) {
 		InterviewBoardComment interviewBoardComment = interviewBoardCommentRepository.findById(
 				commentId)
 			.orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
 		interviewBoardComment.deleteComment();
+	}
+
+	/**
+	 * 주어진 게시글 ID의 작성자가 현재 사용자인지 확인합니다.
+	 *
+	 * @param postId 확인할 게시글 ID
+	 * @param memberEmail 현재 사용자의 이메일
+	 * @return 현재 사용자가 게시글의 작성자인 경우 true, 그렇지 않은 경우 false
+	 */
+	@Override
+	public boolean isPostAuthor(Long postId, String memberEmail) {
+		return interviewBoardRepository.findById(postId)
+			.map(interview -> interview.isAuthor(memberEmail))
+			.orElse(false);
+	}
+
+	/**
+	 * 주어진 댓글 ID의 작성자가 현재 사용자인지 확인합니다.
+	 *
+	 * @param commentId 확인할 게시글 ID
+	 * @param memberEmail 현재 사용자의 이메일
+	 * @return 현재 사용자가 게시글의 작성자인 경우 true, 그렇지 않은 경우 false
+	 */
+	@Override
+	public boolean isCommentAuthor(Long commentId, String memberEmail) {
+		return interviewBoardCommentRepository.findById(commentId)
+			.map(interview -> interview.isAuthor(memberEmail))
+			.orElse(false);
 	}
 
 }

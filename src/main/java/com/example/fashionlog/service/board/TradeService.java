@@ -66,6 +66,7 @@ public class TradeService implements BoardService {
 
 		// 현재 로그인된 사용자를 가져온다
 		Member currentUser = currentUserProvider.getCurrentUser();
+		tradeDto.setAuthorName(currentUser.getNickname());
 
 		tradeRepository.save(TradeDto.convertToEntity(tradeDto, currentUser));
 	}
