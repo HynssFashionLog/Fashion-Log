@@ -17,6 +17,7 @@ public class TradeDto implements Updatable {
 
 	private Long id;
 	private Long memberId;
+	private String authorName;
 	private String title;
 	private String content;
 	private Boolean status;
@@ -51,6 +52,7 @@ public class TradeDto implements Updatable {
 		return TradeDto.builder()
 			.id(trade.getId())
 			.memberId(trade.getMember().getMemberId())
+			.authorName(trade.getMember().getNickname())
 			.title(trade.getTitle())
 			.content(trade.getContent())
 			.status(trade.getStatus())
