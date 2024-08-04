@@ -76,7 +76,7 @@ public class LookbookService implements BoardService {
 	 * @param id          수정할 글의 id를 받아옴.
 	 * @param lookbookDto 컨트롤러에서 DB에 수정할 DTO를 받아옴.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Lookbook", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "Lookbook", AUTHOR_TYPE = AuthorType.POST)
 	@Transactional
 	public void updateLookbook(Long id, LookbookDto lookbookDto) {
 		// Not Null 예외 처리
@@ -106,7 +106,7 @@ public class LookbookService implements BoardService {
 	 *
 	 * @param id 삭제할 글의 id를 받아옴.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Lookbook", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "Lookbook", AUTHOR_TYPE = AuthorType.POST)
 	@Transactional
 	public void deleteLookbook(Long id) {
 		Lookbook lookbook = lookbookRepository.findById(id)
@@ -120,7 +120,7 @@ public class LookbookService implements BoardService {
 	 * @param lookbookId 댓글 들이 속한 룩북 게시판 글의 id를 받아옴.
 	 * @return 룩북 게시판에서 조회한 글에 해당하는 댓글 목록을 반환함.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Lookbook", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Lookbook", AUTHOR_TYPE = AuthorType.COMMENT)
 	public Optional<List<LookbookCommentDto>> getCommentsByLookbookId(Long lookbookId) {
 		List<LookbookCommentDto> comments = lookbookCommentRepository
 			.findAllByLookbookIdAndCommentStatusIsTrue(lookbookId).stream()
@@ -136,7 +136,7 @@ public class LookbookService implements BoardService {
 	 * @param id                 룩북 게시판 글의 id를 컨트롤러에서 받아옴.
 	 * @param lookbookCommentDto 컨트롤러에서 DB에 삽입할 댓글 DTO를 받아옴.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Lookbook", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Lookbook", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
 	public void createLookbookComment(Long id, LookbookCommentDto lookbookCommentDto) {
 		// Not Null 예외 처리
@@ -157,7 +157,7 @@ public class LookbookService implements BoardService {
 	 * @param commentId          자유 게시판 글의 댓글 id를 컨트롤러에서 받아옴.
 	 * @param lookbookCommentDto 컨트롤러에서 DB에 수정할 댓글 DTO를 받아옴.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Lookbook", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "Lookbook", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
 	public void updateLookbookComment(Long commentId,
 		LookbookCommentDto lookbookCommentDto) {
@@ -176,7 +176,7 @@ public class LookbookService implements BoardService {
 	 *
 	 * @param commentId 룩북 게시판 글의 댓글 id를 컨트롤러에서 받아옴.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Lookbook", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "Lookbook", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
 	public void deleteLookbookComment(Long commentId) {
 		LookbookComment lookbookComment = lookbookCommentRepository.findById(commentId)
