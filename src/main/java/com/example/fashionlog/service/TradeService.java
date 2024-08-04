@@ -78,7 +78,7 @@ public class TradeService implements BoardService {
 	 * @param id       수정할 글의 id 받아오기
 	 * @param tradeDto 컨트롤러에서 db에 수정할 dto 받아오기
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Trade", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "Trade", AUTHOR_TYPE = AuthorType.POST)
 	@Transactional
 	public void updateTrade(Long id, TradeDto tradeDto) {
 		// Not Null 예외처리
@@ -95,7 +95,7 @@ public class TradeService implements BoardService {
 	 *
 	 * @param id 삭제할 글의 id 받아오기
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Trade", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "Trade", AUTHOR_TYPE = AuthorType.POST)
 	@Transactional
 	public void deleteTrade(Long id) {
 		Trade trade = tradeRepository.findById(id)
@@ -106,7 +106,7 @@ public class TradeService implements BoardService {
 	/**
 	 * 거래 게시판 글의 댓글 목록 조회
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Trade", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Trade", AUTHOR_TYPE = AuthorType.COMMENT)
 	public Optional<List<TradeCommentDto>> getCommentsByTradeId(Long tradeId) {
 		List<TradeCommentDto> comments = tradeCommentRepository
 			.findAllByTradeIdAndCommentStatusIsTrue(tradeId).stream()
@@ -123,7 +123,7 @@ public class TradeService implements BoardService {
 	 * @param id              거래 게시판 글의 id를 컨트롤러에서 받아옴
 	 * @param tradeCommentDto 컨트롤러에서 db에 삽입할 댓글 dto를 받아옴
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Trade", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Trade", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
 	public void createTradeComment(Long id, TradeCommentDto tradeCommentDto) {
 		// Not Null 예외 처리
@@ -144,7 +144,7 @@ public class TradeService implements BoardService {
 	 * @param commentId       거래 게시판 글의 댓글 id를 컨트롤러에서 받아오기
 	 * @param tradeCommentDto 컨트롤러에서 db에 수정할 댓글 dto를 받아옴
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Trade", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "Trade", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
 	public void updateTradeComment(Long commentId, TradeCommentDto tradeCommentDto) {
 		// Not Null 예외 처리
@@ -161,7 +161,7 @@ public class TradeService implements BoardService {
 	 *
 	 * @param commentId 거래 게시판 글의 댓글 id를 컨트롤러에서 받아옴
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Trade", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "Trade", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
 	public void deleteTradeComment(Long commentId) {
 		TradeComment tradeComment = tradeCommentRepository.findById(commentId)
