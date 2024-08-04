@@ -19,6 +19,7 @@ public class LookbookCommentDto implements CommentUpdatable {
 	private Long id;
 	private Long lookbookId;
 	private Long memberId;
+	private String authorName;
 	private String content;
 	private Boolean commentStatus;
 	private LocalDateTime createdAt;
@@ -58,6 +59,7 @@ public class LookbookCommentDto implements CommentUpdatable {
 			.id(lookbookComment.getId())
 			.memberId(lookbookComment.getMember().getMemberId())
 			.lookbookId(lookbookComment.getLookbook().getId())
+			.authorName(lookbookComment.getMember().getNickname())
 			.content(lookbookComment.getContent())
 			.commentStatus(lookbookComment.getCommentStatus())
 			.createdAt(lookbookComment.getCreatedAt())

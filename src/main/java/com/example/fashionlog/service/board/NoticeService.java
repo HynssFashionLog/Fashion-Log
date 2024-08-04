@@ -37,6 +37,7 @@ public class NoticeService {
 	@Transactional
 	public void createNotice(NoticeDto noticeDto) {
 		Member currentUser = currentUserProvider.getCurrentUser();
+		noticeDto.setAuthorName(currentUser.getNickname());
 		noticeDto.setStatus(true);
 		Notice notice = NoticeDto.convertToEntity(noticeDto, currentUser);
 		noticeRepository.save(notice);

@@ -133,7 +133,9 @@ public class FreeBoardService implements BoardService {
 
 		FreeBoard freeBoard = freeBoardRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
+
 		Member currentUser = currentUserProvider.getCurrentUser();
+		freeBoardCommentDto.setAuthorName(currentUser.getNickname());
 
 		FreeBoardComment freeBoardComment = FreeBoardCommentDto.convertToEntity(freeBoard,
 			freeBoardCommentDto, currentUser);

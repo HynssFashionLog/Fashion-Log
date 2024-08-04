@@ -36,6 +36,7 @@ public class InterviewBoardService {
 
 		interviewBoardDto.setCreatedAt(LocalDateTime.now());
 		interviewBoardDto.setStatus(true);
+		interviewBoardDto.setAuthorName(currentUser.getNickname());
 
 		InterviewBoard interviewBoard = InterviewBoardDto.toEntity(interviewBoardDto, currentUser);
 		interviewBoardRepository.save(interviewBoard);

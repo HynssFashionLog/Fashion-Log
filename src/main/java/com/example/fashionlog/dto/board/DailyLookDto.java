@@ -22,6 +22,7 @@ public class DailyLookDto implements Updatable {
 
     private Long id;
     private Long memberId;
+    private String authorName;
     private String title;
     private String content;
     private Boolean postStatus;
@@ -43,6 +44,7 @@ public class DailyLookDto implements Updatable {
         return DailyLookDto.builder()
             .id(dailyLook.getId())
             .memberId(dailyLook.getMember().getMemberId())
+            .authorName(dailyLook.getMember().getNickname())
             .title(dailyLook.getTitle())
             .content(dailyLook.getContent())
             .postStatus(dailyLook.getStatus())

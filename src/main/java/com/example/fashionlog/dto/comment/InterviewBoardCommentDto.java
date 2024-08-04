@@ -19,6 +19,7 @@ public class InterviewBoardCommentDto implements CommentUpdatable {
 	private Long id;
 	private Long memberId;
 	private Long boardId;
+	private String authorName;
 	private String content;
 	private Boolean commentStatus;
 	private LocalDateTime createdAt;
@@ -35,6 +36,7 @@ public class InterviewBoardCommentDto implements CommentUpdatable {
 			.id(interviewBoardComment.getId())
 			.memberId(interviewBoardComment.getMember().getMemberId())
 			.boardId(interviewBoardComment.getInterviewBoard().getId())
+			.authorName(interviewBoardComment.getMember().getNickname())
 			.content(interviewBoardComment.getContent())
 			.commentStatus(interviewBoardComment.getCommentStatus())
 			.createdAt(interviewBoardComment.getCreatedAt())

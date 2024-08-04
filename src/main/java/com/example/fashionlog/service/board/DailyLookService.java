@@ -65,6 +65,8 @@ public class DailyLookService implements BoardService {
         // 현재 로그인된 사용자를 가져옵니다
         Member currentUser = currentUserProvider.getCurrentUser();
 
+        dailyLookDto.setAuthorName(currentUser.getNickname());
+
         DailyLook dailyLook = DailyLookDto.convertToEntity(dailyLookDto, currentUser);
         dailyLookRepository.save(dailyLook);
     }

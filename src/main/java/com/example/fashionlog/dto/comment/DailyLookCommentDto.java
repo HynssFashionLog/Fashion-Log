@@ -24,6 +24,7 @@ public class DailyLookCommentDto implements CommentUpdatable {
     private Long id;
     private Long memberId;
     private Long dailyLookId;
+    private String authorName;
     private String content;
     private Boolean commentStatus;
     private LocalDateTime createdAt;
@@ -41,6 +42,7 @@ public class DailyLookCommentDto implements CommentUpdatable {
             .id(dailyLookComment.getId())
             .memberId(dailyLookComment.getMember().getMemberId())
             .dailyLookId(dailyLookComment.getDailyLook().getId())
+            .authorName(dailyLookComment.getMember().getNickname())
             .content(dailyLookComment.getContent())
             .commentStatus(dailyLookComment.getCommentStatus())
             .createdAt(dailyLookComment.getCreatedAt())
