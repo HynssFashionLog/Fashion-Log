@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Notice List</title>
-  <link rel="stylesheet" th:href="@{/notice/css/styles.css}">
-  <link rel="stylesheet" th:href="@{/notice/css/list.css}">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" th:href="@{/css/board/list.css}">
 </head>
 <header>
   <div class="logo-container">
@@ -31,16 +31,15 @@
   <table>
     <thead>
     <tr>
-      <th>분류</th>
       <th>제목</th>
       <th>작성자</th>
       <th>작성일</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="notice:${notices}" class="post-item">
-      <th th:text="${notice.category.getDisplayName()}">분류</th>
+    <tr th:each="notice:${notices}" class="post-item notice-item">
       <td>
+        <span class="category" th:text="${notice.category.getDisplayName()}">분류</span>
         <a th:text="${notice.title}" th:href="@{/fashionlog/notice/{id}(id=${notice.id})}">제목</a>
       </td>
       <td>작성자</td>
