@@ -31,7 +31,7 @@ public class LookbookService implements BoardService {
 	 *
 	 * @return getPostStatus(글이 삭제되었는지, soft delete 방식)가 true일 경우 룩북 게시판의 전체 글을 반환함.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Lookbook", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "LookBook", AUTHOR_TYPE = AuthorType.POST)
 	public Optional<List<LookbookDto>> getAllLookbooks() {
 		List<LookbookDto> lookbooks = lookbookRepository.findByDeletedAtIsNull().stream()
 			.map(LookbookDto::convertToDto)
@@ -45,7 +45,7 @@ public class LookbookService implements BoardService {
 	 * @param id 글 하나를 상세하게 보기위해 게시글 id를 받아옴.
 	 * @return 룩북 게시판 데이터베이스에서 id가 같은 게시글을 반환함.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Lookbook", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "LookBook", AUTHOR_TYPE = AuthorType.POST)
 	public Optional<LookbookDto> getLookbookById(Long id) {
 		return lookbookRepository.findByIdAndStatusIsTrue(id)
 			.map(LookbookDto::convertToDto);
@@ -56,7 +56,7 @@ public class LookbookService implements BoardService {
 	 *
 	 * @param lookbookDto 컨트롤러에서 DB에 삽입할 DTO를 받아옴.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Lookbook", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "LookBook", AUTHOR_TYPE = AuthorType.POST)
 	@Transactional
 	public void createLookbookPost(LookbookDto lookbookDto) {
 		// Not Null 예외 처리
@@ -78,7 +78,7 @@ public class LookbookService implements BoardService {
 	 * @param id          수정할 글의 id를 받아옴.
 	 * @param lookbookDto 컨트롤러에서 DB에 수정할 DTO를 받아옴.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "Lookbook", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "LookBook", AUTHOR_TYPE = AuthorType.POST)
 	@Transactional
 	public void updateLookbook(Long id, LookbookDto lookbookDto) {
 		// Not Null 예외 처리
@@ -96,7 +96,7 @@ public class LookbookService implements BoardService {
 	 * @param id 글 하나를 상세하게 보기위해 게시글 id를 받아옴.
 	 * @return 룩북 게시판 데이터베이스에서 id가 같은 게시글을 반환함.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Lookbook", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "LookBook", AUTHOR_TYPE = AuthorType.POST)
 	public Optional<LookbookDto> getLookbookDtoById(Long id) {
 		return lookbookRepository.findByIdAndStatusIsTrue(id)
 			.map(LookbookDto::convertToDto);
@@ -108,7 +108,7 @@ public class LookbookService implements BoardService {
 	 *
 	 * @param id 삭제할 글의 id를 받아옴.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "Lookbook", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "LookBook", AUTHOR_TYPE = AuthorType.POST)
 	@Transactional
 	public void deleteLookbook(Long id) {
 		Lookbook lookbook = lookbookRepository.findById(id)
@@ -122,7 +122,7 @@ public class LookbookService implements BoardService {
 	 * @param lookbookId 댓글 들이 속한 룩북 게시판 글의 id를 받아옴.
 	 * @return 룩북 게시판에서 조회한 글에 해당하는 댓글 목록을 반환함.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Lookbook", AUTHOR_TYPE = AuthorType.COMMENT)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "LookBook", AUTHOR_TYPE = AuthorType.COMMENT)
 	public Optional<List<LookbookCommentDto>> getCommentsByLookbookId(Long lookbookId) {
 		List<LookbookCommentDto> comments = lookbookCommentRepository
 			.findAllByLookbookIdAndCommentStatusIsTrue(lookbookId).stream()
@@ -138,7 +138,7 @@ public class LookbookService implements BoardService {
 	 * @param id                 룩북 게시판 글의 id를 컨트롤러에서 받아옴.
 	 * @param lookbookCommentDto 컨트롤러에서 DB에 삽입할 댓글 DTO를 받아옴.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Lookbook", AUTHOR_TYPE = AuthorType.COMMENT)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "LookBook", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
 	public void createLookbookComment(Long id, LookbookCommentDto lookbookCommentDto) {
 		Member currentUser = currentUserProvider.getCurrentUser();
@@ -159,19 +159,19 @@ public class LookbookService implements BoardService {
 	/**
 	 * 룩북 게시판 글의 댓글 수정하기 API
 	 *
-	 * @param commentId          자유 게시판 글의 댓글 id를 컨트롤러에서 받아옴.
+	 * @param id          자유 게시판 글의 댓글 id를 컨트롤러에서 받아옴.
 	 * @param lookbookCommentDto 컨트롤러에서 DB에 수정할 댓글 DTO를 받아옴.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "Lookbook", AUTHOR_TYPE = AuthorType.COMMENT)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "LookBook", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
-	public void updateLookbookComment(Long commentId,
+	public void updateLookbookComment(Long id,
 		LookbookCommentDto lookbookCommentDto) {
 		// Not Null 예외 처리
 		LookbookComment.validateField(lookbookCommentDto.getContent(), "Content");
 
-		LookbookComment lookbookComment = lookbookCommentRepository.findById(commentId)
+		LookbookComment lookbookComment = lookbookCommentRepository.findById(id)
 			.orElseThrow(
-				() -> new IllegalArgumentException("comment id:" + commentId + " not found"));
+				() -> new IllegalArgumentException("comment id:" + id + " not found"));
 
 		lookbookComment.updateComment(lookbookCommentDto);
 	}
@@ -179,13 +179,13 @@ public class LookbookService implements BoardService {
 	/**
 	 * 룩북 게시판 글의 댓글 삭제하기 API
 	 *
-	 * @param commentId 룩북 게시판 글의 댓글 id를 컨트롤러에서 받아옴.
+	 * @param id 룩북 게시판 글의 댓글 id를 컨트롤러에서 받아옴.
 	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "Lookbook", AUTHOR_TYPE = AuthorType.COMMENT)
+	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "LookBook", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
-	public void deleteLookbookComment(Long commentId) {
-		LookbookComment lookbookComment = lookbookCommentRepository.findById(commentId)
-			.orElseThrow(() -> new IllegalArgumentException("id: " + commentId + " not found"));
+	public void deleteLookbookComment(Long id) {
+		LookbookComment lookbookComment = lookbookCommentRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
 		lookbookComment.deleteComment();
 	}
 

@@ -145,17 +145,17 @@ public class TradeService implements BoardService {
 	/**
 	 * 거래 게시판 글의 댓글 수정하기
 	 *
-	 * @param commentId       거래 게시판 글의 댓글 id를 컨트롤러에서 받아오기
+	 * @param id       거래 게시판 글의 댓글 id를 컨트롤러에서 받아오기
 	 * @param tradeCommentDto 컨트롤러에서 db에 수정할 댓글 dto를 받아옴
 	 */
 	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "Trade", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
-	public void updateTradeComment(Long commentId, TradeCommentDto tradeCommentDto) {
+	public void updateTradeComment(Long id, TradeCommentDto tradeCommentDto) {
 		// Not Null 예외 처리
 		TradeComment.validateField(tradeCommentDto.getContent(), "Content");
 
-		TradeComment tradeComment = tradeCommentRepository.findById(commentId)
-			.orElseThrow(() -> new IllegalArgumentException("id: " + commentId + " not found"));
+		TradeComment tradeComment = tradeCommentRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
 
 		tradeComment.updateComment(tradeCommentDto);
 	}
@@ -163,13 +163,13 @@ public class TradeService implements BoardService {
 	/**
 	 * 거래 게시판 글의 댓글 삭제하기
 	 *
-	 * @param commentId 거래 게시판 글의 댓글 id를 컨트롤러에서 받아옴
+	 * @param id 거래 게시판 글의 댓글 id를 컨트롤러에서 받아옴
 	 */
 	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "Trade", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
-	public void deleteTradeComment(Long commentId) {
-		TradeComment tradeComment = tradeCommentRepository.findById(commentId)
-			.orElseThrow(() -> new IllegalArgumentException("id: " + commentId + " not found"));
+	public void deleteTradeComment(Long id) {
+		TradeComment tradeComment = tradeCommentRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
 		tradeComment.deleteComment();
 	}
 
@@ -196,7 +196,7 @@ public class TradeService implements BoardService {
 	 */
 	@Override
 	public boolean isCommentAuthor(Long commentId, String memberEmail) {
-		return tradeRepository.findById(commentId)
+		return tradeCommentRepository.findById(commentId)
 			.map(trade -> trade.isAuthor(memberEmail))
 			.orElse(false);
 	}
