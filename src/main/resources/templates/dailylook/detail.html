@@ -15,7 +15,7 @@
   <div class="post-content">
     <div>
       <h2 th:text="${dailyLook.title}">Title</h2>
-      <span>작성자</span>
+      <span th:text="${dailyLook.authorName}">작성자</span>
       <span class="post-date" th:if="${dailyLook.updatedAt}"
             th:text="${#temporals.format(dailyLook.updatedAt, 'MM.dd HH:mm:ss')}"></span>
       <span class="post-date" th:unless="${dailyLook.updatedAt}"
@@ -39,7 +39,7 @@
           <p th:id="'view-' + ${comment.id}" th:text="${comment.content}"><span class="comment-content-main"></span>댓글 내용</p>
         </div>
         <div class="comment-info">
-          <span class="comment-author">작성자</span>
+          <span th:text="${comment.authorName}" class="comment-author">작성자</span>
           <span class="comment-date" th:if="${comment.updatedAt}" th:text="${#temporals.format(comment.updatedAt, 'MM.dd HH:mm:ss')}"></span>
           <span class="comment-date" th:unless="${comment.updatedAt}" th:text="${#temporals.format(comment.createdAt, 'MM.dd HH:mm:ss')}"></span>
           <button th:id="'edit-button-' + ${comment.id}" th:onclick="'toggleEditForm(' + ${comment.id} + ')'" class="btn-edit">수정</button>
