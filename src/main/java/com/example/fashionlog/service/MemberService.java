@@ -46,6 +46,12 @@ public class MemberService {
 			memberDto.getPhone() == null) {
 			throw new IllegalArgumentException("All fields are required");
 		}
+
+		// 전화번호 형식 검증
+		if (!isValidPhoneNumber(memberDto.getPhone())) {
+			throw new IllegalArgumentException("올바른 전화번호 형식이 아닙니다.");
+		}
+
 		// 각 항목 중복 검사
 		validateDuplicateValue("email", memberDto.getEmail());
 		validateDuplicateValue("nickname", memberDto.getNickname());
@@ -61,6 +67,11 @@ public class MemberService {
 
 		Member member = MemberDto.convertToEntity(memberDto);
 		memberRepository.save(member);
+
+		// 전화번호 형식 검증 추가
+		if (!memberDto.getPhone().matches("010-\\d{4}-\\d{4}")) {
+			throw new IllegalArgumentException("올바른 전화번호 형식이 아닙니다.");
+		}
 	}
 
 
@@ -136,6 +147,15 @@ public class MemberService {
 	}
 
 	public boolean isPhoneDuplicate(String phone) {
+		// 전화번호 형식 검증 추가
+		if (!phone.matches("010-\\d{4}-\\d{4}")) {
+			throw new IllegalArgumentException("올바른 전화번호 형식이 아닙니다.");
+		}
 		return memberRepository.existsByPhone(phone);
+	}
+
+	// 전화번호 형식 검증 메소드
+	private boolean isValidPhoneNumber(String phone) {
+		return phone.matches("010-\\d{4}-\\d{4}");
 	}
 }
