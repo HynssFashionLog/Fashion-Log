@@ -18,6 +18,7 @@ public class LookbookDto implements Updatable {
 	private Long id;
 	private Long memberId;
 	private String authorName;
+	private String authorEmail;
 	private String title;
 	private String content;
 	private Boolean status;
@@ -59,6 +60,7 @@ public class LookbookDto implements Updatable {
 			.id(lookbook.getId())
 			.memberId(lookbook.getMember().getMemberId())
 			.authorName(lookbook.getMember().getNickname())
+			.authorEmail(lookbook.getMember().getEmail())
 			.title(lookbook.getTitle())
 			.content(lookbook.getContent())
 			.status(lookbook.getStatus())

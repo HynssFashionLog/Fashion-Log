@@ -20,6 +20,7 @@ public class NoticeCommentDto implements CommentUpdatable {
 	private Long memberId;
 	private Long noticeId;
 	private String authorName;
+	private String authorEmail;
 	private String content;
 	private Boolean commentStatus;
 	private LocalDateTime createdAt;
@@ -37,6 +38,7 @@ public class NoticeCommentDto implements CommentUpdatable {
 			.memberId(noticeComment.getMember().getMemberId())
 			.noticeId(noticeComment.getNotice().getId())
 			.authorName(noticeComment.getMember().getNickname())
+			.authorEmail(noticeComment.getMember().getEmail())
 			.content(noticeComment.getContent())
 			.commentStatus(noticeComment.getCommentStatus())
 			.createdAt(noticeComment.getCreatedAt())

@@ -40,6 +40,7 @@ public class InterviewBoardService implements BoardService {
 		interviewBoardDto.setCreatedAt(LocalDateTime.now());
 		interviewBoardDto.setStatus(true);
 		interviewBoardDto.setAuthorName(currentUser.getNickname());
+		interviewBoardDto.setAuthorEmail(currentUser.getEmail());
 
 		InterviewBoard interviewBoard = InterviewBoardDto.toEntity(interviewBoardDto, currentUser);
 		interviewBoardRepository.save(interviewBoard);
@@ -86,6 +87,7 @@ public class InterviewBoardService implements BoardService {
 		interviewBoardCommentDto.setBoardId(id);
 		interviewBoardCommentDto.setCreatedAt(LocalDateTime.now());
 		interviewBoardCommentDto.setCommentStatus(true);
+		interviewBoardCommentDto.setAuthorEmail(currentUser.getEmail());
 
 		InterviewBoardComment interviewBoardComment = interviewBoardCommentDto.toEntity(
 			interviewBoardCommentDto, interviewBoard, currentUser);
