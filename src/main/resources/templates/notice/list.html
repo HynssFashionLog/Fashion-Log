@@ -11,8 +11,12 @@
 <div th:replace="~{header :: header}"></div>
 
 <div class="container">
-  <h1>Notice</h1>
-
+  <div class="header-container">
+    <h1>Notice</h1>
+    <div sec:authorize="hasRole('ADMIN')">
+      <a class="btn btn-primary" th:href="@{/fashionlog/notice/new}">새 글 작성</a>
+    </div>
+  </div>
   <hr>
 
   <table>
@@ -37,9 +41,6 @@
     </tbody>
   </table>
   <div class="actions"></div>
-  <div sec:authorize="hasRole('ADMIN')">
-    <a class="btn btn-primary" th:href="@{/fashionlog/notice/new}">새 글 작성</a>
-  </div>
-  </div>
+</div>
 </body>
 </html>

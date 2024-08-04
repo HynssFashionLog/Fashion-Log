@@ -16,14 +16,21 @@
     <ul>
       <li><a href="#">About Us</a></li>
       <li><a href="#">Contact</a></li>
-      <li><button class="login">UserName</button></li>
-      <li><button class="signup">탈퇴</button></li>
+      <li>
+        <button class="login">UserName</button>
+      </li>
+      <li>
+        <button class="signup">탈퇴</button>
+      </li>
     </ul>
   </nav>
 </header>
 <body>
 <div class="container">
-  <h1>Trade</h1>
+  <div class="header-container">
+    <h1>Trade</h1>
+    <a class="btn btn-primary" th:href="@{/fashionlog/trade/new}">새 글 작성</a>
+  </div>
   <hr>
   <table>
     <thead>
@@ -56,7 +63,6 @@
     </tbody>
   </table>
   <div class="actions"></div>
-  <a class="btn btn-primary" th:href="@{/fashionlog/trade/new}">새 글 작성</a>
 </div>
 </body>
 </html>
