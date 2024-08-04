@@ -145,19 +145,19 @@ public class FreeBoardService implements BoardService {
 	/**
 	 * 자유 게시판 글의 댓글 수정하기 API
 	 *
-	 * @param commentId           자유 게시판 글의 댓글 id를 컨트롤러에서 받아옴.
+	 * @param id           자유 게시판 글의 댓글 id를 컨트롤러에서 받아옴.
 	 * @param freeBoardCommentDto 컨트롤러에서 DB에 수정할 댓글 DTO를 받아옴.
 	 */
 	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "FreeBoard", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
-	public void updateFreeBoardComment(Long commentId,
+	public void updateFreeBoardComment(Long id,
 		FreeBoardCommentDto freeBoardCommentDto) {
 		// Not Null 예외 처리
 		FreeBoardComment.validateField(freeBoardCommentDto.getContent(), "Content");
 
-		FreeBoardComment freeBoardComment = freeBoardCommentRepository.findById(commentId)
+		FreeBoardComment freeBoardComment = freeBoardCommentRepository.findById(id)
 			.orElseThrow(
-				() -> new IllegalArgumentException("comment id:" + commentId + " not found"));
+				() -> new IllegalArgumentException("comment id:" + id + " not found"));
 
 		freeBoardComment.updateComment(freeBoardCommentDto);
 	}
@@ -165,13 +165,13 @@ public class FreeBoardService implements BoardService {
 	/**
 	 * 자유 게시판 글의 댓글 삭제하기 API
 	 *
-	 * @param commentId 자유 게시판 글의 댓글 id를 컨트롤러에서 받아옴.
+	 * @param id 자유 게시판 글의 댓글 id를 컨트롤러에서 받아옴.
 	 */
 	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "FreeBoard", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
-	public void deleteFreeBoardComment(Long commentId) {
-		FreeBoardComment freeBoardComment = freeBoardCommentRepository.findById(commentId)
-			.orElseThrow(() -> new IllegalArgumentException("id: " + commentId + " not found"));
+	public void deleteFreeBoardComment(Long id) {
+		FreeBoardComment freeBoardComment = freeBoardCommentRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
 		freeBoardComment.deleteComment();
 	}
 

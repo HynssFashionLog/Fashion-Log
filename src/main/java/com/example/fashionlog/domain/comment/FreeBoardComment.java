@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,10 +23,11 @@ import lombok.experimental.SuperBuilder;
  * @version 1.0.0
  */
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "freeboard_comment")
 public class FreeBoardComment extends CommentBaseEntity {
 
 	// 댓글 아이디(PK)
@@ -36,6 +38,6 @@ public class FreeBoardComment extends CommentBaseEntity {
 
 	// 게시물 아이디(FK)
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "freeboard_id", nullable = false)
+	@JoinColumn(name = "freeboard_id")
 	private FreeBoard freeBoard;
 }
