@@ -65,7 +65,9 @@ public class LookbookService implements BoardService {
 
 		// 현재 로그인된 사용자를 가져옵니다
 		Member currentUser = currentUserProvider.getCurrentUser();
+
 		lookbookDto.setAuthorName(currentUser.getNickname());
+		lookbookDto.setAuthorEmail(currentUser.getEmail());
 
 		lookbookRepository.save(LookbookDto.convertToEntity(lookbookDto, currentUser));
 	}
@@ -139,12 +141,15 @@ public class LookbookService implements BoardService {
 	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Lookbook", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
 	public void createLookbookComment(Long id, LookbookCommentDto lookbookCommentDto) {
+		Member currentUser = currentUserProvider.getCurrentUser();
+
 		// Not Null 예외 처리
 		LookbookComment.validateField(lookbookCommentDto.getContent(), "Content");
 
+		lookbookCommentDto.setAuthorEmail(currentUser.getEmail());
+
 		Lookbook lookbook = lookbookRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
-		Member currentUser = currentUserProvider.getCurrentUser();
 
 		LookbookComment lookbookComment = LookbookCommentDto.convertToEntity(lookbook,
 			lookbookCommentDto, currentUser);

@@ -26,6 +26,7 @@ public class FreeBoardCommentDto implements CommentUpdatable {
 	private Long freeBoardId; // 게시물 id
 	private Long memberId; // 회원 id
 	private String authorName;
+	private String authorEmail;
 	private String content; // 내용
 	private Boolean commentStatus; // 댓글의 삭제 여부(소프트 딜리트)
 	private LocalDateTime createdAt; // 댓글 생성일
@@ -66,6 +67,7 @@ public class FreeBoardCommentDto implements CommentUpdatable {
 			.memberId(freeBoardComment.getMember().getMemberId())
 			.freeBoardId(freeBoardComment.getFreeBoard().getId())
 			.authorName(freeBoardComment.getMember().getNickname())
+			.authorEmail(freeBoardComment.getMember().getEmail())
 			.content(freeBoardComment.getContent())
 			.commentStatus(freeBoardComment.getCommentStatus())
 			.createdAt(freeBoardComment.getCreatedAt())

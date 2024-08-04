@@ -66,6 +66,7 @@ public class DailyLookService implements BoardService {
         Member currentUser = currentUserProvider.getCurrentUser();
 
         dailyLookDto.setAuthorName(currentUser.getNickname());
+		dailyLookDto.setAuthorEmail(currentUser.getEmail());
 
         DailyLook dailyLook = DailyLookDto.convertToEntity(dailyLookDto, currentUser);
         dailyLookRepository.save(dailyLook);
@@ -135,14 +136,16 @@ public class DailyLookService implements BoardService {
     @AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "DailyLook", AUTHOR_TYPE = AuthorType.COMMENT)
     @Transactional
     public void createDailyLookComment(Long id, DailyLookCommentDto dailyLookCommentDto) {
-        dailyLookCommentDto.setId(null);
+        Member currentUser = currentUserProvider.getCurrentUser();
+
+		dailyLookCommentDto.setId(null);
         dailyLookCommentDto.setDailyLookId(id);
 
+		dailyLookCommentDto.setAuthorEmail(currentUser.getEmail());
         dailyLookCommentDto.setCommentStatus(Boolean.TRUE);
         dailyLookCommentDto.setCreatedAt(LocalDateTime.now());
 
         DailyLook dailyLook = findDailyLookById(id);
-        Member currentUser = currentUserProvider.getCurrentUser();
 
         DailyLookComment dailyLookComment = DailyLookCommentDto.convertToEntity(
             dailyLookCommentDto, dailyLook, currentUser);

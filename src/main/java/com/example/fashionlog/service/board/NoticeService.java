@@ -36,7 +36,7 @@ public class NoticeService implements BoardService {
 		return notices.isEmpty() ? Optional.empty() : Optional.of(notices);
 	}
 
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Notice", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"ADMIN"}, Type = "Notice", AUTHOR_TYPE = AuthorType.POST)
 	@Transactional
 	public void createNotice(NoticeDto noticeDto) {
 		Member currentUser = currentUserProvider.getCurrentUser();
@@ -51,14 +51,14 @@ public class NoticeService implements BoardService {
 		return NoticeDto.convertToDto(notice);
 	}
 
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "Notice", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"ADMIN"}, checkAuthor = true, Type = "Notice", AUTHOR_TYPE = AuthorType.POST)
 	@Transactional
 	public void editNotice(Long id, NoticeDto noticeDto) {
 		Notice notice = findByIdAndStatusIsTrue(id);
 		notice.update(noticeDto);
 	}
 
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "Notice", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {"ADMIN"}, checkAuthor = true, Type = "Notice", AUTHOR_TYPE = AuthorType.POST)
 	@Transactional
 	public void deleteNotice(Long id) {
 		Notice notice = findByIdAndStatusIsTrue(id);
@@ -81,6 +81,7 @@ public class NoticeService implements BoardService {
 		noticeCommentDto.setNoticeId(null);
 		noticeCommentDto.setNoticeId(id);
 		noticeCommentDto.setCommentStatus(true);
+		noticeCommentDto.setAuthorEmail(currentUser.getEmail());
 
 		NoticeComment noticeComment = NoticeCommentDto.convertToEntity(noticeCommentDto, notice, currentUser);
 		noticeCommentRepository.save(noticeComment);
