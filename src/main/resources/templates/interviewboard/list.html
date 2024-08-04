@@ -10,8 +10,10 @@
 
 <body>
 <div class="container">
-  <h1>Interview</h1>
-
+  <div class="header-container">
+    <h1>Interview</h1>
+    <a class="btn btn-primary" th:href="@{/fashionlog/interviewboard/new}">새 글 작성</a>
+  </div>
   <hr>
 
   <table>
@@ -35,7 +37,8 @@
     </tr>
     <tr th:each="interview:${interviewBoards}" class="post-item board-item">
       <td>
-        <a th:text="${interview.title}" th:href="@{/fashionlog/interviewboard/{id}(id=${interview.id})}">제목</a>
+        <a th:text="${interview.title}"
+           th:href="@{/fashionlog/interviewboard/{id}(id=${interview.id})}">제목</a>
       </td>
       <td th:text="${interview.authorName}">작성자</td>
       <!-- updateAt이 null 이 아니면 updateAt 표시 -->
@@ -45,7 +48,6 @@
     </tbody>
   </table>
   <div class="actions"></div>
-  <a class="btn btn-primary" th:href="@{/fashionlog/interviewboard/new}">새 글 작성</a>
 </div>
 </body>
 </html>

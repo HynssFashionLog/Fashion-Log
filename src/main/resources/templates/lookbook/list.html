@@ -10,8 +10,10 @@
 
 <body>
 <div class="container">
-  <h1>Look Book</h1>
-
+  <div class="header-container">
+    <h1>Look Book</h1>
+    <a class="btn btn-primary" th:href="@{/fashionlog/lookbook/new}">새 글 작성</a>
+  </div>
   <hr>
 
   <table>
@@ -45,7 +47,6 @@
     </tbody>
   </table>
   <div class="actions"></div>
-  <a class="btn btn-primary" th:href="@{/fashionlog/lookbook/new}">새 글 작성</a>
 </div>
 </body>
 </html>

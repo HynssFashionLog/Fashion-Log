@@ -8,10 +8,11 @@
 </head>
 <body>
 <div th:replace="~{header :: header}"></div>
-
 <div class="container">
-  <h1>Free Board</h1>
-
+  <div class="header-container">
+    <h1>Free Board</h1>
+    <a class="btn btn-primary" th:href="@{/fashionlog/freeboard/new}">새 글 작성</a>
+  </div>
   <hr>
 
   <table>
@@ -45,7 +46,6 @@
     </tbody>
   </table>
   <div class="actions"></div>
-  <a class="btn btn-primary" th:href="@{/fashionlog/freeboard/new}">새 글 작성</a>
 </div>
 </body>
 </html>
