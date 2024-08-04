@@ -4,25 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Notice List</title>
-  <link rel="stylesheet" th:href="@{/notice/css/styles.css}">
-  <link rel="stylesheet" th:href="@{/notice/css/list.css}">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" th:href="@{/css/board/list.css}">
 </head>
-<header>
-  <div class="logo-container">
-    <a href="/" class="logo">
-      <img src="#" alt="Logo" class="logo-image">
-    </a>
-  </div>
-  <nav>
-    <ul>
-      <li><a href="#">About Us</a></li>
-      <li><a href="#">Contact</a></li>
-      <li><button class="login">UserName</button></li>
-      <li><button class="signup">탈퇴</button></li>
-    </ul>
-  </nav>
-</header>
 <body>
+<div th:replace="~{header :: header}"></div>
+
 <div class="container">
   <h1>Notice</h1>
 
@@ -31,16 +18,15 @@
   <table>
     <thead>
     <tr>
-      <th>분류</th>
       <th>제목</th>
       <th>작성자</th>
       <th>작성일</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="notice:${notices}" class="post-item">
-      <th th:text="${notice.category.getDisplayName()}">분류</th>
+    <tr th:each="notice:${notices}" class="post-item notice-item">
       <td>
+        <span class="category" th:text="${notice.category.getDisplayName()}">분류</span>
         <a th:text="${notice.title}" th:href="@{/fashionlog/notice/{id}(id=${notice.id})}">제목</a>
       </td>
       <td th:text="${notice.authorName}">작성자</td>
