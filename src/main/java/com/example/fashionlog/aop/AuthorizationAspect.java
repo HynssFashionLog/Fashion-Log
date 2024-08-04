@@ -100,9 +100,9 @@ public class AuthorizationAspect {
 		return switch (boardType) {
 			case "DailyLook" -> dailyLookService.isPostAuthor(postId, memberEmail);
 			case "FreeBoard" -> freeBoardService.isPostAuthor(postId, memberEmail);
-			//case "Interview" -> interviewBoardService.isPostAuthor(postId, memberEmail);
+			case "Interview" -> interviewBoardService.isPostAuthor(postId, memberEmail);
 			case "LookBook" -> lookbookService.isPostAuthor(postId, memberEmail);
-			//case "Notice" -> noticeService.isPostAuthor(postId, memberEmail);
+			case "Notice" -> noticeService.isPostAuthor(postId, memberEmail);
 			case "Trade" -> tradeService.isPostAuthor(postId, memberEmail);
 			default -> throw new IllegalArgumentException("알수 없는 보드타입: " + boardType);
 		};
@@ -112,9 +112,9 @@ public class AuthorizationAspect {
 		return switch (boardType) {
 			case "DailyLook" -> dailyLookService.isCommentAuthor(commentId, memberEmail);
 			case "FreeBoard" -> freeBoardService.isCommentAuthor(commentId, memberEmail);
-			//case "Interview" -> interviewBoardService.isCommentAuthor(commentId, memberEmail);
+			case "Interview" -> interviewBoardService.isCommentAuthor(commentId, memberEmail);
 			case "LookBook" -> lookbookService.isCommentAuthor(commentId, memberEmail);
-			//case "Notice" -> noticeService.isCommentAuthor(commentId, memberEmail);
+			case "Notice" -> noticeService.isCommentAuthor(commentId, memberEmail);
 			case "Trade" -> tradeService.isCommentAuthor(commentId, memberEmail);
 			default -> throw new IllegalArgumentException("알수 없는 보드타입: " + boardType);
 		};
