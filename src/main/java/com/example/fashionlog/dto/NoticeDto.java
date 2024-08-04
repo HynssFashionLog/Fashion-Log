@@ -18,6 +18,7 @@ public class NoticeDto implements NoticeUpdatable {
 
 	private Long id;
 	private Long memberId;
+	private String authorName;
 	private String title;
 	private String content;
 	private Boolean status;
@@ -45,6 +46,7 @@ public class NoticeDto implements NoticeUpdatable {
 		return NoticeDto.builder()
 			.id(notice.getId())
 			.memberId(notice.getMember().getMemberId())
+			.authorName(notice.getMember().getNickname())
 			.title(notice.getTitle())
 			.content(notice.getContent())
 			.status(notice.getStatus())

@@ -67,6 +67,8 @@ public class LookbookService implements BoardService {
 
 		// 현재 로그인된 사용자를 가져옵니다
 		Member currentUser = currentUserProvider.getCurrentUser();
+		lookbookDto.setAuthorName(currentUser.getNickname());
+
 		lookbookRepository.save(LookbookDto.convertToEntity(lookbookDto, currentUser));
 	}
 
