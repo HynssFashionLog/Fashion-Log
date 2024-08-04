@@ -1,7 +1,7 @@
 package com.example.fashionlog.service.board;
 
-import com.example.fashionlog.aop.AuthCheck;
-import com.example.fashionlog.aop.AuthorType;
+import com.example.fashionlog.aop.auth.AuthCheck;
+import com.example.fashionlog.aop.auth.AuthorType;
 import com.example.fashionlog.domain.Category;
 import com.example.fashionlog.domain.Member;
 import com.example.fashionlog.domain.board.Notice;
@@ -12,6 +12,7 @@ import com.example.fashionlog.repository.comment.NoticeCommentRepository;
 import com.example.fashionlog.repository.board.NoticeRepository;
 import com.example.fashionlog.security.CurrentUserProvider;
 import jakarta.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,6 +40,9 @@ public class NoticeService implements BoardService {
 	@AuthCheck(value = {"ADMIN"}, Type = "Notice", AUTHOR_TYPE = AuthorType.POST)
 	@Transactional
 	public void createNotice(NoticeDto noticeDto) {
+		Notice.validateField(noticeDto.getTitle(), "Title");
+		Notice.validateField(noticeDto.getContent(), "Content");
+
 		Member currentUser = currentUserProvider.getCurrentUser();
 		noticeDto.setAuthorName(currentUser.getNickname());
 		noticeDto.setStatus(true);
@@ -46,66 +50,82 @@ public class NoticeService implements BoardService {
 		noticeRepository.save(notice);
 	}
 
-	public NoticeDto getNoticeDetail(Long id) {
-		Notice notice = findByIdAndStatusIsTrue(id);
-		return NoticeDto.convertToDto(notice);
+	public Optional<NoticeDto> getNoticeDetail(Long id) {
+		return noticeRepository.findById(id).map(NoticeDto::convertToDto);
 	}
 
-	@AuthCheck(value = {"ADMIN"}, checkAuthor = true, Type = "Notice", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {
+		"ADMIN"}, checkAuthor = true, Type = "Notice", AUTHOR_TYPE = AuthorType.POST)
 	@Transactional
 	public void editNotice(Long id, NoticeDto noticeDto) {
+		Notice.validateField(noticeDto.getTitle(), "Title");
+		Notice.validateField(noticeDto.getContent(), "Content");
+
 		Notice notice = findByIdAndStatusIsTrue(id);
 		notice.update(noticeDto);
 	}
 
-	@AuthCheck(value = {"ADMIN"}, checkAuthor = true, Type = "Notice", AUTHOR_TYPE = AuthorType.POST)
+	@AuthCheck(value = {
+		"ADMIN"}, checkAuthor = true, Type = "Notice", AUTHOR_TYPE = AuthorType.POST)
 	@Transactional
 	public void deleteNotice(Long id) {
 		Notice notice = findByIdAndStatusIsTrue(id);
 		notice.delete();
 	}
 
-	public List<NoticeCommentDto> getNoticeCommentList(Long id) {
-		List<NoticeComment> noticeCommentDtoList
-			= noticeCommentRepository.findAllByCommentStatusIsTrueAndNoticeId(id);
-		return noticeCommentDtoList.stream().map(NoticeCommentDto::convertToDto)
-			.collect(Collectors.toList());
+	public Optional<List<NoticeCommentDto>> getNoticeCommentList(Long id) {
+		List<NoticeCommentDto> noticeCommentDtoList
+			= noticeCommentRepository.findAllByCommentStatusIsTrueAndNoticeId(id).stream()
+			.map(NoticeCommentDto::convertToDto)
+			.toList();
+		return noticeCommentDtoList.isEmpty() ? Optional.empty() : Optional.of(noticeCommentDtoList);
 	}
 
 	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Notice", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
 	public void createNoticeComment(Long id, NoticeCommentDto noticeCommentDto) {
-		Notice notice = findByIdAndStatusIsTrue(id);
+		Notice.validateField(noticeCommentDto.getContent(), "Content");
+
 		Member currentUser = currentUserProvider.getCurrentUser();
 
-		noticeCommentDto.setNoticeId(null);
+		noticeCommentDto.setId(null);
 		noticeCommentDto.setNoticeId(id);
-		noticeCommentDto.setCommentStatus(true);
-		noticeCommentDto.setAuthorEmail(currentUser.getEmail());
 
-		NoticeComment noticeComment = NoticeCommentDto.convertToEntity(noticeCommentDto, notice, currentUser);
+		noticeCommentDto.setAuthorEmail(currentUser.getEmail());
+		noticeCommentDto.setCommentStatus(Boolean.TRUE);
+		noticeCommentDto.setCreatedAt(LocalDateTime.now());
+
+		Notice notice = findByIdAndStatusIsTrue(id);
+
+		NoticeComment noticeComment = NoticeCommentDto.convertToEntity(noticeCommentDto, notice,
+			currentUser);
 		noticeCommentRepository.save(noticeComment);
 	}
 
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "Notice", AUTHOR_TYPE = AuthorType.COMMENT)
+	@AuthCheck(value = {"NORMAL",
+		"ADMIN"}, checkAuthor = true, Type = "Notice", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
-	public void editNoticeComment(Long postId, Long commentId,
+	public void editNoticeComment(Long postId, Long id,
 		NoticeCommentDto noticeCommentDto) {
+		Notice.validateField(noticeCommentDto.getContent(), "Content");
+
 		findByIdAndStatusIsTrue(postId);
-		NoticeComment noticeComment = findByIdAndCommentStatusIsTrue(commentId);
+		NoticeComment noticeComment = findByIdAndCommentStatusIsTrue(id);
 		noticeComment.updateComment(noticeCommentDto);
 	}
 
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, checkAuthor = true, Type = "Notice", AUTHOR_TYPE = AuthorType.COMMENT)
+	@AuthCheck(value = {"NORMAL",
+		"ADMIN"}, checkAuthor = true, Type = "Notice", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
-	public void deleteNoticeComment(Long commentId) {
-		NoticeComment noticeComment = findByIdAndCommentStatusIsTrue(commentId);
+	public void deleteNoticeComment(Long id) {
+		NoticeComment noticeComment = findByIdAndCommentStatusIsTrue(id);
 		noticeComment.deleteComment();
 	}
 
 	public Optional<List<NoticeDto>> getNoticeListByCategory(Category category) {
 		System.out.println(category);
-		List<NoticeDto> getNotice = noticeRepository.findTop5ByCategoryAndStatusIsTrueOrderByCreatedAtDesc(category)
+		List<NoticeDto> getNotice = noticeRepository.findTop5ByCategoryAndStatusIsTrueOrderByCreatedAtDesc(
+				category)
 			.stream()
 			.map(NoticeDto::convertToDto)
 			.collect(Collectors.toList());

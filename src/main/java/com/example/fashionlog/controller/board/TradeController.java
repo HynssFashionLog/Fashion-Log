@@ -1,17 +1,20 @@
 package com.example.fashionlog.controller.board;
 
+import com.example.fashionlog.aop.exception.BoardExceptionHandler;
 import com.example.fashionlog.domain.Category;
 import com.example.fashionlog.dto.board.NoticeDto;
-import com.example.fashionlog.dto.comment.TradeCommentDto;
 import com.example.fashionlog.dto.board.TradeDto;
+import com.example.fashionlog.dto.comment.TradeCommentDto;
 import com.example.fashionlog.service.board.NoticeService;
 import com.example.fashionlog.service.board.TradeService;
+import jakarta.validation.Valid;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +39,7 @@ public class TradeController {
 	 *
 	 * @param model 모델로 뷰에 값을 전달
 	 */
+	@BoardExceptionHandler(boardType = "trade", errorRedirect = "redirect:/fashionlog")
 	@GetMapping
 	public String getAllTradeList(Model model) {
 		List<TradeDto> tradeDto = tradeService.getAllTrades()
@@ -50,6 +54,7 @@ public class TradeController {
 	/**
 	 * 거래 게시판 글 상세 조회 detail.html 반환
 	 */
+	@BoardExceptionHandler(boardType = "trade", errorRedirect = "redirect:/fashionlog/trade")
 	@GetMapping("/{id}")
 	public String detail(@PathVariable("id") Long id, Model model) {
 		Optional<TradeDto> tradeDtoOpt = tradeService.getTradeById(id);
@@ -80,8 +85,15 @@ public class TradeController {
 	/**
 	 * 거래 게시판 글 작성 (Post)
 	 */
+	@BoardExceptionHandler(boardType = "trade")
 	@PostMapping("/new")
-	public String create(@ModelAttribute TradeDto tradeDto) {
+	public String saveTradePost(@Valid @ModelAttribute TradeDto tradeDto,
+		BindingResult bindingResult) {
+		// 글자 수 초과 예외 처리
+		if (bindingResult.hasErrors()) {
+			return "redirect:/fashionlog/trade/new";
+		}
+
 		tradeService.createTradePost(tradeDto);
 		return "redirect:/fashionlog/trade";
 	}
@@ -99,8 +111,15 @@ public class TradeController {
 	/**
 	 * 거래 게시판 글 수정 (Post)
 	 */
+	@BoardExceptionHandler(boardType = "trade")
 	@PostMapping("/{id}/edit")
-	public String edit(@PathVariable Long id, @ModelAttribute TradeDto tradeDto) {
+	public String editTrade(@PathVariable Long id, @Valid @ModelAttribute TradeDto tradeDto,
+		BindingResult bindingResult) {
+		// 글자 수 초과 예외 처리
+		if (bindingResult.hasErrors()) {
+			return "redirect:/fashionlog/trade/{id}/edit";
+		}
+
 		tradeService.updateTrade(id, tradeDto);
 		return "redirect:/fashionlog/trade/" + id;
 	}
@@ -108,6 +127,7 @@ public class TradeController {
 	/**
 	 * 거래 게시판 글 삭제 (Post)
 	 */
+	@BoardExceptionHandler(boardType = "trade")
 	@PostMapping("/{id}/delete")
 	public String deleteTrade(@PathVariable Long id) {
 		tradeService.deleteTrade(id);
@@ -117,44 +137,44 @@ public class TradeController {
 	/**
 	 * 거래 게시판 글에 댓글 작성 (Post)
 	 */
+	@BoardExceptionHandler(boardType = "trade", isComment = true)
 	@PostMapping("/{postid}/comment")
-	public String createComment(@PathVariable("postid") Long postId,
-		@ModelAttribute TradeCommentDto tradeCommentDto) {
-		try {
-			tradeService.createTradeComment(postId, tradeCommentDto);
-			return "redirect:/fashionlog/trade/" + postId;
-		} catch (Exception e) {
+	public String saveComment(@PathVariable("postid") Long postId,
+		@Valid @ModelAttribute TradeCommentDto tradeCommentDto, BindingResult bindingResult) {
+		// 글자 수 초과 예외 처리
+		if (bindingResult.hasErrors()) {
 			return "redirect:/fashionlog/trade/" + postId;
 		}
+
+		tradeService.createTradeComment(postId, tradeCommentDto);
+		return "redirect:/fashionlog/trade/" + postId;
 	}
 
 	/**
 	 * 거래 게시판 글의 댓글 삭제 (Post)
 	 */
+	@BoardExceptionHandler(boardType = "trade", isComment = true)
 	@PostMapping("/{postid}/delete-comment/{commentid}")
 	public String deleteComment(@PathVariable("postid") Long postId,
 		@PathVariable Long commentid) {
-		try {
-			tradeService.deleteTradeComment(commentid);
-		} catch (RuntimeException e) {
-			return "redirect:/fashionlog/trade" + postId;
-		}
+		tradeService.deleteTradeComment(commentid);
 		return "redirect:/fashionlog/trade/" + postId;
 	}
 
 	/**
 	 * 거래 게시판 글의 댓글 수정 (Post)
 	 */
+	@BoardExceptionHandler(boardType = "trade", isComment = true)
 	@PostMapping("/{postid}/edit-comment/{commentid}")
 	public String editComment(@PathVariable("postid") Long postId,
 		@PathVariable("commentid") Long commentId,
-		@ModelAttribute TradeCommentDto tradeCommentDto) {
-		try {
-			tradeService.updateTradeComment(commentId, tradeCommentDto);
-			return "redirect:/fashionlog/trade/" + postId;
-		} catch (RuntimeException e) {
+		@Valid @ModelAttribute TradeCommentDto tradeCommentDto, BindingResult bindingResult) {
+		// 글자 수 초과 예외 처리
+		if (bindingResult.hasErrors()) {
 			return "redirect:/fashionlog/trade/" + postId;
 		}
-	}
 
+		tradeService.updateTradeComment(commentId, tradeCommentDto);
+		return "redirect:/fashionlog/trade/" + postId;
+	}
 }

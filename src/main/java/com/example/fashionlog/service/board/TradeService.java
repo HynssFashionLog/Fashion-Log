@@ -1,7 +1,7 @@
 package com.example.fashionlog.service.board;
 
-import com.example.fashionlog.aop.AuthCheck;
-import com.example.fashionlog.aop.AuthorType;
+import com.example.fashionlog.aop.auth.AuthCheck;
+import com.example.fashionlog.aop.auth.AuthorType;
 import com.example.fashionlog.domain.Member;
 import com.example.fashionlog.domain.board.Trade;
 import com.example.fashionlog.domain.comment.TradeComment;
@@ -67,9 +67,6 @@ public class TradeService implements BoardService {
 		// 현재 로그인된 사용자를 가져온다
 		Member currentUser = currentUserProvider.getCurrentUser();
 
-		tradeDto.setAuthorName(currentUser.getNickname());
-		tradeDto.setAuthorEmail(currentUser.getEmail());
-
 		tradeRepository.save(TradeDto.convertToEntity(tradeDto, currentUser));
 	}
 
@@ -131,8 +128,6 @@ public class TradeService implements BoardService {
 
 		// Not Null 예외 처리
 		TradeComment.validateField(tradeCommentDto.getContent(), "Content");
-
-		tradeCommentDto.setAuthorEmail(currentUser.getEmail());
 
 		Trade trade = tradeRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));

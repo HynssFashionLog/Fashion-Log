@@ -1,7 +1,7 @@
 package com.example.fashionlog.service.board;
 
-import com.example.fashionlog.aop.AuthCheck;
-import com.example.fashionlog.aop.AuthorType;
+import com.example.fashionlog.aop.auth.AuthCheck;
+import com.example.fashionlog.aop.auth.AuthorType;
 import com.example.fashionlog.domain.board.Lookbook;
 import com.example.fashionlog.domain.comment.LookbookComment;
 import com.example.fashionlog.domain.Member;
@@ -89,19 +89,6 @@ public class LookbookService implements BoardService {
 			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
 		lookbook.update(lookbookDto);
 	}
-
-	/**
-	 * 룩북 게시판 글 상세보기 API
-	 *
-	 * @param id 글 하나를 상세하게 보기위해 게시글 id를 받아옴.
-	 * @return 룩북 게시판 데이터베이스에서 id가 같은 게시글을 반환함.
-	 */
-	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "LookBook", AUTHOR_TYPE = AuthorType.POST)
-	public Optional<LookbookDto> getLookbookDtoById(Long id) {
-		return lookbookRepository.findByIdAndStatusIsTrue(id)
-			.map(LookbookDto::convertToDto);
-	}
-
 
 	/**
 	 * 룩북 게시판 글 삭제하기 API

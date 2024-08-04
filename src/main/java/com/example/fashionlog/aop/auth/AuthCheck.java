@@ -1,4 +1,4 @@
-package com.example.fashionlog.aop;
+package com.example.fashionlog.aop.auth;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -2,6 +2,7 @@ package com.example.fashionlog.dto;
 
 import com.example.fashionlog.domain.Member;
 import com.example.fashionlog.domain.Role;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,10 +19,15 @@ import lombok.NoArgsConstructor;
 public class MemberDto {
 
     Long memberId;
+    @Size(max = 25, message = "이름은 25자를 초과할 수 없습니다.")
     String name;
+    @Size(max = 25, message = "닉네임은 25자를 초과할 수 없습니다.")
     String nickname;
+    @Size(max = 15, message = "전화번호는 15자를 초과할 수 없습니다.")
     String phone;
+    @Size(max = 50, message = "이메일은 50자를 초과할 수 없습니다.")
     String email;
+    @Size(max = 50, message = "비밀번호는 50자를 초과할 수 없습니다.")
     String password;
     Boolean status;
     LocalDateTime createdAt;

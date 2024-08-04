@@ -4,6 +4,7 @@ import com.example.fashionlog.domain.baseentity.CommentUpdatable;
 import com.example.fashionlog.domain.board.FreeBoard;
 import com.example.fashionlog.domain.comment.FreeBoardComment;
 import com.example.fashionlog.domain.Member;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,8 +26,11 @@ public class FreeBoardCommentDto implements CommentUpdatable {
 	private Long id; // 댓글 id
 	private Long freeBoardId; // 게시물 id
 	private Long memberId; // 회원 id
+	@Size(max = 25, message = "이름은 25자를 초과할 수 없습니다.")
 	private String authorName;
+	@Size(max = 50, message = "이메일은 50자를 초과할 수 없습니다.")
 	private String authorEmail;
+	@Size(max = 65535, message = "글자 수는 65535자를 초과할 수 없습니다.")
 	private String content; // 내용
 	private Boolean commentStatus; // 댓글의 삭제 여부(소프트 딜리트)
 	private LocalDateTime createdAt; // 댓글 생성일
