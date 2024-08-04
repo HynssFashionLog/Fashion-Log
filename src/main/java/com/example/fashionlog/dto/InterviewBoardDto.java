@@ -17,6 +17,7 @@ public class InterviewBoardDto implements Updatable {
 
 	private Long id;
 	private Long memberId;
+	private String authorName;
 	private String title;
 	private String content;
 	private Boolean status;
@@ -38,6 +39,7 @@ public class InterviewBoardDto implements Updatable {
 		return InterviewBoardDto.builder()
 			.id(interviewBoard.getId())
 			.memberId(interviewBoard.getMember().getMemberId())
+			.authorName(interviewBoard.getMember().getNickname())
 			.title(interviewBoard.getTitle())
 			.content(interviewBoard.getContent())
 			.status(interviewBoard.getStatus())
