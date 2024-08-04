@@ -2,47 +2,43 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>회원 권한 수정</title>
+  <title>Management</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" th:href="@{/css/management.css}">
 </head>
-<body>>
-<h1>회원 권한 수정</h1>
-<ul>
-  <li th:each="member : ${members}">
-    <div>
-      <span th:text="${member.memberId}">ID</span>
-      <span th:text="${member.name}">이름</span>
-      <span th:text="${member.nickname}">닉네임</span>
-      <span th:text="${member.phone}">전화번호</span>
-      <span th:text="${member.email}">이메일</span>
-      <span th:text="${member.password}">비밀번호</span>
-      <span th:text="${member.status}">삭제 여부</span>
-      <span th:text="${member.createdAt}">생성일</span>
-      <span th:text="${member.updatedAt}">수정일</span>
-      <span th:text="${member.deletedAt}">삭제일</span>
-      <div id="container">
-        <ul id="menu">
-          <li class="menu-item">
-            <form th:action="@{/fashionlog/management/{id}/ADMIN(id=${member.memberId})}"
-                  th:method="post">
-              <button type="submit" class="menu-name">ADMIN</button>
-            </form>
-          </li>
-          <li class="menu-item">
-            <form th:action="@{/fashionlog/management/{id}/NORMAL(id=${member.memberId})}"
-                  th:method="post">
-              <button type="submit" class="menu-name">NORMAL</button>
-            </form>
-          </li>
-          <li class="menu-item">
-            <form th:action="@{/fashionlog/management/{id}/BANNED(id=${member.memberId})}"
-                  th:method="post">
-              <button type="submit" class="menu-name">BANNED</button>
-            </form>
-          </li>
-        </ul>
+<div th:replace="~{header :: header}"></div>
+
+<body>
+<div class="container">
+  <h1>회원 정보</h1>
+  <ul class="member-list">
+    <li th:each="member : ${members}" class="member-item">
+      <div class="member-info">
+        <span th:text="${'ID: ' + member.memberId}"></span>
+        <span th:text="${'이름: ' + member.name}"></span>
+        <span th:text="${'닉네임: ' + member.nickname}"></span>
+        <span th:text="${'전화번호: ' + member.phone}"></span>
+        <span th:text="${'이메일: ' + member.email}"></span>
+        <span th:text="${'권한: ' + member.role}"></span>
+        <span th:text="${'생성일: ' + member.createdAt}"></span>
+        <span th:with="updatedAt=${member.updatedAt != null ? member.updatedAt : ''}"
+              th:text="${'수정일: ' + updatedAt}"></span>
+        <span th:with="deletedAt=${member.deletedAt != null ? member.deletedAt : ''}"
+              th:text="${'삭제일: ' + deletedAt}"></span>
       </div>
-    </div>
-  </li>
-</ul>
+      <div class="action-buttons">
+        <form th:action="@{/fashionlog/management/{id}/ADMIN(id=${member.memberId})}" th:method="post">
+          <button type="submit" class="action-button admin-button">ADMIN</button>
+        </form>
+        <form th:action="@{/fashionlog/management/{id}/NORMAL(id=${member.memberId})}" th:method="post">
+          <button type="submit" class="action-button normal-button">NORMAL</button>
+        </form>
+        <form th:action="@{/fashionlog/management/{id}/BANNED(id=${member.memberId})}" th:method="post">
+          <button type="submit" class="action-button banned-button">BANNED</button>
+        </form>
+      </div>
+    </li>
+  </ul>
+</div>
 </body>
 </html>

@@ -2,8 +2,8 @@ package com.example.fashionlog.service;
 
 import com.example.fashionlog.domain.Member;
 import com.example.fashionlog.repository.MemberRepository;
-
-import org.springframework.security.core.userdetails.User;
+import java.util.Collections;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -41,11 +41,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 		if (member == null || !member.getStatus()) {
 			throw new UsernameNotFoundException("삭제된 유저입니다.");
 		} else {
-			return User.builder()
-				.username(member.getEmail())
-				.password(member.getPassword())
-				.roles(member.getRole().name())
-				.build();
+			return new CustomUserDetails(
+				member.getEmail(),
+				member.getPassword(),
+				Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + member.getRole().name())),
+				member.getNickname()
+			);
 		}
 	}
 }

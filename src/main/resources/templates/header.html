@@ -1,15 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <header th:fragment="header">
   <div class="logo-container">
     <a th:href="@{/fashionlog}" class="logo">
-      <img src="#" alt="Logo" class="logo-image">
+      <img th:src="@{/img/hynss-logo.png}" alt="Logo" class="logo-image">
     </a>
   </div>
   <nav>
     <ul>
+      <li>
+        <div sec:authorize="hasRole('ADMIN')">
+          <a th:href="@{/fashionlog/management}">관리자 페이지</a>
+        </div>
+      </li>
       <li><a href="#">About Us</a></li>
       <li><a href="#">Contact</a></li>
-      <li>
-        <button class="nav-btn login">UserName</button>
+      <li sec:authorize="isAuthenticated()">
+        <span th:text="${#authentication.principal.nickname} + ' 님'">UserNickname</span>
       </li>
       <li>
         <form th:action="@{/logout}" method="post">
@@ -24,3 +32,4 @@
     </ul>
   </nav>
 </header>
+</html>
