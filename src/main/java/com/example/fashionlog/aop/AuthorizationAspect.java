@@ -1,13 +1,13 @@
 package com.example.fashionlog.aop;
 
 import com.example.fashionlog.domain.Member;
-import com.example.fashionlog.service.CurrentUserProvider;
-import com.example.fashionlog.service.DailyLookService;
-import com.example.fashionlog.service.FreeBoardService;
-import com.example.fashionlog.service.InterviewBoardService;
-import com.example.fashionlog.service.LookbookService;
-import com.example.fashionlog.service.NoticeService;
-import com.example.fashionlog.service.TradeService;
+import com.example.fashionlog.security.CurrentUserProvider;
+import com.example.fashionlog.service.board.DailyLookService;
+import com.example.fashionlog.service.board.FreeBoardService;
+import com.example.fashionlog.service.board.InterviewBoardService;
+import com.example.fashionlog.service.board.LookbookService;
+import com.example.fashionlog.service.board.NoticeService;
+import com.example.fashionlog.service.board.TradeService;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
