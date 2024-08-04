@@ -220,7 +220,7 @@ public class FreeBoardController {
 		try {
 			freeBoardService.deleteFreeBoardComment(commentId);
 			return "redirect:/fashionlog/freeboard/" + postId;
-		} catch (SecurityException e) {
+		} catch (IllegalArgumentException e) {
 			return "redirect:/fashionlog/freeboard/" + postId;
 		}
 	}
