@@ -59,6 +59,9 @@ public class FreeBoardService implements BoardService {
 		// 현재 로그인된 사용자를 가져옵니다
 		Member currentUser = currentUserProvider.getCurrentUser();
 
+		freeBoardDto.setAuthorName(currentUser.getNickname());
+		freeBoardDto.setAuthorEmail(currentUser.getEmail());
+
 		freeBoardRepository.save(FreeBoardDto.convertToEntity(freeBoardDto, currentUser));
 	}
 
@@ -136,6 +139,7 @@ public class FreeBoardService implements BoardService {
 
 		Member currentUser = currentUserProvider.getCurrentUser();
 		freeBoardCommentDto.setAuthorName(currentUser.getNickname());
+		freeBoardCommentDto.setAuthorEmail(currentUser.getEmail());
 
 		FreeBoardComment freeBoardComment = FreeBoardCommentDto.convertToEntity(freeBoard,
 			freeBoardCommentDto, currentUser);

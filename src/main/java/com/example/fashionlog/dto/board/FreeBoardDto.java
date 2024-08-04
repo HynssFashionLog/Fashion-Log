@@ -24,6 +24,7 @@ public class FreeBoardDto implements Updatable {
 	private Long id; // 게시물 id
 	private Long memberId; // 회원 id
 	private String authorName;
+	private String authorEmail;
 	private String title; // 게시물 제목
 	private String content; // 내용
 	private Boolean status; // 게시물의 삭제 여부(소프트 딜리트)
@@ -67,6 +68,7 @@ public class FreeBoardDto implements Updatable {
 			.id(freeBoard.getId())
 			.memberId(freeBoard.getMember().getMemberId())
 			.authorName(freeBoard.getMember().getNickname())
+			.authorEmail(freeBoard.getMember().getEmail())
 			.title(freeBoard.getTitle())
 			.content(freeBoard.getContent())
 			.status(freeBoard.getStatus())

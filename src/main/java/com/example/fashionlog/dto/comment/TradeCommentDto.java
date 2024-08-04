@@ -20,6 +20,7 @@ public class TradeCommentDto implements CommentUpdatable {
 	private Long tradeId;
 	private Long memberId;
 	private String authorName;
+	private String authorEmail;
 	private String content;
 	private Boolean commentStatus;
 	private LocalDateTime createdAt;
@@ -59,6 +60,7 @@ public class TradeCommentDto implements CommentUpdatable {
 			.memberId(tradeComment.getMember().getMemberId())
 			.tradeId(tradeComment.getTrade().getId())
 			.authorName(tradeComment.getMember().getNickname())
+			.authorEmail(tradeComment.getMember().getEmail())
 			.content(tradeComment.getContent())
 			.commentStatus(tradeComment.getCommentStatus())
 			.createdAt(tradeComment.getCreatedAt())

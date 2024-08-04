@@ -66,7 +66,9 @@ public class TradeService implements BoardService {
 
 		// 현재 로그인된 사용자를 가져온다
 		Member currentUser = currentUserProvider.getCurrentUser();
+
 		tradeDto.setAuthorName(currentUser.getNickname());
+		tradeDto.setAuthorEmail(currentUser.getEmail());
 
 		tradeRepository.save(TradeDto.convertToEntity(tradeDto, currentUser));
 	}
@@ -125,12 +127,15 @@ public class TradeService implements BoardService {
 	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Trade", AUTHOR_TYPE = AuthorType.COMMENT)
 	@Transactional
 	public void createTradeComment(Long id, TradeCommentDto tradeCommentDto) {
+		Member currentUser = currentUserProvider.getCurrentUser();
+
 		// Not Null 예외 처리
 		TradeComment.validateField(tradeCommentDto.getContent(), "Content");
 
+		tradeCommentDto.setAuthorEmail(currentUser.getEmail());
+
 		Trade trade = tradeRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
-		Member currentUser = currentUserProvider.getCurrentUser();
 
 		TradeComment tradeComment = TradeCommentDto.convertToEntity(trade, tradeCommentDto,
 			currentUser);

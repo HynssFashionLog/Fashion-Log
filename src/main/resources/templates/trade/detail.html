@@ -25,9 +25,14 @@
   </div>
   <div class="action-buttons">
     <a href="/fashionlog/trade" class="btn">뒤로</a>
-    <a th:href="@{/fashionlog/trade/{id}/edit(id=${trade.id})}" class="btn edit-btn">수정</a>
-    <form th:action="@{/fashionlog/trade/{id}/delete(id=${trade.id})}" method="post" style="display: inline;">
-      <button type="submit" class="btn delete-btn">삭제</button>
+    <a th:if="${#authentication.name == trade.authorEmail or #authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+       th:href="@{/fashionlog/trade/{id}/edit(id=${trade.id})}" class="btn edit-btn">수정</a>
+    <form th:action="@{/fashionlog/trade/{id}/delete(id=${trade.id})}" method="post"
+          style="display: inline;">
+      <button
+          th:if="${#authentication.name == trade.authorEmail or #authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+          type="submit" class="btn delete-btn">삭제
+      </button>
     </form>
   </div>
   <!-- 댓글 목록 -->
@@ -40,11 +45,22 @@
         </div>
         <div class="comment-info">
           <span th:text="${comment.authorName}" class="comment-author">작성자</span>
-          <span class="comment-date" th:if="${comment.updatedAt}" th:text="${#temporals.format(comment.updatedAt, 'MM.dd HH:mm:ss')}"></span>
-          <span class="comment-date" th:unless="${comment.updatedAt}" th:text="${#temporals.format(comment.createdAt, 'MM.dd HH:mm:ss')}"></span>
-          <button th:id="'edit-button-' + ${comment.id}" th:onclick="'toggleEditForm(' + ${comment.id} + ')'" class="btn-edit">수정</button>
-          <form th:action="@{/fashionlog/trade/{postid}/delete-comment/{commentid}(postid=${trade.id}, commentid=${comment.id})}" method="post" style="display: inline;">
-            <button type="submit" class="btn-delete">삭제</button>
+          <span class="comment-date" th:if="${comment.updatedAt}"
+                th:text="${#temporals.format(comment.updatedAt, 'MM.dd HH:mm:ss')}"></span>
+          <span class="comment-date" th:unless="${comment.updatedAt}"
+                th:text="${#temporals.format(comment.createdAt, 'MM.dd HH:mm:ss')}"></span>
+          <button
+              th:if="${#authentication.name == comment.authorEmail or #authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+              th:id="'edit-button-' + ${comment.id}"
+              th:onclick="'toggleEditForm(' + ${comment.id} + ')'" class="btn-edit">수정
+          </button>
+          <form
+              th:action="@{/fashionlog/trade/{postid}/delete-comment/{commentid}(postid=${trade.id}, commentid=${comment.id})}"
+              method="post" style="display: inline;">
+            <button
+                th:if="${#authentication.name == comment.authorEmail or #authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+                type="submit" class="btn-delete">삭제
+            </button>
           </form>
         </div>
         <!-- 수정 모드 -->
@@ -57,8 +73,10 @@
       </li>
     </ul>
     <!-- 댓글 작성 -->
-    <form class="comment-form" th:action="@{/fashionlog/trade/{id}/comment(id=${trade.id})}" th:object="${tradeComment}" method="post">
-      <textarea id="content" name="content" th:field="*{content}" placeholder="댓글을 입력하세요"></textarea>
+    <form class="comment-form" th:action="@{/fashionlog/trade/{id}/comment(id=${trade.id})}"
+          th:object="${tradeComment}" method="post">
+      <textarea id="content" name="content" th:field="*{content}"
+                placeholder="댓글을 입력하세요"></textarea>
       <button type="submit">등록</button>
     </form>
   </div>
