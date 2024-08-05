@@ -123,7 +123,6 @@ public class NoticeService implements BoardService {
 	}
 
 	public Optional<List<NoticeDto>> getNoticeListByCategory(Category category) {
-		System.out.println(category);
 		List<NoticeDto> getNotice = noticeRepository.findTop5ByCategoryAndStatusIsTrueOrderByCreatedAtDesc(
 				category)
 			.stream()

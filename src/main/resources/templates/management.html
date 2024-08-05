@@ -27,9 +27,6 @@
               th:text="${'삭제일: ' + deletedAt}"></span>
       </div>
       <div class="action-buttons">
-        <form th:action="@{/fashionlog/management/{id}/ADMIN(id=${member.memberId})}" th:method="post">
-          <button type="submit" class="action-button admin-button">ADMIN</button>
-        </form>
         <form th:action="@{/fashionlog/management/{id}/NORMAL(id=${member.memberId})}" th:method="post">
           <button type="submit" class="action-button normal-button">NORMAL</button>
         </form>
