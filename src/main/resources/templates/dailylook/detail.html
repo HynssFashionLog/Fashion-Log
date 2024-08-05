@@ -41,8 +41,7 @@
     <ul class="comment-list">
       <li th:each="comment : ${dailyLookComments}" class="comment">
         <div class="comment-content">
-          <p th:id="'view-' + ${comment.id}" th:text="${comment.content}"><span
-              class="comment-content-main"></span>댓글 내용</p>
+          <span th:id="'view-' + ${comment.id}" th:text="${comment.content}">댓글 내용</span>
         </div>
         <div class="comment-info">
           <span th:text="${comment.authorName}" class="comment-author">작성자</span>
