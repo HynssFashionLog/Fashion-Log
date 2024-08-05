@@ -10,12 +10,36 @@
 <div th:replace="~{header :: header}"></div>
 
 <div class="main-content">
-  <a th:href="@{/fashionlog/notice}" id="notice"><span>Notice</span></a>
-  <a th:href="@{/fashionlog/freeboard}" id="freetalk"><span>Free Talk</span></a>
-  <a th:href="@{/fashionlog/lookbook}" id="lookbook"><span>LookBook</span></a>
-  <a th:href="@{/fashionlog/trade}" id="buysell"><span>Buy Sell Trade</span></a>
-  <a th:href="@{/fashionlog/interviewboard}" id="interview"><span>Interview</span></a>
-  <a th:href="@{/fashionlog/dailylook}" id="dailylook"><span>DailyLook</span></a>
+  <a th:href="@{/fashionlog/notice}" id="notice" class="section-link">
+    <img th:src="@{/img/Notice.png}" alt="Notice Background" class="background-image">
+    <span class="section-text">Notice</span>
+  </a>
+
+  <a th:href="@{/fashionlog/freeboard}" id="freetalk" class="section-link">
+    <img th:src="@{/img/Freetalk2.png}" alt="Notice Background" class="background-image">
+    <span>Free Talk</span>
+  </a>
+
+  <a th:href="@{/fashionlog/lookbook}" id="lookbook" class="section-link">
+    <img th:src="@{/img/Lookbook.jpg}" alt="Notice Background" class="background-image">
+    <span>LookBook</span>
+  </a>
+
+  <a th:href="@{/fashionlog/trade}" id="buysell" class="section-link">
+    <img th:src="@{/img/Trade.jpg}" alt="Notice Background" class="background-image">
+    <span>Buy Sell Trade</span>
+  </a>
+
+  <a th:href="@{/fashionlog/interviewboard}" id="interview" class="section-link">
+    <img th:src="@{/img/Interview2.png}" alt="Notice Background" class="background-image">
+    <span>Interview</span>
+  </a>
+
+  <a th:href="@{/fashionlog/dailylook}" id="dailylook" class="section-link">
+    <img th:src="@{/img/DailyLook.png}" alt="Notice Background" class="background-image">
+    <span>DailyLook</span>
+  </a>
+
 </div>
 </body>
 </html>
