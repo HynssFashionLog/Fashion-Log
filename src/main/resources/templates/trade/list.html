@@ -48,8 +48,8 @@
       </td>
       <td th:text="${notice.authorName}">작성자</td>
       <!-- updateAt이 null 이 아니면 updateAt 표시 -->
-      <td th:if="${notice.updatedAt != null}" th:text="${notice.updatedAt}">작성일</td>
-      <td th:unless="${notice.updatedAt != null}" th:text="${notice.createdAt}">작성일</td>
+      <td th:if="${notice.updatedAt != null}" th:text="${#temporals.format(notice.updatedAt, 'YY.MM.dd')}">작성일</td>
+      <td th:unless="${notice.updatedAt != null}" th:text="${#temporals.format(notice.createdAt, 'YY.MM.dd')}">작성일</td>
     </tr>
     <tr th:each="post:${trades}" class="post-item board-item">
       <td>
@@ -57,8 +57,8 @@
       </td>
       <td th:text="${post.authorName}">작성자</td>
       <!-- updateAt이 null 이 아니면 updateAt 표시 -->
-      <td th:if="${post.updatedAt != null}" th:text="${post.updatedAt}">작성일</td>
-      <td th:unless="${post.updatedAt != null}" th:text="${post.createdAt}">작성일</td>
+      <td th:if="${post.updatedAt != null}" th:text="${#temporals.format(post.updatedAt, 'YY.MM.dd')}">작성일</td>
+      <td th:unless="${post.updatedAt != null}" th:text="${#temporals.format(post.createdAt, 'YY.MM.dd')}">작성일</td>
     </tr>
     </tbody>
   </table>

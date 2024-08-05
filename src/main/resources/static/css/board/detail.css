@@ -8,7 +8,7 @@
   margin-bottom: 20px;
 }
 
-.post-content-main {
+.post-content p {
   white-space: pre-wrap;
   word-wrap: break-word;
 }
@@ -46,6 +46,11 @@
 
 .comment-content {
   margin-bottom: 5px;
+}
+
+.comment-content span {
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 .comment-content-main {

@@ -19,6 +19,23 @@ th, td {
   border-bottom: 1px solid #eee;
 }
 
+/* 첫 번째 열(제목 열)에 대한 스타일 */
+td:first-child {
+  max-width: 300px; /* 최대 너비 설정 */
+}
+
+/* 제목 링크에 대한 스타일 */
+td:first-child a {
+  display: block; /* 링크를 블록 레벨 요소로 만들어 전체 셀을 클릭 가능하게 함 */
+  width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal; /* 자동 줄바꿈 허용 */
+  line-height: 1.3; /* 줄 간격 설정 */
+  text-decoration: none; /* 링크 밑줄 제거 */
+  color: #333; /* 텍스트 색상 */
+}
+
 th {
   background-color: #f8f8f8;
   font-weight: bold;

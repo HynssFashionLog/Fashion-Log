@@ -17,7 +17,7 @@
       <h2 th:text="${dailyLook.title}">Title</h2>
       <span th:text="${dailyLook.authorName}">작성자</span>
       <span class="post-date" th:if="${dailyLook.updatedAt}"
-            th:text="${#temporals.format(dailyLook.updatedAt, 'MM.dd HH:mm:ss')}"></span>
+            th:text="${#temporals.format(dailyLook.updatedAt, 'YY.MM.dd')}"></span>
       <span class="post-date" th:unless="${dailyLook.updatedAt}"
             th:text="${#temporals.format(dailyLook.createdAt, 'MM.dd HH:mm:ss')}"></span>
     </div>
