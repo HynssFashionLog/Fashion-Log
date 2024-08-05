@@ -38,7 +38,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(configurer -> configurer
-                // 정적 리소르에 대한 접근 허용
+                // 정적 리소스에 대한 접근 허용
                 .requestMatchers("/css/**", "/js/**", "/image/**").permitAll()
                 // 메인 페이지는 인증된 사용자만 접근 가능
                 .requestMatchers("/fashionlog").authenticated()

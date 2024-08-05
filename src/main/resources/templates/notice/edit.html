@@ -19,7 +19,7 @@
         <div>
             <label>분류:</label>
             <div th:each="cat : ${categories}">
-                <input type="radio" th:field="*{category}" th:value="${cat}" th:id="${'category-' + cat}" />
+                <input type="radio" th:field="*{category}" th:value="${cat}" th:id="${'category-' + cat}" required/>
                 <label th:for="${'category-' + cat}" th:text="${cat.displayName}"></label>
             </div>
         </div>

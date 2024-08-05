@@ -1,7 +1,7 @@
 package com.example.fashionlog.service.board;
 
-import com.example.fashionlog.aop.AuthCheck;
-import com.example.fashionlog.aop.AuthorType;
+import com.example.fashionlog.aop.auth.AuthCheck;
+import com.example.fashionlog.aop.auth.AuthorType;
 import com.example.fashionlog.domain.board.FreeBoard;
 import com.example.fashionlog.domain.comment.FreeBoardComment;
 import com.example.fashionlog.domain.Member;
@@ -90,7 +90,7 @@ public class FreeBoardService implements BoardService {
 		FreeBoard.validateField(freeBoardDto.getContent(), "Content");
 
 		FreeBoard freeBoard = freeBoardRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
+			.orElseThrow(() -> new IllegalArgumentException("게시판 정보를 찾을 수 없습니다."));
 		freeBoard.update(freeBoardDto);
 	}
 
@@ -103,7 +103,7 @@ public class FreeBoardService implements BoardService {
 	@Transactional
 	public void deleteFreeBoardPost(Long id) {
 		FreeBoard freeBoard = freeBoardRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
+			.orElseThrow(() -> new IllegalArgumentException("게시판 정보를 찾을 수 없습니다."));
 		freeBoard.delete();
 	}
 
@@ -134,11 +134,10 @@ public class FreeBoardService implements BoardService {
 		// Not Null 예외 처리
 		FreeBoardComment.validateField(freeBoardCommentDto.getContent(), "Content");
 
-		FreeBoard freeBoard = freeBoardRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
-
 		Member currentUser = currentUserProvider.getCurrentUser();
-		freeBoardCommentDto.setAuthorName(currentUser.getNickname());
+		FreeBoard freeBoard = freeBoardRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("게시판 정보를 찾을 수 없습니다."));
+
 		freeBoardCommentDto.setAuthorEmail(currentUser.getEmail());
 
 		FreeBoardComment freeBoardComment = FreeBoardCommentDto.convertToEntity(freeBoard,
@@ -161,7 +160,7 @@ public class FreeBoardService implements BoardService {
 
 		FreeBoardComment freeBoardComment = freeBoardCommentRepository.findById(id)
 			.orElseThrow(
-				() -> new IllegalArgumentException("comment id:" + id + " not found"));
+				() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
 
 		freeBoardComment.updateComment(freeBoardCommentDto);
 	}
@@ -175,7 +174,7 @@ public class FreeBoardService implements BoardService {
 	@Transactional
 	public void deleteFreeBoardComment(Long id) {
 		FreeBoardComment freeBoardComment = freeBoardCommentRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("id: " + id + " not found"));
+			.orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
 		freeBoardComment.deleteComment();
 	}
 

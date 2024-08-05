@@ -1,4 +1,4 @@
-package com.example.fashionlog.aop;
+package com.example.fashionlog.aop.auth;
 
 import com.example.fashionlog.domain.Member;
 import com.example.fashionlog.security.CurrentUserProvider;

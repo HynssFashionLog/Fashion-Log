@@ -1,17 +1,20 @@
 package com.example.fashionlog.controller.board;
 
+import com.example.fashionlog.aop.exception.BoardExceptionHandler;
 import com.example.fashionlog.domain.Category;
-import com.example.fashionlog.dto.comment.FreeBoardCommentDto;
 import com.example.fashionlog.dto.board.FreeBoardDto;
 import com.example.fashionlog.dto.board.NoticeDto;
+import com.example.fashionlog.dto.comment.FreeBoardCommentDto;
 import com.example.fashionlog.service.board.FreeBoardService;
 import com.example.fashionlog.service.board.NoticeService;
+import jakarta.validation.Valid;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,19 +41,16 @@ public class FreeBoardController {
 	 * @param model 모델로 뷰에 값을 전달해 줌.
 	 * @return freeboard/list.html을 사용자 화면으로 반환
 	 */
+	@BoardExceptionHandler(boardType = "freeboard", errorRedirect = "redirect:/fashionlog")
 	@GetMapping
 	public String getAllFreeBoardList(Model model) {
-		try {
-			List<FreeBoardDto> freeBoardDto = freeBoardService.getAllFreeBoards()
-				.orElse(Collections.emptyList());
-			List<NoticeDto> noticeDto = noticeService.getNoticeListByCategory(Category.FREE)
-				.orElse(Collections.emptyList());
-			model.addAttribute("freeboards", freeBoardDto);
-			model.addAttribute("freeNotice", noticeDto);
-			return "freeboard/list";
-		} catch (SecurityException e) {
-			return "home";
-		}
+		List<FreeBoardDto> freeBoardDto = freeBoardService.getAllFreeBoards()
+			.orElse(Collections.emptyList());
+		List<NoticeDto> noticeDto = noticeService.getNoticeListByCategory(Category.FREE)
+			.orElse(Collections.emptyList());
+		model.addAttribute("freeboards", freeBoardDto);
+		model.addAttribute("freeNotice", noticeDto);
+		return "freeboard/list";
 	}
 
 	/**
@@ -70,17 +70,17 @@ public class FreeBoardController {
 	 * @param freeBoardDto 폼에서 작성한 값들을 freeBoardDto로 받아옴.
 	 * @return 제목과 내용이 비어있는지 안 비어있는지에 따라 각각의 대상 페이지에 리다이렉트
 	 */
+	@BoardExceptionHandler(boardType = "freeboard")
 	@PostMapping("/new")
-	public String saveFreeBoardPost(@ModelAttribute FreeBoardDto freeBoardDto) {
-		// Not Null 예외 처리
-		try {
-			freeBoardService.createFreeBoardPost(freeBoardDto);
-			return "redirect:/fashionlog/freeboard"; // 성공 시 목록 페이지로 리다이렉트
-		} catch (IllegalArgumentException ie) {
-			return "redirect:/fashionlog/freeboard/new"; // 예외 발생 시 같은 페이지 리다이렉트
-		} catch (SecurityException se) {
+	public String saveFreeBoardPost(@Valid @ModelAttribute FreeBoardDto freeBoardDto,
+		BindingResult bindingResult) {
+		// 글자 수 초과 예외 처리
+		if (bindingResult.hasErrors()) {
 			return "redirect:/fashionlog/freeboard/new";
 		}
+
+		freeBoardService.createFreeBoardPost(freeBoardDto);
+		return "redirect:/fashionlog/freeboard";
 	}
 
 	/**
@@ -90,26 +90,23 @@ public class FreeBoardController {
 	 * @param model 모델로 뷰에 값을 전달해 줌.
 	 * @return freeboard/detail.html을 사용자 화면으로 반환
 	 */
+	@BoardExceptionHandler(boardType = "freeboard", errorRedirect = "redirect:/fashionlog/freeboard")
 	@GetMapping("/{id}")
 	public String getFreeBoardById(@PathVariable("id") Long id, Model model) {
-		try {
-			Optional<FreeBoardDto> freeBoardDtoOpt = freeBoardService.getFreeBoardDtoById(id);
-			// FreeBoard 정보가 없을 때 예외 처리
-			if (freeBoardDtoOpt.isEmpty()) {
-				throw new IllegalArgumentException("Free board not found");
-			}
-			FreeBoardDto freeBoardDto = freeBoardDtoOpt.get();
-			List<FreeBoardCommentDto> freeBoardCommentDto = freeBoardService.getCommentsByFreeBoardId(
-				id).orElse(Collections.emptyList());
-
-			model.addAttribute("freeBoard", freeBoardDto);
-			model.addAttribute("freeBoardComments", freeBoardCommentDto);
-			model.addAttribute("freeBoardComment", new FreeBoardCommentDto());
-
-			return "freeboard/detail";
-		} catch (SecurityException e) {
-			return "freeboard/list";
+		Optional<FreeBoardDto> freeBoardDtoOpt = freeBoardService.getFreeBoardDtoById(id);
+		// FreeBoard 정보가 없을 때 예외 처리
+		if (freeBoardDtoOpt.isEmpty()) {
+			throw new IllegalArgumentException("Free board not found");
 		}
+		FreeBoardDto freeBoardDto = freeBoardDtoOpt.get();
+		List<FreeBoardCommentDto> freeBoardCommentDto = freeBoardService.getCommentsByFreeBoardId(
+			id).orElse(Collections.emptyList());
+
+		model.addAttribute("freeBoard", freeBoardDto);
+		model.addAttribute("freeBoardComments", freeBoardCommentDto);
+		model.addAttribute("freeBoardComment", new FreeBoardCommentDto());
+
+		return "freeboard/detail";
 	}
 
 	/**
@@ -133,18 +130,18 @@ public class FreeBoardController {
 	 * @param freeBoardDto 폼에서 작성한 값들을 freeBoardDto로 받아옴.
 	 * @return 제목과 내용이 비어있는지 안 비어있는지에 따라 각각의 대상 페이지에 리다이렉트
 	 */
+	@BoardExceptionHandler(boardType = "freeboard")
 	@PostMapping("/{id}/edit")
 	public String editFreeBoardPost(@PathVariable("id") Long id,
-		@ModelAttribute FreeBoardDto freeBoardDto) {
-		// Not Null 예외 처리
-		try {
-			freeBoardService.updateFreeBoardPost(id, freeBoardDto);
-			return "redirect:/fashionlog/freeboard/" + id; // 성공 시 상세 보기 페이지로 리다이렉트
-		} catch (IllegalArgumentException ie) {
-			return "redirect:/fashionlog/freeboard/{id}/edit"; // 예외 발생 시 같은 페이지 리다이렉트
-		} catch (SecurityException se) {
+		@Valid @ModelAttribute FreeBoardDto freeBoardDto,
+		BindingResult bindingResult) {
+		// 글자 수 초과 예외 처리
+		if (bindingResult.hasErrors()) {
 			return "redirect:/fashionlog/freeboard/{id}/edit";
 		}
+
+		freeBoardService.updateFreeBoardPost(id, freeBoardDto);
+		return "redirect:/fashionlog/freeboard/" + id;
 	}
 
 	/**
@@ -153,14 +150,11 @@ public class FreeBoardController {
 	 * @param id 자유 게시판 글 id
 	 * @return 자유 게시판 글 목록 페이지로 리다이렉트
 	 */
+	@BoardExceptionHandler(boardType = "freeboard")
 	@PostMapping("/{id}/delete")
 	public String deleteFreeBoardPost(@PathVariable("id") Long id) {
-		try {
-			freeBoardService.deleteFreeBoardPost(id);
-			return "redirect:/fashionlog/freeboard";
-		} catch (SecurityException e) {
-			return "redirect:/fashionlog/freeboard/{id}";
-		}
+		freeBoardService.deleteFreeBoardPost(id);
+		return "redirect:/fashionlog/freeboard";
 	}
 
 	/**
@@ -170,18 +164,18 @@ public class FreeBoardController {
 	 * @param freeBoardCommentDto 폼에서 작성한 값들을 freeBoardCommentDto로 받아옴.
 	 * @return 내용이 비어있는지 안 비어있는지에 확인 후 현재 페이지에 리다이렉트
 	 */
+	@BoardExceptionHandler(boardType = "freeboard", isComment = true)
 	@PostMapping("/{postid}/comment")
 	public String saveFreeBoardComment(@PathVariable("postid") Long postId,
-		@ModelAttribute FreeBoardCommentDto freeBoardCommentDto) {
-		// Not Null 예외 처리
-		try {
-			freeBoardService.createFreeBoardComment(postId, freeBoardCommentDto);
-			return "redirect:/fashionlog/freeboard/" + postId; // 성공 시 상세 보기 페이지로 리다이렉트
-		} catch (IllegalArgumentException ie) {
-			return "redirect:/fashionlog/freeboard/" + postId; // 예외 발생 시 같은 페이지 리다이렉트
-		} catch (SecurityException se) {
+		@Valid @ModelAttribute FreeBoardCommentDto freeBoardCommentDto,
+		BindingResult bindingResult) {
+		// 글자 수 초과 예외 처리
+		if (bindingResult.hasErrors()) {
 			return "redirect:/fashionlog/freeboard/" + postId;
 		}
+
+		freeBoardService.createFreeBoardComment(postId, freeBoardCommentDto);
+		return "redirect:/fashionlog/freeboard/" + postId;
 	}
 
 	/**
@@ -192,19 +186,19 @@ public class FreeBoardController {
 	 * @param freeBoardCommentDto 폼에서 작성한 값들을 freeBoardCommentDto로 받아옴.
 	 * @return 내용이 비어있는지 안 비어있는지에 확인 후 현재 페이지에 리다이렉트
 	 */
+	@BoardExceptionHandler(boardType = "freeboard", isComment = true)
 	@PostMapping("/{postid}/edit-comment/{commentid}")
 	public String editFreeBoardComment(@PathVariable("postid") Long postId,
 		@PathVariable("commentid") Long commentId,
-		@ModelAttribute FreeBoardCommentDto freeBoardCommentDto) {
-		// Not Null 예외 처리
-		try {
-			freeBoardService.updateFreeBoardComment(commentId, freeBoardCommentDto);
-			return "redirect:/fashionlog/freeboard/" + postId; // 성공 시 상세 보기 페이지로 리다이렉트
-		} catch (IllegalArgumentException ie) {
-			return "redirect:/fashionlog/freeboard/" + postId; // 예외 발생 시 같은 페이지 리다이렉트
-		} catch (SecurityException se) {
+		@Valid @ModelAttribute FreeBoardCommentDto freeBoardCommentDto,
+		BindingResult bindingResult) {
+		// 글자 수 초과 예외 처리
+		if (bindingResult.hasErrors()) {
 			return "redirect:/fashionlog/freeboard/" + postId;
 		}
+
+		freeBoardService.updateFreeBoardComment(commentId, freeBoardCommentDto);
+		return "redirect:/fashionlog/freeboard/" + postId;
 	}
 
 	/**
@@ -214,14 +208,11 @@ public class FreeBoardController {
 	 * @param commentId 자유 게시판 댓글 id
 	 * @return 자유 게시판 글 상세 보기 페이지로 리다이렉트
 	 */
+	@BoardExceptionHandler(boardType = "freeboard", isComment = true)
 	@PostMapping("/{postid}/delete-comment/{commentid}")
 	public String deleteFreeBoardComment(@PathVariable("postid") Long postId,
 		@PathVariable("commentid") Long commentId) {
-		try {
-			freeBoardService.deleteFreeBoardComment(commentId);
-			return "redirect:/fashionlog/freeboard/" + postId;
-		} catch (IllegalArgumentException e) {
-			return "redirect:/fashionlog/freeboard/" + postId;
-		}
+		freeBoardService.deleteFreeBoardComment(commentId);
+		return "redirect:/fashionlog/freeboard/" + postId;
 	}
 }
