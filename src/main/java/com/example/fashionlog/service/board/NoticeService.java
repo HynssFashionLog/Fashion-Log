@@ -78,7 +78,8 @@ public class NoticeService implements BoardService {
 			= noticeCommentRepository.findAllByCommentStatusIsTrueAndNoticeId(id).stream()
 			.map(NoticeCommentDto::convertToDto)
 			.toList();
-		return noticeCommentDtoList.isEmpty() ? Optional.empty() : Optional.of(noticeCommentDtoList);
+		return noticeCommentDtoList.isEmpty() ? Optional.empty()
+			: Optional.of(noticeCommentDtoList);
 	}
 
 	@AuthCheck(value = {"NORMAL", "ADMIN"}, Type = "Notice", AUTHOR_TYPE = AuthorType.COMMENT)
@@ -128,7 +129,7 @@ public class NoticeService implements BoardService {
 			.stream()
 			.map(NoticeDto::convertToDto)
 			.collect(Collectors.toList());
-		System.out.println(getNotice);
+
 		return getNotice.isEmpty() ? Optional.empty() : Optional.of(getNotice);
 	}
 
