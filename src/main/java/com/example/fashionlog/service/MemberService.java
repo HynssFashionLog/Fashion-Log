@@ -102,7 +102,7 @@ public class MemberService {
 	@PreAuthorize("hasRole('ADMIN')")
 	@Transactional(readOnly = true)
 	public Optional<List<MemberDto>> getAllMembers() {
-		List<MemberDto> members = memberRepository.findAll().stream()
+		List<MemberDto> members = memberRepository.findByRoleNot(Role.ADMIN).stream()
 			.map(MemberDto::convertToDto)
 			.toList();
 		return members.isEmpty() ? Optional.empty() : Optional.of(members);
