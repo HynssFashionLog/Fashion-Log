@@ -96,6 +96,15 @@ h1 {
   text-align: center;
 }
 
+h2 {
+  width: 100%; /* 부모 div의 전체 너비를 사용 */
+  word-wrap: break-word; /* 긴 단어의 줄바꿈 허용 */
+  overflow-wrap: break-word; /* 모던 브라우저 지원 */
+  hyphens: auto; /* 필요시 하이픈 추가 */
+  line-height: 1.5; /* 줄 간격 */
+  margin: 0; /* 기본 마진 제거 */
+}
+
 a {
   color: #3498db;
   text-decoration: none;
