@@ -11,7 +11,7 @@ body, html {
   grid-template-rows: auto auto auto auto;
   gap: 10px;
   padding: 10px;
-  height: calc(100vh - 60px); /* 헤더 높이에 따라 조정 */
+  height: calc((100vh - 60px) * 1.5);
 }
 
 .main-content a {
@@ -76,4 +76,8 @@ body, html {
   #notice, #freetalk, #buysell, #lookbook, #interview, #dailylook {
     grid-column: 1 / -1;
   }
+}
+
+.section-link:hover .background-image {
+  transform: scale(1.1);
 }
