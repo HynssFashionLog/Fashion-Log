@@ -1,7 +1,6 @@
 # Hynss Fashion-Log
 <div align="center">
-  <img src = "https://github.com/user-attachments/assets/bc9d675c-1535-444a-850f-74e564057e82">
-  [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fgjbae1212%2Fhit-counter)]([https://hits.seeyoufarm.com](https://github.com/HynssFashionLog/Fashion-Log))                    
+  <img src = "https://github.com/user-attachments/assets/bc9d675c-1535-444a-850f-74e564057e82">                
 </div>
 
 
@@ -37,10 +36,42 @@
 ### Communitcation
 <img alt="github" src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img alt="Discord" src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=Discord&logoColor=white"> <img alt="Slack" src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=Slack&logoColor=white"> <img alt="Figma" src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=Figma&logoColor=white">
 
+### ERD
+![image](https://github.com/user-attachments/assets/c7e5afe2-ce69-47ed-b884-c14c98c4238e)
+
 
 ## 화면 구성
+| 메인 페이지  |  게시글/댓글작성   |
+| :-------------------------------------------: | :------------: |
+|  <img width="329" src="https://github.com/user-attachments/assets/2175d659-7485-49d5-b3a4-4aedf078acf7"/> |  <img width="329" src="https://github.com/user-attachments/assets/f83deb73-ac92-4525-959b-cb688f3818fd"/>|  
+| 로그인 페이지   |  회원가입 페이지   |  
+| <img width="329" src="https://github.com/user-attachments/assets/1bebba91-250f-4998-8386-da8fcf50e64f"/>   |  <img width="329" src="https://github.com/user-attachments/assets/b9071f53-1196-43d1-8afc-8044b6b30f9d"/>     |
+| 게시글 목록   |  게시글 디테일   |  
+| <img width="329" src="https://github.com/user-attachments/assets/810d9a4d-a417-41ab-8190-88d1057ccaf8"/>   |  <img width="329" src="https://github.com/user-attachments/assets/c56389c2-d3a0-41b4-bf42-de9ce93eba89"/>     |
 
 
 ## 주요 기능
+### 회원가입, 로그인 기능
+- 이메일, 닉네임, 핸드폰 번호 중복체크 기능
+- 가입된 회원만 메인 페이지 입장 가능함
+- `로그인 기억하기` 기능
+- 회원 탈퇴 기능
+
+### 관리자 페이지
+- 관리자(`ADMIN`)만 접속 가능
+- 관리자를 제외한 회원들의 권한을 변경할 수 있음
+
+### 모든 게시글 작성 및 댓글 작성 기능
+- 관리자, 일반 권한을 가진 회원만 작성 가능
+- 단, 공지사항 게시판은 관리자만 작성 가능함
+- 타인이 작성한 글이 아닌 본인이 작성한 글과 댓글만 수정 및 삭제 가능함
+- 빈칸이 들어가는 경우나 글자 수가 많을 시 개행 처리와 오버된 경우 예외 처리
+  
+### 공지사항 게시판
+- 관리자만 글 작성 가능
+- 카테고리를 선택하여 게시판 별 공지사항을 작성할 수 있음
+- 공지사항 게시판 내에선 모든 카테고리 공지사항 확인 가능
+- 각 카테고리 별 게시판에선 카테고리에 해당되는 최신 공지사항 5개만 볼 수 있음
+- 정지된 회원도 공지사항 게시판은 확인 가능
 
 
